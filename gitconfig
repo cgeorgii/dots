@@ -1,0 +1,29 @@
+[push]
+	default = simple
+[alias]
+  cb = checkout -b
+  pp = pull --prune
+	co = checkout
+	cm = commit
+	cmm = commit -m
+	cma = commit --amend --no-edit
+	st = status
+  di = diff
+  dc = diff --cached
+  dw = diff --word-diff
+  dwc = diff --word-diff --cached
+  lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+[user]
+	email = cgeorgii@gmail.com
+	name = Christian Georgii
+[core]
+	excludefile = ~/.gitignore
+	excludesfile = ~/.gitignore
+	pager = less -F -X
+  editor = nvim
+[github]
+  user = cgeorgii
+[rerere]
+	enabled = 1
+[branch]
+	autosetuprebase = always
