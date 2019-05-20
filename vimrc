@@ -32,8 +32,6 @@ Plug 'MattesGroeger/vim-bookmarks'
 Plug 'VundleVim/Vundle.vim'
 Plug 'brookhong/ag.vim'
 Plug 'christoomey/vim-tmux-navigator'
-" Plug 'itchyny/lightline.vim'
-" Plug 'itchyny/vim-gitbranch'
 Plug 'junegunn/vim-easy-align'
 Plug 'nelstrom/vim-visual-star-search'
 Plug 'neoclide/vim-jsx-improve'
@@ -60,10 +58,7 @@ Plug 'neoclide/coc.nvim', {'tag': '*', 'do': './install.sh'}
 
 call plug#end()
 
-" let g:shell_colorscheme = system('echo $BASE16_THEME')
-" execute('colorscheme ' . g:shell_colorscheme)
 if filereadable(expand("~/.vimrc_background"))
-  " let base16colorspace=256
   source ~/.vimrc_background
 endif
 set termguicolors
@@ -71,18 +66,6 @@ set termguicolors
 function! ShowFileName()
   return @%
 endfunction
-
-let g:lightline = {
-      \ 'colorscheme': 'wombat',
-      \ 'active': {
-      \   'left': [ [ 'paste' ],
-      \             [ 'readonly', 'gitbranch', 'folderfile', 'modified' ] ]
-      \ },
-      \ 'component_function': {
-      \   'gitbranch': 'gitbranch#name',
-      \   'folderfile': 'ShowFileName'
-      \ },
-      \ }
 
 let g:ruby_path = system('echo $HOME/.rbenv/shims')
 set regexpengine=1
@@ -154,9 +137,8 @@ map <silent> <leader>q :tabclose<CR>
 fun! ViewBundleGem ( gemName )
   let a:gemPath = system("bundle info --path " . a:gemName)
   echom "Opening gem: " . a:gemPath
-
   execute ":tabnew " . a:gemPath
-  set title a:gemName
+  execute ":tcd " . a:gemPath
 endfun
 command! -nargs=* ViewBundleGem call ViewBundleGem( "<args>" )
 
