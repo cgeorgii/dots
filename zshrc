@@ -10,6 +10,7 @@ export PATH="/usr/local/heroku/bin:$PATH"
 export PATH="/usr/local/sbin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 export SSH_KEY_PATH="~/.ssh/"
+export FZF_DEFAULT_COMMAND='ag -g ""'
 # }}}
 
 # Plugins
