@@ -17,6 +17,8 @@ set smartcase
 set showcmd
 set shortmess+=I
 set signcolumn=yes
+set lazyredraw
+set inccommand=nosplit
 
 nnoremap * #
 nnoremap # *
@@ -28,33 +30,36 @@ filetype plugin indent on    " required
 call plug#begin('~/.local/share/nvim/plugged')
 
 Plug 'ElmCast/elm-vim'
+Plug 'FooSoft/vim-argwrap'
 Plug 'MattesGroeger/vim-bookmarks'
-Plug 'VundleVim/Vundle.vim'
+Plug 'Yggdroot/indentLine'
+Plug 'alvan/vim-closetag'
 Plug 'brookhong/ag.vim'
+Plug 'chriskempson/base16-vim'
 Plug 'christoomey/vim-tmux-navigator'
+Plug 'junegunn/fzf.vim'
 Plug 'junegunn/vim-easy-align'
 Plug 'nelstrom/vim-visual-star-search'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'neoclide/vim-jsx-improve'
 Plug 'neovimhaskell/haskell-vim'
+Plug 'alx741/vim-hindent'
 Plug 'ntpeters/vim-better-whitespace'
 Plug 'scrooloose/nerdtree'
+Plug 'stephpy/vim-yaml'
 Plug 'townk/vim-autoclose'
+Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-eunuch'
+Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 Plug 'vim-ruby/vim-ruby'
-Plug 'wavded/vim-stylus'
-Plug 'alvan/vim-closetag'
-Plug 'chriskempson/base16-vim'
-Plug 'stephpy/vim-yaml'
-Plug 'Yggdroot/indentLine'
-Plug 'FooSoft/vim-argwrap'
-Plug 'junegunn/fzf.vim'
 Plug 'w0rp/ale'
-Plug 'neoclide/coc.nvim', {'tag': '*', 'do': './install.sh'}
+Plug 'wavded/vim-stylus'
+Plug 'junegunn/goyo.vim'
 
 call plug#end()
 
@@ -62,10 +67,6 @@ if filereadable(expand("~/.vimrc_background"))
   source ~/.vimrc_background
 endif
 set termguicolors
-
-function! ShowFileName()
-  return @%
-endfunction
 
 let g:ruby_path = system('echo $HOME/.rbenv/shims')
 set regexpengine=1
@@ -88,11 +89,12 @@ set hlsearch incsearch
 
 " Sensible defaults for indentation
 set tabstop=2 softtabstop=2 shiftwidth=2 expandtab
+autocmd FileType elm setlocal softtabstop=4 shiftwidth=4 expandtab
 
 " Enter paste mode
 set pastetoggle=<F2>
 
-set statusline+=%f
+" set statusline="%f"
 set laststatus=2
 
 " Open NerdTree with Ctrl+n
@@ -111,7 +113,7 @@ nmap ga <Plug>(EasyAlign)
 
 augroup vimrc_autocmds
   autocmd BufEnter * highlight OverLength cterm=underline guibg=#111111
-  autocmd BufEnter * match OverLength /\%91v.*/
+  autocmd BufEnter *.rb match OverLength /\%110v.*/
 augroup END
 
 let g:jsx_ext_required = 1
@@ -128,29 +130,49 @@ let g:indentLine_char = '▏'
 nnoremap <silent> <leader>a :ArgWrap<CR>
 let g:argwrap_padded_braces = '{'
 
+fun! ViewBundleGem ( gemName )
+  let gemPath = system("bundle info --path " . a:gemName)
+  echom "Opening gem: " . gemPath
+  execute ":tabnew " . gemPath
+  execute ":tcd " . gemPath
+endfun
+command! -nargs=* ViewBundleGem call ViewBundleGem( "<args>" )
+
+fun! ToggleClipboard ()
+  if &clipboard == 'unnamed'
+    execute ':set clipboard='
+  else
+    execute ':set clipboard=unnamed'
+  endif
+  echom("clipboard set to: " . &clipboard)
+endfun
+command! ToggleClipboard call ToggleClipboard()
+map <leader>cc :ToggleClipboard<CR>
+
+map <C-P> :Files<CR>
+map <leader>; :Commands<CR><SPACE>
+map <leader>r :e!<CR>
+map <leader>R :source ~/.vimrc<CR>
+map <leader>bo :ViewBundleGem<SPACE>
+map <leader>bp o(::Kernel.require 'pry'; ::Kernel.binding.pry)<ESC>
+map <leader>cb :!cat % \| pbcopy<CR><CR>
+map <leader>n :cnext<CR>
+map <leader>p :cprevious<CR>
+map <leader>f gg=G<C-o><C-o>
+map <leader>F :!rubocop % -a<CR><CR>
+map <leader>s :%s/
+map <leader>S :%S/
+" Use K to show documentation in preview window
+nnoremap <silent><leader>k :call <SID>show_documentation()<CR>
 " Tab navigation shortcuts
 map <silent> <leader>t :tabnew<CR>
 map <silent> <leader>h :tabprevious<CR>
 map <silent> <leader>l :tabnext<CR>
 map <silent> <leader>q :tabclose<CR>
 
-fun! ViewBundleGem ( gemName )
-  let a:gemPath = system("bundle info --path " . a:gemName)
-  echom "Opening gem: " . a:gemPath
-  execute ":tabnew " . a:gemPath
-  execute ":tcd " . a:gemPath
-endfun
-command! -nargs=* ViewBundleGem call ViewBundleGem( "<args>" )
 
-map <C-P> :Files<CR>
-map <leader>; :Commands<CR><SPACE>
-map <leader>R :source ~/.vimrc<CR>
-map <leader>bo :ViewBundleGem<SPACE>
-map <leader>bp o::Kernel.require 'pry'; ::Kernel.binding.pry<ESC>
-map <leader>cb :!cat % \| pbcopy<CR><CR>
-map <leader>n :cnext<CR>
-map <leader>p :cprevious<CR>
-
+nnoremap H ^
+nnoremap L $
 " --------------------------------------------------------------------------
 " CoC configuration
 " Use tab for trigger completion with characters ahead and navigate.
@@ -172,11 +194,14 @@ endfunction
 inoremap <expr> <C-l>
       \ pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
+inoremap jj <ESC>
+
 " Remap keys for gotos
 nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
+nmap <leader>qf  <Plug>(coc-fix-current)
 
 " Use <leader>K to show documentation in preview window
 nnoremap <silent><leader>k :call <SID>show_documentation()<CR>
@@ -188,7 +213,7 @@ function! s:show_documentation()
     call CocAction('doHover')
   endif
 endfunction
-"
+
 " Using CocList
 " Show all diagnostics
 nnoremap <silent> <space>a  :<C-u>CocList diagnostics<cr>
@@ -207,3 +232,19 @@ nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list
 nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
 " --------------------------------------------------------------------------
+
+let g:elm_format_autosave = 1
+
+" Run a given vim command on the results of alt from a given path.
+" See usage below.
+function! AltCommand(path, vim_command)
+  let l:alternate = system("alt " . a:path)
+  if empty(l:alternate)
+    echo "No alternate file for " . a:path . " exists!"
+  else
+    exec a:vim_command . " " . l:alternate
+  endif
+endfunction
+
+" Find the alternate file for the current path and open it
+nnoremap <leader>. :w<cr>:call AltCommand(expand('%'), ':e')<cr>
