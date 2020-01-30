@@ -60,6 +60,7 @@ Plug 'vim-ruby/vim-ruby'
 Plug 'w0rp/ale'
 Plug 'wavded/vim-stylus'
 Plug 'junegunn/goyo.vim'
+Plug 'vimwiki/vimwiki'
 
 call plug#end()
 
@@ -132,9 +133,13 @@ let g:argwrap_padded_braces = '{'
 
 fun! ViewBundleGem ( gemName )
   let gemPath = system("bundle info --path " . a:gemName)
-  echom "Opening gem: " . gemPath
-  execute ":tabnew " . gemPath
-  execute ":tcd " . gemPath
+  if v:shell_error == 0
+    echom "Opening gem: " . gemPath
+    execute ":tabnew " . gemPath
+    execute ":tcd " . gemPath
+  else
+    echom gemPath
+  endif
 endfun
 command! -nargs=* ViewBundleGem call ViewBundleGem( "<args>" )
 
