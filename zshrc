@@ -38,6 +38,7 @@ alias bc="bin/console"
 alias be="bundle exec"
 alias br="bundle exec rspec -t '~integration' -t '~pdf'"
 alias bu="br spec/unit"
+alias cat=bat
 alias dc="docker-compose"
 alias dots="~/dots"
 alias git=hub
@@ -53,6 +54,7 @@ alias vi="vim"
 alias vim="nvim"
 alias vimconfig="vim ~/.vimrc"
 alias zshconfig="vim ~/.zshrc"
+alias tmuxconfig="vim ~/.zshrc"
 disable r
 # }}}
 
