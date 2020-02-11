@@ -34,19 +34,21 @@ Plug 'FooSoft/vim-argwrap'
 Plug 'MattesGroeger/vim-bookmarks'
 Plug 'Yggdroot/indentLine'
 Plug 'alvan/vim-closetag'
+Plug 'alx741/vim-hindent'
 Plug 'brookhong/ag.vim'
 Plug 'chriskempson/base16-vim'
 Plug 'christoomey/vim-tmux-navigator'
+Plug 'jiangmiao/auto-pairs'
 Plug 'junegunn/fzf.vim'
+Plug 'junegunn/goyo.vim'
 Plug 'junegunn/vim-easy-align'
+Plug 'mustache/vim-mustache-handlebars'
 Plug 'nelstrom/vim-visual-star-search'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'neoclide/vim-jsx-improve'
 Plug 'neovimhaskell/haskell-vim'
-Plug 'alx741/vim-hindent'
 Plug 'ntpeters/vim-better-whitespace'
 Plug 'scrooloose/nerdtree'
-Plug 'jiangmiao/auto-pairs'
 Plug 'stephpy/vim-yaml'
 Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-commentary'
@@ -57,10 +59,9 @@ Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 Plug 'vim-ruby/vim-ruby'
+Plug 'vimwiki/vimwiki'
 Plug 'w0rp/ale'
 Plug 'wavded/vim-stylus'
-Plug 'junegunn/goyo.vim'
-Plug 'vimwiki/vimwiki'
 
 call plug#end()
 
@@ -154,26 +155,26 @@ endfun
 command! ToggleClipboard call ToggleClipboard()
 map <leader>cc :ToggleClipboard<CR>
 
-map <C-P> :Files<CR>
-map <leader>; :Commands<CR><SPACE>
-map <leader>r :e!<CR>
-map <leader>R :source ~/.vimrc<CR>
-map <leader>bo :ViewBundleGem<SPACE>
-map <leader>bp o(::Kernel.require 'pry'; ::Kernel.binding.pry)<ESC>
-map <leader>cb :!cat % \| pbcopy<CR><CR>
-map <leader>n :cnext<CR>
-map <leader>p :cprevious<CR>
-map <leader>f gg=G<C-o><C-o>
-map <leader>F :!rubocop % -a<CR><CR>
-map <leader>s :%s/
-map <leader>S :%S/
+nnoremap <C-P> :Files<CR>
+nnoremap <leader>; :Buffers<CR><SPACE>
+nnoremap <leader>r :e!<CR>
+nnoremap <leader>R :source ~/.vimrc<CR>
+nnoremap <leader>bo :ViewBundleGem<SPACE>
+nnoremap <leader>bp o(::Kernel.require 'pry'; ::Kernel.binding.pry)<ESC>
+nnoremap <leader>cb :!cat % \| pbcopy<CR><CR>
+nnoremap <leader>n :cnext<CR>
+nnoremap <leader>p :cprevious<CR>
+nnoremap <leader>f gg=G<C-o><C-o>
+nnoremap <leader>F :!rubocop % -a<CR><CR>
+nnoremap <leader>s :%s/
+nnoremap <leader>S :%S/
 " Use K to show documentation in preview window
 nnoremap <silent><leader>k :call <SID>show_documentation()<CR>
 " Tab navigation shortcuts
-map <silent> <leader>t :tabnew<CR>
-map <silent> <leader>h :tabprevious<CR>
-map <silent> <leader>l :tabnext<CR>
-map <silent> <leader>q :tabclose<CR>
+nnoremap <silent> <leader>t :tabnew<CR>
+nnoremap <silent> <leader>h :tabprevious<CR>
+nnoremap <silent> <leader>l :tabnext<CR>
+nnoremap <silent> <leader>q :tabclose<CR>
 
 
 nnoremap H ^
@@ -230,7 +231,7 @@ nnoremap <silent> <space>c  :<C-u>CocList commands<cr>
 nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
 " --------------------------------------------------------------------------
 
-let g:elm_format_autosave = 1
+let g:elm_format_autosave = 0
 
 " Run a given vim command on the results of alt from a given path.
 " See usage below.
