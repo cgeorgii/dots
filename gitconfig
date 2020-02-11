@@ -1,6 +1,7 @@
 [push]
 	default = simple
 [alias]
+	b = branch
 	cb = checkout -b
 	pp = pull --prune
 	co = checkout
