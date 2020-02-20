@@ -54,7 +54,6 @@ alias vi="vim"
 alias vim="nvim"
 alias vimconfig="vim ~/.vimrc"
 alias zshconfig="vim ~/.zshrc"
-alias tmuxconfig="vim ~/.zshrc"
 disable r
 # }}}
 
