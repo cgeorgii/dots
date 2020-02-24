@@ -60,6 +60,7 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 Plug 'vim-ruby/vim-ruby'
 Plug 'vimwiki/vimwiki'
+Plug 'vmchale/dhall-vim'
 Plug 'w0rp/ale'
 Plug 'wavded/vim-stylus'
 
@@ -231,7 +232,7 @@ nnoremap <silent> <space>c  :<C-u>CocList commands<cr>
 nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
 " --------------------------------------------------------------------------
 
-let g:elm_format_autosave = 0
+" let g:elm_format_autosave = 1
 
 " Run a given vim command on the results of alt from a given path.
 " See usage below.
