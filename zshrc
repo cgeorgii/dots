@@ -13,13 +13,11 @@ export PATH="/usr/local/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 export SSH_KEY_PATH="~/.ssh/"
 export FZF_DEFAULT_COMMAND='ag -g ""'
-export NNN_BMS='d:~/Downloads;~:~;c:~/code'
-export NNN_USE_EDITOR=1
 # }}}
 
 # Plugins
 # plugins=(git ssh-agent vi-mode tmuxinator zsh-autosuggestions)
-plugins=(git ssh-agent vi-mode tmuxinator zsh-autosuggestions)
+plugins=(git vi-mode zsh-autosuggestions)
 
 # Ruby
 eval "$(rbenv init -)"
@@ -29,29 +27,25 @@ ZSH_THEME="robbyrussell"
 source $ZSH/oh-my-zsh.sh
 bindkey "^P" up-line-or-beginning-search # Make ctrl-p work like up arrow
 bindkey "^N" down-line-or-beginning-search # Make ctrl-n work like down arrow
-bindkey -s "^_" 'nnn^M'
 DISABLE_UNTRACKED_FILES_DIRTY="true"
 # }}}
 
 # Aliases {{{
 alias bc="bin/console"
 alias be="bundle exec"
-alias br="bundle exec rspec -t '~integration' -t '~pdf'"
-alias bu="br spec/unit"
 alias cat=bat
-alias dc="docker-compose"
 alias dots="~/dots"
 alias git=hub
-alias gitconfig="vim ~/.gitconfig"
 alias ls=exa
 alias mux="tmuxinator"
-alias scheme="rlwrap -c -r -f ~/mit_scheme_bindings.txt scheme"
 alias se="stack exec"
 alias t=bin/test
 alias there='tmux new-session -As $(basename "$PWD" | tr . -)'
-alias tmuxconfig="vim ~/.tmux.conf"
 alias vi="vim"
 alias vim="nvim"
+
+alias gitconfig="vim ~/.gitconfig"
+alias tmuxconfig="vim ~/.tmux.conf"
 alias vimconfig="vim ~/.vimrc"
 alias zshconfig="vim ~/.zshrc"
 disable r
