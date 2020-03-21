@@ -16,7 +16,6 @@ export FZF_DEFAULT_COMMAND='ag -g ""'
 # }}}
 
 # Plugins
-# plugins=(git ssh-agent vi-mode tmuxinator zsh-autosuggestions)
 plugins=(git vi-mode zsh-autosuggestions)
 
 # Ruby
