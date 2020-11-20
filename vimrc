@@ -31,11 +31,9 @@ call plug#begin('~/.local/share/nvim/plugged')
 
 Plug 'ElmCast/elm-vim'
 Plug 'FooSoft/vim-argwrap'
-Plug 'MattesGroeger/vim-bookmarks'
 Plug 'Yggdroot/indentLine'
 Plug 'alvan/vim-closetag'
 Plug 'alx741/vim-hindent'
-Plug 'brookhong/ag.vim'
 Plug 'chriskempson/base16-vim'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'jiangmiao/auto-pairs'
@@ -59,7 +57,6 @@ Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 Plug 'vim-ruby/vim-ruby'
-Plug 'vimwiki/vimwiki'
 Plug 'vmchale/dhall-vim'
 Plug 'w0rp/ale'
 Plug 'wavded/vim-stylus'
@@ -79,9 +76,6 @@ set grepprg=ag\ --nogroup\ --nocolor
 
 " bind K to grep word under cursor
 nnoremap K :silent grep! <cword> \| copen<CR>
-
-" bind \ (backward slash) to grep shortcut
-nnoremap \ :Ag<SPACE>
 
 " Display line numbers
 set number rnu
@@ -115,8 +109,8 @@ set splitright
 nmap ga <Plug>(EasyAlign)
 
 augroup vimrc_autocmds
-  autocmd BufEnter * highlight OverLength cterm=underline guibg=#111111
-  autocmd BufEnter *.rb match OverLength /\%110v.*/
+  " autocmd BufEnter * highlight OverLength cterm=underline guibg=#111111
+  " autocmd BufEnter *.rb match OverLength /\%110v.*/
 augroup END
 
 let g:jsx_ext_required = 1
@@ -156,8 +150,10 @@ endfun
 command! ToggleClipboard call ToggleClipboard()
 map <leader>cc :ToggleClipboard<CR>
 
+nnoremap \ :Ag<CR>
+nnoremap \| :Tags<CR>
 nnoremap <C-P> :Files<CR>
-nnoremap <leader>; :Buffers<CR><SPACE>
+nnoremap <leader>; :Buffers<CR>
 nnoremap <leader>r :e!<CR>
 nnoremap <leader>R :source ~/.vimrc<CR>
 nnoremap <leader>bo :ViewBundleGem<SPACE>
@@ -169,9 +165,7 @@ nnoremap <leader>f gg=G<C-o><C-o>
 nnoremap <leader>F :!rubocop % -a<CR><CR>
 nnoremap <leader>s :%s/
 nnoremap <leader>S :%S/
-" Use K to show documentation in preview window
 nnoremap <silent><leader>k :call <SID>show_documentation()<CR>
-" Tab navigation shortcuts
 nnoremap <silent> <leader>t :tabnew<CR>
 nnoremap <silent> <leader>h :tabprevious<CR>
 nnoremap <silent> <leader>l :tabnext<CR>
@@ -179,7 +173,10 @@ nnoremap <silent> <leader>q :tabclose<CR>
 
 
 nnoremap H ^
-nnoremap L $
+nnoremap L g_
+vnoremap H ^
+vnoremap L g_
+
 " --------------------------------------------------------------------------
 " CoC configuration
 " Use tab for trigger completion with characters ahead and navigate.
@@ -232,7 +229,7 @@ nnoremap <silent> <space>c  :<C-u>CocList commands<cr>
 nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
 " --------------------------------------------------------------------------
 
-" let g:elm_format_autosave = 1
+let g:elm_format_autosave = 1
 
 " Run a given vim command on the results of alt from a given path.
 " See usage below.
@@ -247,3 +244,5 @@ endfunction
 
 " Find the alternate file for the current path and open it
 nnoremap <leader>. :w<cr>:call AltCommand(expand('%'), ':e')<cr>
+
+let g:ale_pattern_options = {'\.hs$': {'ale_enabled': 0}}
