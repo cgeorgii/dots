@@ -18,6 +18,9 @@ export FZF_DEFAULT_COMMAND='ag -g ""'
 # Plugins
 plugins=(git vi-mode zsh-autosuggestions)
 
+# This enables commands such as `rake db:create_migration[migration_name]` to work properly
+unsetopt nomatch
+
 # Ruby
 eval "$(rbenv init -)"
 
@@ -62,3 +65,6 @@ BASE16_SHELL="$HOME/.config/base16-shell/"
 [ -f /usr/local/etc/profile.d/autojump.sh ] && . /usr/local/etc/profile.d/autojump.sh
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+if [ -e /Users/cgeorgii/.nix-profile/etc/profile.d/nix.sh ]; then . /Users/cgeorgii/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
+eval "$(direnv hook zsh)"
+[ -f "/Users/cgeorgii/.ghcup/env" ] && source "/Users/cgeorgii/.ghcup/env" # ghcup-env
