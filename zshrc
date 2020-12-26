@@ -66,5 +66,4 @@ BASE16_SHELL="$HOME/.config/base16-shell/"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 if [ -e /Users/cgeorgii/.nix-profile/etc/profile.d/nix.sh ]; then . /Users/cgeorgii/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
-eval "$(direnv hook zsh)"
 [ -f "/Users/cgeorgii/.ghcup/env" ] && source "/Users/cgeorgii/.ghcup/env" # ghcup-env
