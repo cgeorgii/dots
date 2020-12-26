@@ -29,6 +29,7 @@ filetype plugin indent on    " required
 
 call plug#begin('~/.local/share/nvim/plugged')
 
+Plug 'elixir-editors/vim-elixir'
 Plug 'ElmCast/elm-vim'
 Plug 'FooSoft/vim-argwrap'
 Plug 'Yggdroot/indentLine'
@@ -36,6 +37,7 @@ Plug 'alvan/vim-closetag'
 Plug 'alx741/vim-hindent'
 Plug 'chriskempson/base16-vim'
 Plug 'christoomey/vim-tmux-navigator'
+Plug 'brookhong/ag.vim'
 Plug 'jiangmiao/auto-pairs'
 Plug 'junegunn/fzf.vim'
 Plug 'junegunn/goyo.vim'
@@ -150,7 +152,8 @@ endfun
 command! ToggleClipboard call ToggleClipboard()
 map <leader>cc :ToggleClipboard<CR>
 
-nnoremap \ :Ag<CR>
+nnoremap \ :Ag<SPACE>
+" nnoremap \ :Ag<CR>
 nnoremap \| :Tags<CR>
 nnoremap <C-P> :Files<CR>
 nnoremap <leader>; :Buffers<CR>
