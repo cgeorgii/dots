@@ -1,4 +1,4 @@
-set nocompatible " be iMproved, required
+set nocompatible
 
 let mapleader = ";"
 let maplocalleader = ";"
@@ -23,10 +23,15 @@ set inccommand=nosplit
 nnoremap * #
 nnoremap # *
 
-set rtp+=/usr/local/opt/fzf
+" set rtp+=/usr/local/opt/fzf
 
 filetype plugin indent on    " required
 
+let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
+if empty(glob(data_dir . '/autoload/plug.vim'))
+  silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
 call plug#begin('~/.local/share/nvim/plugged')
 
 Plug 'elixir-editors/vim-elixir'
@@ -39,6 +44,7 @@ Plug 'chriskempson/base16-vim'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'brookhong/ag.vim'
 Plug 'jiangmiao/auto-pairs'
+Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'junegunn/goyo.vim'
 Plug 'junegunn/vim-easy-align'
@@ -68,7 +74,9 @@ call plug#end()
 if filereadable(expand("~/.vimrc_background"))
   source ~/.vimrc_background
 endif
-set termguicolors
+if has("termguicolors")
+  set termguicolors
+endif
 
 let g:ruby_path = system('echo $HOME/.rbenv/shims')
 set regexpengine=1
@@ -249,3 +257,7 @@ endfunction
 nnoremap <leader>. :w<cr>:call AltCommand(expand('%'), ':e')<cr>
 
 let g:ale_pattern_options = {'\.hs$': {'ale_enabled': 0}}
+
+set background=dark
+let base16colorspace=256  " Access colors present in 256 colorspace
+colorscheme base16-onedark
