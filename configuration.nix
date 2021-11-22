@@ -70,6 +70,7 @@
       pkgs.starship
       pkgs.rbenv
       pkgs.autojump
+      pkgs.diff-so-fancy
     ];
 
     programs.autojump = {
@@ -77,11 +78,13 @@
       enableZshIntegration = true;
     };
 
+
     programs.zsh = {
       enable = true;
       enableAutosuggestions = true;
       enableCompletion = true;
       autocd = true;
+
       initExtra = "
         bindkey -v '^P' history-beginning-search-backward
         bindkey -v '^N' history-beginning-search-forward
@@ -100,6 +103,29 @@
         gst = "git status";
         gitconfig = "nvim ~/.gitconfig";
       };
+
+      plugins = with pkgs; [
+        {
+          name = "zsh-syntax-highlighting";
+          src = fetchFromGitHub {
+            owner = "zsh-users";
+            repo = "zsh-syntax-highlighting";
+            rev = "0.6.0";
+            sha256 = "0zmq66dzasmr5pwribyh4kbkk23jxbpdw4rjxx0i7dx8jjp2lzl4";
+          };
+          file = "zsh-syntax-highlighting.zsh";
+        }
+        {
+          name = "zsh-autopair";
+          src = fetchFromGitHub {
+            owner = "hlissner";
+            repo = "zsh-autopair";
+            rev = "34a8bca0c18fcf3ab1561caef9790abffc1d3d49";
+            sha256 = "1h0vm2dgrmb8i2pvsgis3lshc5b0ad846836m62y8h3rdb3zmpy1";
+          };
+          file = "autopair.zsh";
+        }
+      ];
     };
 
     programs.starship = {
