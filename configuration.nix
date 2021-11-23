@@ -47,6 +47,7 @@
     xclip
     tmux
     ag
+    rnix-lsp
   ];
 
   users.users.corgi = {
@@ -60,7 +61,12 @@
     (pkgs.nerdfonts.override { fonts = [ "Iosevka" ]; })
   ];
 
+
   home-manager.users.corgi = { pkgs, ...}: {
+    nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (pkgs.lib.getName pkg) [
+      "dropbox"
+    ];
+
     home.packages = [
       pkgs.nodejs
       pkgs.neovim
@@ -71,6 +77,7 @@
       pkgs.rbenv
       pkgs.autojump
       pkgs.diff-so-fancy
+      pkgs.dropbox
     ];
 
     programs.autojump = {
@@ -90,13 +97,10 @@
         autoload -U history-search-end
         zle -N history-beginning-search-backward-end history-search-end
         zle -N history-beginning-search-forward-end history-search-end
-        bindkey -v '^P' history-beginning-search-backward-end
-        bindkey -v '^N' history-beginning-search-forward-end
+        bindkey -e '^P' history-beginning-search-backward-end
+        bindkey -e '^N' history-beginning-search-forward-end
 
-        bindkey '^A' beginning-of-line
-        bindkey '^E' end-of-line
-        bindkey '^B' vi-backward-blank-word
-        bindkey '^F' vi-forward-blank-word
+        bindkey -e '^[' vi-cmd-mode
       ";
 
       shellAliases = {
