@@ -64,6 +64,7 @@
   home-manager.users.corgi = { pkgs, ...}: {
     nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (pkgs.lib.getName pkg) [
       "dropbox"
+      "slack"
     ];
 
     home.packages = [
@@ -77,6 +78,7 @@
       pkgs.autojump
       pkgs.diff-so-fancy
       pkgs.dropbox
+      pkgs.slack
       pkgs.keepassxc
     ];
 
