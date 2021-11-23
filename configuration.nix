@@ -86,8 +86,13 @@
       autocd = true;
 
       initExtra = "
-        bindkey -v '^P' history-beginning-search-backward
-        bindkey -v '^N' history-beginning-search-forward
+        # Better history navigation with ^P and ^N
+        autoload -U history-search-end
+        zle -N history-beginning-search-backward-end history-search-end
+        zle -N history-beginning-search-forward-end history-search-end
+        bindkey -v '^P' history-beginning-search-backward-end
+        bindkey -v '^N' history-beginning-search-forward-end
+
         bindkey '^A' beginning-of-line
         bindkey '^E' end-of-line
         bindkey '^B' vi-backward-blank-word
