@@ -61,7 +61,6 @@
     (pkgs.nerdfonts.override { fonts = [ "Iosevka" ]; })
   ];
 
-
   home-manager.users.corgi = { pkgs, ...}: {
     nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (pkgs.lib.getName pkg) [
       "dropbox"
@@ -78,6 +77,7 @@
       pkgs.autojump
       pkgs.diff-so-fancy
       pkgs.dropbox
+      pkgs.keepassxc
     ];
 
     programs.autojump = {
