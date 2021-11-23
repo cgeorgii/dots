@@ -35,6 +35,7 @@ endif
 call plug#begin('~/.local/share/nvim/plugged')
 
 Plug 'elixir-editors/vim-elixir'
+Plug 'LnL7/vim-nix'
 Plug 'ElmCast/elm-vim'
 Plug 'FooSoft/vim-argwrap'
 Plug 'Yggdroot/indentLine'
