@@ -50,6 +50,10 @@
     bat
   ];
 
+  environment.variables = {
+    EDITOR = "nvim";
+  };
+
   users.users.corgi = {
     isNormalUser = true;
     shell = pkgs.zsh;
