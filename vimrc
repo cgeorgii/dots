@@ -72,21 +72,10 @@ Plug 'wavded/vim-stylus'
 
 call plug#end()
 
-if filereadable(expand("~/.vimrc_background"))
-  source ~/.vimrc_background
-endif
-if has("termguicolors")
-  set termguicolors
-endif
-
-let g:ruby_path = system('echo $HOME/.rbenv/shims')
 set regexpengine=1
 
 " Use ag over grep
 set grepprg=ag\ --nogroup\ --nocolor
-
-" bind K to grep word under cursor
-nnoremap K :silent grep! <cword> \| copen<CR>
 
 " Display line numbers
 set number rnu
@@ -98,6 +87,7 @@ set hlsearch incsearch
 " Sensible defaults for indentation
 set tabstop=2 softtabstop=2 shiftwidth=2 expandtab
 autocmd FileType elm setlocal softtabstop=4 shiftwidth=4 expandtab
+
 
 " Enter paste mode
 set pastetoggle=<F2>
@@ -118,11 +108,6 @@ set splitright
 
 " Start interactive EasyAlign for a motion/text object (e.g. gaip)
 nmap ga <Plug>(EasyAlign)
-
-augroup vimrc_autocmds
-  " autocmd BufEnter * highlight OverLength cterm=underline guibg=#111111
-  " autocmd BufEnter *.rb match OverLength /\%110v.*/
-augroup END
 
 let g:jsx_ext_required = 1
 
@@ -161,6 +146,8 @@ endfun
 command! ToggleClipboard call ToggleClipboard()
 map <leader>cc :ToggleClipboard<CR>
 
+" bind K to grep word under cursor
+nnoremap K :silent grep! <cword> \| copen<CR>
 nnoremap \ :Ag<SPACE>
 " nnoremap \ :Ag<CR>
 nnoremap \| :Tags<CR>
@@ -259,6 +246,5 @@ nnoremap <leader>. :w<cr>:call AltCommand(expand('%'), ':e')<cr>
 
 let g:ale_pattern_options = {'\.hs$': {'ale_enabled': 0}}
 
-set background=dark
-let base16colorspace=256  " Access colors present in 256 colorspace
+set termguicolors
 colorscheme base16-onedark

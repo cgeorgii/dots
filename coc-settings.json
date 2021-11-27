@@ -12,7 +12,5 @@
         "nix"
       ]
     }
-	},
-  "solargraph.useBundler": true,
-  "solargraph.bundlerPath": "/Users/cgeorgii/.rbenv/shims/bundle"
+	}
 }

@@ -35,8 +35,6 @@
   nix.binaryCaches = [ "https://cache.nixos.org" "https://nixcache.reflex-frp.org" ];
   nix.binaryCachePublicKeys = [ "ryantrinkle.com-1:JJiAKaRv9mWgpVAz8dwewnZe0AzzEAzPkagE9SP5NWI=" ];
 
-  environment.variables.EDITOR = "nvim";
-
   nixpkgs.config.firefox.enableGnomeExtensions = true;
   environment.systemPackages = with pkgs; [
     firefox
@@ -48,6 +46,8 @@
     tmux
     ag
     rnix-lsp
+    file
+    bat
   ];
 
   users.users.corgi = {
@@ -103,6 +103,8 @@
         bindkey -e '^N' history-beginning-search-forward-end
 
         bindkey -e '^[' vi-cmd-mode
+
+        export BAT_THEME=base16
       ";
 
       shellAliases = {
