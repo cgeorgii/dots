@@ -35,6 +35,11 @@
   nix.binaryCaches = [ "https://cache.nixos.org" "https://nixcache.reflex-frp.org" ];
   nix.binaryCachePublicKeys = [ "ryantrinkle.com-1:JJiAKaRv9mWgpVAz8dwewnZe0AzzEAzPkagE9SP5NWI=" ];
 
+  nix.extraOptions = ''
+    keep-outputs = true
+    keep-derivations = true
+  '';
+
   nixpkgs.config.firefox.enableGnomeExtensions = true;
   environment.systemPackages = with pkgs; [
     firefox
@@ -48,6 +53,8 @@
     rnix-lsp
     file
     bat
+    readline
+    chromium
   ];
 
   environment.variables = {
@@ -84,6 +91,9 @@
       pkgs.dropbox
       pkgs.slack
       pkgs.keepassxc
+      pkgs.direnv
+      pkgs.nix-direnv
+      pkgs.signal-desktop
     ];
 
     programs.autojump = {
@@ -91,6 +101,10 @@
       enableZshIntegration = true;
     };
 
+    programs.direnv = {
+      enable = true;
+      nix-direnv.enable = true;
+    };
 
     programs.zsh = {
       enable = true;
@@ -106,6 +120,13 @@
         bindkey -e '^P' history-beginning-search-backward-end
         bindkey -e '^N' history-beginning-search-forward-end
 
+        bindkey -e '^b' backward-char
+        bindkey -e '^f' forward-char
+
+        bindkey -e '^[b' backward-word
+        bindkey -e '^[f' forward-word
+
+        # Enter vim mode with ESC
         bindkey -e '^[' vi-cmd-mode
 
         export BAT_THEME=base16

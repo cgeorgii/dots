@@ -23,8 +23,6 @@ set inccommand=nosplit
 nnoremap * #
 nnoremap # *
 
-" set rtp+=/usr/local/opt/fzf
-
 filetype plugin indent on    " required
 
 let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
@@ -40,7 +38,6 @@ Plug 'ElmCast/elm-vim'
 Plug 'FooSoft/vim-argwrap'
 Plug 'Yggdroot/indentLine'
 Plug 'alvan/vim-closetag'
-Plug 'alx741/vim-hindent'
 Plug 'chriskempson/base16-vim'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'brookhong/ag.vim'
@@ -87,7 +84,6 @@ set hlsearch incsearch
 " Sensible defaults for indentation
 set tabstop=2 softtabstop=2 shiftwidth=2 expandtab
 autocmd FileType elm setlocal softtabstop=4 shiftwidth=4 expandtab
-
 
 " Enter paste mode
 set pastetoggle=<F2>
