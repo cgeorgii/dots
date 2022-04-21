@@ -13,6 +13,8 @@ export PATH="/usr/local/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 export SSH_KEY_PATH="~/.ssh/"
 export FZF_DEFAULT_COMMAND='ag -g ""'
+export FZF_CTRL_T_COMMAND='ag -g ""'
+export BAT_THEME="OneHalfDark"
 # }}}
 
 # Plugins
@@ -41,6 +43,8 @@ alias git=hub
 alias ls=exa
 alias mux="tmuxinator"
 alias se="stack exec"
+alias sb="stack build"
+alias sr="stack run"
 alias t=bin/test
 alias there='tmux new-session -As $(basename "$PWD" | tr . -)'
 alias vi="vim"
@@ -66,4 +70,11 @@ BASE16_SHELL="$HOME/.config/base16-shell/"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 if [ -e /Users/cgeorgii/.nix-profile/etc/profile.d/nix.sh ]; then . /Users/cgeorgii/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
+eval "$(direnv hook zsh)"
 [ -f "/Users/cgeorgii/.ghcup/env" ] && source "/Users/cgeorgii/.ghcup/env" # ghcup-env
+
+export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion

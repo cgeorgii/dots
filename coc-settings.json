@@ -5,8 +5,30 @@
       "args": ["--lsp"],
       "rootPatterns": ["*.cabal", "stack.yaml", "cabal.project", "package.yaml", "hie.yaml"],
       "filetypes": ["haskell", "lhaskell"]
+    },
+    "elm": {
+      "command": "elm-language-server",
+      "args": [],
+      "rootPatterns": ["package.json"],
+      "filetypes": ["elm"]
+    },
+    "purescript": {
+      "command": "purescript-language-server",
+      "args": ["--stdio"],
+      "filetypes": ["purescript"],
+      "trace.server": "off",
+      "rootPatterns": ["bower.json", "psc-package.json", "spago.dhall"],
+      "settings": {
+        "purescript": {
+          "addSpagoSources": true,
+          "addNpmPath": true
+        }
+      }
     }
 	},
-  "solargraph.useBundler": true,
+
+  "solargraph.useBundler": false,
+  "solargraph.diagnostics": true,
+  "solargraph.formatting": true,
   "solargraph.bundlerPath": "/Users/cgeorgii/.rbenv/shims/bundle"
 }

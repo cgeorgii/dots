@@ -34,19 +34,21 @@ Plug 'ElmCast/elm-vim'
 Plug 'FooSoft/vim-argwrap'
 Plug 'Yggdroot/indentLine'
 Plug 'alvan/vim-closetag'
-Plug 'alx741/vim-hindent'
 Plug 'chriskempson/base16-vim'
 Plug 'christoomey/vim-tmux-navigator'
-Plug 'brookhong/ag.vim'
+" Plug 'brookhong/ag.vim'
+Plug 'mileszs/ack.vim'
 Plug 'jiangmiao/auto-pairs'
 Plug 'junegunn/fzf.vim'
 Plug 'junegunn/goyo.vim'
 Plug 'junegunn/vim-easy-align'
+Plug 'LnL7/vim-nix'
 Plug 'mustache/vim-mustache-handlebars'
 Plug 'nelstrom/vim-visual-star-search'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'neoclide/vim-jsx-improve'
 Plug 'neovimhaskell/haskell-vim'
+Plug 'sdiehl/vim-ormolu'
 Plug 'ntpeters/vim-better-whitespace'
 Plug 'scrooloose/nerdtree'
 Plug 'stephpy/vim-yaml'
@@ -60,8 +62,16 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 Plug 'vim-ruby/vim-ruby'
 Plug 'vmchale/dhall-vim'
-Plug 'w0rp/ale'
+Plug 'dense-analysis/ale'
 Plug 'wavded/vim-stylus'
+Plug 'mattn/emmet-vim'
+Plug 'digitaltoad/vim-pug'
+Plug 'jparise/vim-graphql'
+" Plug 'unisonweb/unison', { 'branch': 'trunk', 'rtp': 'editor-support/vim' }
+Plug 'purescript-contrib/purescript-vim'
+
+Plug 'leafgarland/typescript-vim'
+Plug 'peitalin/vim-jsx-typescript'
 
 call plug#end()
 
@@ -78,6 +88,9 @@ set grepprg=ag\ --nogroup\ --nocolor
 
 " bind K to grep word under cursor
 nnoremap K :silent grep! <cword> \| copen<CR>
+
+" Erase search highlight with spacebar
+nnoremap <Space> :noh<return><esc>
 
 " Display line numbers
 set number rnu
@@ -98,6 +111,7 @@ set laststatus=2
 
 " Open NerdTree with Ctrl+n
 map <C-n> :NERDTreeToggle<CR>
+" map <C-n> :CHADopen<CR>
 
 " Persistent undo between vim sessions
 set undofile
@@ -111,8 +125,9 @@ set splitright
 nmap ga <Plug>(EasyAlign)
 
 augroup vimrc_autocmds
-  " autocmd BufEnter * highlight OverLength cterm=underline guibg=#111111
-  " autocmd BufEnter *.rb match OverLength /\%110v.*/
+  autocmd BufEnter * highlight OverLength cterm=underline guibg=#111111
+  autocmd BufWrite *.rb call CocAction('format')
+  autocmd BufWrite *.purs call CocAction('format')
 augroup END
 
 let g:jsx_ext_required = 1
@@ -130,7 +145,7 @@ nnoremap <silent> <leader>a :ArgWrap<CR>
 let g:argwrap_padded_braces = '{'
 
 fun! ViewBundleGem ( gemName )
-  let gemPath = system("bundle info --path " . a:gemName)
+  let gemPath = system("RUBYOPT='-W0' bundle info --path " . a:gemName)
   if v:shell_error == 0
     echom "Opening gem: " . gemPath
     execute ":tabnew " . gemPath
@@ -152,23 +167,30 @@ endfun
 command! ToggleClipboard call ToggleClipboard()
 map <leader>cc :ToggleClipboard<CR>
 
-nnoremap \ :Ag<SPACE>
-" nnoremap \ :Ag<CR>
+nnoremap \ :Ack!<Space>
+if executable('ag')
+  let g:ackprg = 'ag --vimgrep'
+endif
+
 nnoremap \| :Tags<CR>
 nnoremap <C-P> :Files<CR>
+nnoremap <C-T> :Files<CR>
 nnoremap <leader>; :Buffers<CR>
+nnoremap <leader>: :History:<CR>
 nnoremap <leader>r :e!<CR>
 nnoremap <leader>R :source ~/.vimrc<CR>
 nnoremap <leader>bo :ViewBundleGem<SPACE>
 nnoremap <leader>bp o(::Kernel.require 'pry'; ::Kernel.binding.pry)<ESC>
 nnoremap <leader>cb :!cat % \| pbcopy<CR><CR>
-nnoremap <leader>n :cnext<CR>
-nnoremap <leader>p :cprevious<CR>
-nnoremap <leader>f gg=G<C-o><C-o>
-nnoremap <leader>F :!rubocop % -a<CR><CR>
+" nnoremap <leader>n :cnext<CR>
+" nnoremap <leader>p :cprevious<CR>
+" nnoremap <leader>f gg=G<C-o>
+nnoremap <leader>f :call CocAction('format')<CR>
 nnoremap <leader>s :%s/
 nnoremap <leader>S :%S/
 nnoremap <silent><leader>k :call <SID>show_documentation()<CR>
+
+" Tab management
 nnoremap <silent> <leader>t :tabnew<CR>
 nnoremap <silent> <leader>h :tabprevious<CR>
 nnoremap <silent> <leader>l :tabnext<CR>
@@ -179,6 +201,9 @@ nnoremap H ^
 nnoremap L g_
 vnoremap H ^
 vnoremap L g_
+
+noremap <leader>zi <c-w>_ \| <c-w>\|
+noremap <leader>zo <c-w>=
 
 " --------------------------------------------------------------------------
 " CoC configuration
@@ -204,11 +229,13 @@ inoremap <expr> <C-l>
 inoremap jj <ESC>
 
 " Remap keys for gotos
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
-nmap <leader>qf  <Plug>(coc-fix-current)
+nmap <silent>gd <Plug>(coc-definition)
+nmap <silent>gy <Plug>(coc-type-definition)
+nmap <silent>gi <Plug>(coc-implementation)
+nmap <silent>gr <Plug>(coc-references)
+nmap <leader>qf <Plug>(coc-fix-current)
+nmap <silent><leader>N <Plug>(coc-diagnostic-prev)
+nmap <silent><leader>n <Plug>(coc-diagnostic-next)
 
 " Use <leader>K to show documentation in preview window
 nnoremap <silent><leader>k :call <SID>show_documentation()<CR>
@@ -220,17 +247,6 @@ function! s:show_documentation()
     call CocAction('doHover')
   endif
 endfunction
-
-" Using CocList
-" Show all diagnostics
-nnoremap <silent> <space>a  :<C-u>CocList diagnostics<cr>
-" Manage extensions
-nnoremap <silent> <space>e  :<C-u>CocList extensions<cr>
-" Show commands
-nnoremap <silent> <space>c  :<C-u>CocList commands<cr>
-" Resume latest coc list
-nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
-" --------------------------------------------------------------------------
 
 let g:elm_format_autosave = 1
 
@@ -248,4 +264,16 @@ endfunction
 " Find the alternate file for the current path and open it
 nnoremap <leader>. :w<cr>:call AltCommand(expand('%'), ':e')<cr>
 
-let g:ale_pattern_options = {'\.hs$': {'ale_enabled': 0}}
+let g:ale_pattern_options = {
+  \ '\.hs$': {'ale_enabled': 0},
+  \ '\.rb$': {'ale_enabled': 1}
+  \ }
+
+let g:haskell_indent_disable = 0
+
+" Use record dot syntax
+let g:ormolu_command="fourmolu"
+let g:ormolu_options=["-o '-pgmF=record-dot-preprocessor'"]
+let g:ormolu_suppress_stderr=1
+
+let g:elm_setup_keybindings = 0
