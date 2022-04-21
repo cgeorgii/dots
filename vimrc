@@ -19,6 +19,8 @@ set shortmess+=I
 set signcolumn=yes
 set lazyredraw
 set inccommand=nosplit
+" Enable scrolling with mouse inside tmux
+set mouse=a
 
 nnoremap * #
 nnoremap # *
