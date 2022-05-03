@@ -81,22 +81,22 @@
     ];
 
     home.packages = [
-      pkgs.albert
-      pkgs.nodejs
-      pkgs.neovim
-      pkgs.hub
       pkgs.alacritty
-      pkgs.fzf
-      pkgs.starship
-      pkgs.rbenv
+      pkgs.albert
       pkgs.autojump
       pkgs.diff-so-fancy
-      pkgs.dropbox
-      pkgs.slack
-      pkgs.keepassxc
       pkgs.direnv
+      pkgs.dropbox
+      pkgs.fzf
+      pkgs.hub
+      pkgs.keepassxc
+      pkgs.neovim
       pkgs.nix-direnv
+      pkgs.nodejs
+      pkgs.rbenv
       pkgs.signal-desktop
+      pkgs.slack
+      pkgs.starship
     ];
 
     programs.autojump = {
