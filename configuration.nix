@@ -81,6 +81,7 @@
     ];
 
     home.packages = [
+      pkgs.albert
       pkgs.nodejs
       pkgs.neovim
       pkgs.hub
