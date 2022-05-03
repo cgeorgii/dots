@@ -89,6 +89,7 @@
       pkgs.dropbox
       pkgs.fzf
       pkgs.hub
+      pkgs.logseq
       pkgs.keepassxc
       pkgs.neovim
       pkgs.nix-direnv
