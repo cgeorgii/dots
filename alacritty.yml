@@ -6,13 +6,13 @@ window:
   decorations: None
   padding:
     x: 5
-    y: 0
+    y: 5
 
 font:
-  size: 13.0
+  size: 14.0
   normal:
     family: Iosevka
-#     style: Light
+    # style: Light
 
 colors:
   # Default colors
