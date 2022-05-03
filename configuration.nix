@@ -32,15 +32,24 @@
   services.xserver.displayManager.gdm.enable = true;
   services.xserver.desktopManager.gnome.enable = true;
 
-  nix.binaryCaches = [ "https://cache.nixos.org" "https://nixcache.reflex-frp.org" ];
-  nix.binaryCachePublicKeys = [ "ryantrinkle.com-1:JJiAKaRv9mWgpVAz8dwewnZe0AzzEAzPkagE9SP5NWI=" ];
+  # Remap caps lock to escape using the -m 1 flag to indicate only caps should be mapped to escape, not swapped
+  services.interception-tools = {
+    enable = true;
+    udevmonConfig = ''
+      - JOB: "${pkgs.interception-tools}/bin/intercept -g $DEVNODE | ${pkgs.interception-tools-plugins.caps2esc}/bin/caps2esc -m 1| ${pkgs.interception-tools}/bin/uinput -d $DEVNODE"
+        DEVICE:
+          EVENTS:
+             EV_KEY: [KEY_CAPSLOCK, KEY_ESC]
+    '';
+  };
 
-  nix.extraOptions = ''
-    keep-outputs = true
-    keep-derivations = true
-  '';
+  users.users.cgeorgii = {
+    isNormalUser = true;
+    shell = pkgs.zsh;
+    home = "/home/cgeorgii";
+    extraGroups = [ "wheel" ];
+  };
 
-  nixpkgs.config.firefox.enableGnomeExtensions = true;
   environment.systemPackages = with pkgs; [
     firefox
     git
@@ -49,7 +58,7 @@
     wget
     xclip
     tmux
-    ag
+    silver-searcher
     rnix-lsp
     file
     bat
@@ -61,18 +70,11 @@
     EDITOR = "nvim";
   };
 
-  users.users.corgi = {
-    isNormalUser = true;
-    shell = pkgs.zsh;
-    home = "/home/corgi";
-    extraGroups = [ "wheel" ];
-  };
-
   fonts.fonts = with pkgs; [
     (pkgs.nerdfonts.override { fonts = [ "Iosevka" ]; })
   ];
 
-  home-manager.users.corgi = { pkgs, ...}: {
+  home-manager.users.cgeorgii = { pkgs, ...}: {
     nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (pkgs.lib.getName pkg) [
       "dropbox"
       "slack"
@@ -190,5 +192,6 @@
   # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "21.05"; # Did you read the comment?
+  system.stateVersion = "21.11"; # Did you read the comment?
+
 }
