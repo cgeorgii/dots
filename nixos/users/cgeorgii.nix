@@ -1,47 +1,8 @@
-# Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
-
 { config, pkgs, ... }:
 
 {
   imports =
-    [ ./hardware-configuration.nix
-      <home-manager/nixos>
-    ];
-
-  # Use the systemd-boot EFI boot loader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-
-  time.timeZone = "Europe/Berlin";
-
-  # The global useDHCP flag is deprecated, therefore explicitly set to false here.
-  # Per-interface useDHCP will be mandatory in the future, so this generated config
-  # replicates the default behaviour.
-  networking.useDHCP = false;
-  networking.interfaces.enp5s0.useDHCP = true;
-  networking.interfaces.wlp3s0.useDHCP = true;
-
-  # Select internationalisation properties.
-  i18n.defaultLocale = "en_US.UTF-8";
-
-  # Enable the X11 windowing system.
-  services.xserver.enable = true;
-
-  # Enable the GNOME Desktop Environment.
-  services.xserver.displayManager.gdm.enable = true;
-  services.xserver.desktopManager.gnome.enable = true;
-
-  # Remap caps lock to escape using the -m 1 flag to indicate only caps should be mapped to escape, not swapped
-  services.interception-tools = {
-    enable = true;
-    udevmonConfig = ''
-      - JOB: "${pkgs.interception-tools}/bin/intercept -g $DEVNODE | ${pkgs.interception-tools-plugins.caps2esc}/bin/caps2esc -m 1| ${pkgs.interception-tools}/bin/uinput -d $DEVNODE"
-        DEVICE:
-          EVENTS:
-             EV_KEY: [KEY_CAPSLOCK, KEY_ESC]
-    '';
-  };
+    [ <home-manager/nixos> ];
 
   users.users.cgeorgii = {
     isNormalUser = true;
@@ -50,29 +11,9 @@
     extraGroups = [ "wheel" ];
   };
 
-  environment.systemPackages = with pkgs; [
-    firefox
-    git
-    gnomeExtensions.dash-to-dock
-    vim
-    wget
-    xclip
-    tmux
-    silver-searcher
-    rnix-lsp
-    file
-    bat
-    readline
-    chromium
-  ];
-
   environment.variables = {
     EDITOR = "nvim";
   };
-
-  fonts.fonts = with pkgs; [
-    (pkgs.nerdfonts.override { fonts = [ "Iosevka" ]; })
-  ];
 
   home-manager.users.cgeorgii = { pkgs, ...}: {
     nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (pkgs.lib.getName pkg) [
@@ -84,13 +25,14 @@
       pkgs.alacritty
       pkgs.albert
       pkgs.autojump
+      pkgs.chromium
       pkgs.diff-so-fancy
       pkgs.direnv
       pkgs.dropbox
       pkgs.fzf
       pkgs.hub
-      pkgs.logseq
       pkgs.keepassxc
+      pkgs.logseq
       pkgs.neovim
       pkgs.nix-direnv
       pkgs.nodejs
@@ -187,13 +129,4 @@
       };
     };
   };
-
-  # This value determines the NixOS release from which the default
-  # settings for stateful data, like file locations and database versions
-  # on your system were taken. It‘s perfectly fine and recommended to leave
-  # this value at the release version of the first install of this system.
-  # Before changing this value read the documentation for this option
-  # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "21.11"; # Did you read the comment?
-
 }
