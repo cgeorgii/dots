@@ -11,8 +11,10 @@
     extraGroups = [ "wheel" ];
   };
 
-  environment.variables = {
-    EDITOR = "nvim";
+  environment = {
+    variables = {
+      EDITOR = "nvim";
+    };
   };
 
   home-manager.users.cgeorgii = { pkgs, ...}: {
@@ -82,7 +84,7 @@
       shellAliases = {
         update = "sudo nixos-rebuild switch";
         edit = "sudoedit /etc/nixos/configuration.nix";
-        there = "tmux new-session -As $(basename \"$PWD\" | tr . -)";
+        there = "tmux new-session -d -s $(basename \"$PWD\" | tr . -); tmux switch-client -t $(basename \"$PWD\" | tr . -);";
         git = "hub";
         g = "git";
         gst = "git status";
