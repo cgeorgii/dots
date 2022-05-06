@@ -62,6 +62,9 @@
       autocd = true;
 
       initExtra = "
+        # Autosuggestion with async mode interferes with the history search functions
+        # See https://github.com/zsh-users/zsh-autosuggestions/issues/619
+        ZSH_AUTOSUGGEST_CLEAR_WIDGETS+=(history-beginning-search-backward-end history-beginning-search-forward-end)
         # Better history navigation with ^P and ^N
         autoload -U history-search-end
         zle -N history-beginning-search-backward-end history-search-end
