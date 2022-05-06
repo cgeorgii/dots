@@ -5,18 +5,19 @@
   time.timeZone = "Europe/Berlin";
 
   environment.systemPackages = with pkgs; [
+    bat
+    file
     firefox
     git
+    git-lfs
     gnomeExtensions.dash-to-dock
+    readline
+    rnix-lsp
+    silver-searcher
+    tmux
     vim
     wget
     xclip
-    tmux
-    silver-searcher
-    rnix-lsp
-    file
-    bat
-    readline
   ];
 
   fonts.fonts = with pkgs; [

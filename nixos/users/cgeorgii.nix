@@ -21,25 +21,26 @@
       "slack"
     ];
 
-    home.packages = [
-      pkgs.alacritty
-      pkgs.albert
-      pkgs.autojump
-      pkgs.chromium
-      pkgs.diff-so-fancy
-      pkgs.direnv
-      pkgs.dropbox
-      pkgs.fzf
-      pkgs.hub
-      pkgs.keepassxc
-      pkgs.logseq
-      pkgs.neovim
-      pkgs.nix-direnv
-      pkgs.nodejs
-      pkgs.rbenv
-      pkgs.signal-desktop
-      pkgs.slack
-      pkgs.starship
+    home.packages = with pkgs; [
+      alacritty
+      albert
+      autojump
+      chromium
+      diff-so-fancy
+      direnv
+      dropbox
+      fzf
+      gh
+      hub
+      keepassxc
+      logseq
+      neovim
+      nix-direnv
+      nodejs
+      rbenv
+      signal-desktop
+      slack
+      starship
     ];
 
     programs.autojump = {
@@ -110,6 +111,11 @@
           file = "autopair.zsh";
         }
       ];
+    };
+
+    programs.git = {
+      enable = true;
+      lfs.enable = true;
     };
 
     programs.starship = {
