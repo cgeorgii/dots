@@ -123,12 +123,13 @@
       enable = true;
       lfs.enable = true;
       includes = [
-        { path = "~/.gitconfig"; }
+        { path = "~/.gitconfig"; } # GH adds auth information to this file
         {
           path = "~/projects/tweag/.gitconfig";
           condition = "gitdir:~/projects/tweag/";
         }
       ];
+      ignores = pkgs.lib.strings.splitString "\n" (builtins.readFile ../git/gitignore);
       extraConfig = {
         user.name = "Christian Georgii";
         user.email = "cgeorgii@gmail.com";
