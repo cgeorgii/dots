@@ -27,8 +27,8 @@
       alacritty
       albert
       autojump
+      calibre
       chromium
-      diff-so-fancy
       direnv
       dropbox
       fzf
@@ -88,6 +88,7 @@
         update = "sudo nixos-rebuild switch";
         edit = "sudoedit /etc/nixos/configuration.nix";
         there = "tmux new-session -d -s $(basename \"$PWD\" | tr . -); tmux switch-client -t $(basename \"$PWD\" | tr . -);";
+        cat = "bat";
         git = "hub";
         g = "git";
         gst = "git status";
@@ -121,6 +122,49 @@
     programs.git = {
       enable = true;
       lfs.enable = true;
+      includes = [
+        { path = "~/.gitconfig"; }
+        {
+          path = "~/projects/tweag/.gitconfig";
+          condition = "gitdir:~/projects/tweag/";
+        }
+      ];
+      extraConfig = {
+        user.name = "Christian Georgii";
+        user.email = "cgeorgii@gmail.com";
+        github.user = "cgeorgii";
+        push.default = "simple";
+        rerere.enable = true;
+        branch.autosetuprebase = "always";
+        core.excludefile = "~/.gitignore";
+        core.excludesfile = "~/.gitignore";
+        hub.protocol = "https";
+      };
+      delta = {
+        enable = true;
+        options = {
+          navigate = true;
+          syntax-theme = "TwoDark";
+          light = false;
+        };
+      };
+      aliases = {
+        b = "branch";
+        cb = "checkout -b";
+        pp = "pull --prune";
+        co = "checkout";
+        cm = "commit";
+        cmm = "commit -m";
+        cma = "commit --amend --no-edit";
+        st = "status";
+        du = "diff @{upstream}";
+        di = "diff";
+        dc = "diff --cached";
+        dw = "diff --word-diff";
+        dwc = "diff --word-diff --cached";
+        lg = "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative";
+        review = "log master.. -p --reverse";
+      };
     };
 
     programs.starship = {
