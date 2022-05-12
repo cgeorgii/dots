@@ -24,6 +24,7 @@
     ];
 
     home.file.".tmux.conf".source = config.lib.file.mkOutOfStoreSymlink ../config/tmux.conf;
+    xdg.configFile."alacritty/alacritty.yml".source = config.lib.file.mkOutOfStoreSymlink ../config/alacritty.yml;
 
     home.packages = with pkgs; [
       alacritty
