@@ -17,11 +17,13 @@
     };
   };
 
-  home-manager.users.cgeorgii = { pkgs, ...}: {
+  home-manager.users.cgeorgii = { config, pkgs, ...}: {
     nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (pkgs.lib.getName pkg) [
       "dropbox"
       "slack"
     ];
+
+    home.file.".tmux.conf".source = config.lib.file.mkOutOfStoreSymlink ../config/tmux.conf;
 
     home.packages = with pkgs; [
       alacritty
@@ -44,6 +46,8 @@
       slack
       starship
     ];
+
+    programs.tmux.newSession = true;
 
     programs.autojump = {
       enable = true;
@@ -87,7 +91,9 @@
       shellAliases = {
         update = "sudo nixos-rebuild switch";
         edit = "sudoedit /etc/nixos/configuration.nix";
-        there = "tmux new-session -d -s $(basename \"$PWD\" | tr . -); tmux switch-client -t $(basename \"$PWD\" | tr . -);";
+        tkill = "tmux kill-server";
+        there = "tmux new-session -d -s $(basename \"$PWD\" | tr . -); tmux switch-client -t $(basename \"$PWD\" | tr . -) || tmux attach -t $(basename \"$PWD\" | tr . -);";
+
         cat = "bat";
         git = "hub";
         g = "git";
@@ -129,7 +135,7 @@
           condition = "gitdir:~/projects/tweag/";
         }
       ];
-      ignores = pkgs.lib.strings.splitString "\n" (builtins.readFile ../git/gitignore);
+      ignores = pkgs.lib.strings.splitString "\n" (builtins.readFile ../config/gitignore);
       extraConfig = {
         user.name = "Christian Georgii";
         user.email = "cgeorgii@gmail.com";
