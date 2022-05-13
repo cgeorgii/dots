@@ -23,3 +23,8 @@ Configuring git
      oauth_token: PASTE_TOKEN_HERE
      protocol: https
   ```
+
+Configuring fingerprint reader
+------------------------------
+  1. Run `fprintd-enroll`
+  2. Profit

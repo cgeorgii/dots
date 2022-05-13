@@ -25,6 +25,9 @@
     (pkgs.nerdfonts.override { fonts = [ "Iosevka" ]; })
   ];
 
+  # Add fingerprint with `fprintd-enroll`
+  services.fprintd.enable = true;
+
   # Remap caps lock to escape using the -m 1 flag to indicate only caps should be mapped to escape, not swapped
   services.interception-tools = {
     enable = true;
