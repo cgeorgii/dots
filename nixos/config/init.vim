@@ -4,7 +4,7 @@ let mapleader = ";"
 let maplocalleader = ";"
 
 " Edit vim config
-command! VimConfig :tabnew ~/.vimrc
+command! VimConfig :tabnew $MYVIMRC
 map <silent> <leader>v :VimConfig<CR>
 
 set encoding=utf-8
@@ -42,7 +42,7 @@ Plug 'Yggdroot/indentLine'
 Plug 'alvan/vim-closetag'
 Plug 'chriskempson/base16-vim'
 Plug 'christoomey/vim-tmux-navigator'
-Plug 'brookhong/ag.vim'
+Plug 'mileszs/ack.vim'
 Plug 'jiangmiao/auto-pairs'
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
@@ -71,6 +71,10 @@ Plug 'wavded/vim-stylus'
 
 call plug#end()
 
+nnoremap \ :Ack!<Space>
+if executable('ag')
+  let g:ackprg = 'ag --vimgrep'
+endif
 set regexpengine=1
 
 " Use ag over grep
@@ -112,7 +116,12 @@ let g:jsx_ext_required = 1
 au BufNewFile,BufRead *.ejs set filetype=html
 au BufNewFile,BufRead *.ts set filetype=javascript
 
-autocmd BufWrite *.rb StripWhitespace
+augroup vimrc_autocmds
+  autocmd BufWrite *.* StripWhitespace
+  autocmd BufEnter * highlight OverLength cterm=underline guibg=#111111
+  autocmd BufWrite *.rb call CocAction('format')
+  autocmd BufWrite *.purs call CocAction('format')
+augroup END
 
 " indentLine config
 let g:indentLine_char = '▏'
@@ -122,7 +131,7 @@ nnoremap <silent> <leader>a :ArgWrap<CR>
 let g:argwrap_padded_braces = '{'
 
 fun! ViewBundleGem ( gemName )
-  let gemPath = system("bundle info --path " . a:gemName)
+  let gemPath = system("RUBYOPT='-W0' bundle info --path " . a:gemName)
   if v:shell_error == 0
     echom "Opening gem: " . gemPath
     execute ":tabnew " . gemPath
@@ -146,19 +155,17 @@ map <leader>cc :ToggleClipboard<CR>
 
 " bind K to grep word under cursor
 nnoremap K :silent grep! <cword> \| copen<CR>
-nnoremap \ :Ag<SPACE>
-" nnoremap \ :Ag<CR>
 nnoremap \| :Tags<CR>
 nnoremap <C-P> :Files<CR>
 nnoremap <leader>; :Buffers<CR>
 nnoremap <leader>r :e!<CR>
-nnoremap <leader>R :source ~/.vimrc<CR>
+nnoremap <leader>R :source $MYVIMRC<CR>
 nnoremap <leader>bo :ViewBundleGem<SPACE>
 nnoremap <leader>bp o(::Kernel.require 'pry'; ::Kernel.binding.pry)<ESC>
 nnoremap <leader>cb :!cat % \| pbcopy<CR><CR>
 nnoremap <leader>n :cnext<CR>
 nnoremap <leader>p :cprevious<CR>
-nnoremap <leader>f gg=G<C-o><C-o>
+nnoremap <leader>f :call CocAction('format')<CR>
 nnoremap <leader>F :!rubocop % -a<CR><CR>
 nnoremap <leader>s :%s/
 nnoremap <leader>S :%S/
@@ -167,7 +174,6 @@ nnoremap <silent> <leader>t :tabnew<CR>
 nnoremap <silent> <leader>h :tabprevious<CR>
 nnoremap <silent> <leader>l :tabnext<CR>
 nnoremap <silent> <leader>q :tabclose<CR>
-
 
 nnoremap H ^
 nnoremap L g_
@@ -198,11 +204,15 @@ inoremap <expr> <C-l>
 inoremap jj <ESC>
 
 " Remap keys for gotos
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
-nmap <leader>qf  <Plug>(coc-fix-current)
+nmap <silent>gd <Plug>(coc-definition)
+nmap <silent>gy <Plug>(coc-type-definition)
+nmap <silent>gi <Plug>(coc-implementation)
+nmap <silent>gr <Plug>(coc-references)
+nmap <leader>qf <Plug>(coc-fix-current)
+nmap <silent><leader>N <Plug>(coc-diagnostic-prev)
+nmap <silent><leader>n <Plug>(coc-diagnostic-next)
+
+let g:ormolu_command="fourmolu"
 
 " Use <leader>K to show documentation in preview window
 nnoremap <silent><leader>k :call <SID>show_documentation()<CR>
