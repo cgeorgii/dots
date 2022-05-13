@@ -30,6 +30,7 @@
     xdg.configFile = {
       "alacritty/alacritty.yml".source = config.lib.file.mkOutOfStoreSymlink ../config/alacritty.yml;
       "nvim/init.vim".source = config.lib.file.mkOutOfStoreSymlink ../config/init.vim;
+      "nvim/coc-settings.json".source = config.lib.file.mkOutOfStoreSymlink ../config/coc-settings.json;
     };
 
     home.packages = with pkgs; [
