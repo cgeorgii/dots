@@ -20,6 +20,36 @@
     xclip
   ];
 
+  nix.package = pkgs.nixVersions.stable;
+  # nix.registry.nixpkgs.flake = nixpkgs;
+  # nix.nixPath = [
+  #   "nixpkgs=${nixpkgs}"
+  #   "nixos-config=/etc/nixos/configuration.nix"
+  # ];
+  nix.settings.sandbox = true;
+  nix.settings.trusted-users = ["@wheel" "cgeorgii"];
+  nix.distributedBuilds = true;
+  nix.extraOptions = ''
+    experimental-features = nix-command flakes
+    builders-use-substitutes = true
+
+    # for nix-direnv
+    keep-outputs = true
+    keep-derivations = true
+  '';
+  # nix.settings.max-jobs = lib.mkDefault 8;
+  # nix.buildMachines = [
+  #     # tweag remote builder
+  #     {
+  #       hostName = "build01.tweag.io";
+  #       maxJobs = 24;
+  #       sshUser = "nix";
+  #       sshKey = "/root/.ssh/id_rsa";
+  #       system = "x86_64-linux";
+  #       supportedFeatures = [ "benchmark" "big-parallel" "kvm" ];
+  #     }
+  #   ];
+
   fonts.fonts = with pkgs; [
     (pkgs.nerdfonts.override { fonts = [ "Iosevka" ]; })
   ];
