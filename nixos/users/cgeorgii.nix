@@ -24,7 +24,13 @@
     ];
 
     home.file.".tmux.conf".source = config.lib.file.mkOutOfStoreSymlink ../config/tmux.conf;
-    xdg.configFile."alacritty/alacritty.yml".source = config.lib.file.mkOutOfStoreSymlink ../config/alacritty.yml;
+    home.file."./projects/tweag/.gitconfig".source =
+      config.lib.file.mkOutOfStoreSymlink ../config/gitconfig-work;
+
+    xdg.configFile = {
+      "alacritty/alacritty.yml".source = config.lib.file.mkOutOfStoreSymlink ../config/alacritty.yml;
+      "nvim/init.vim".source = config.lib.file.mkOutOfStoreSymlink ../config/init.vim;
+    };
 
     home.packages = with pkgs; [
       alacritty
@@ -125,10 +131,6 @@
         }
       ];
     };
-
-    # Git
-    home.file."./projects/tweag/.gitconfig".source =
-      config.lib.file.mkOutOfStoreSymlink ../config/gitconfig-work;
 
     programs.git = {
       enable = true;
