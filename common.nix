@@ -28,14 +28,13 @@
   # Add fingerprint with `fprintd-enroll`
   services.fprintd.enable = true;
 
-  # Remap caps lock to escape using the -m 1 flag to indicate only caps should be mapped to escape, not swapped
-  services.interception-tools = {
-    enable = true;
-    udevmonConfig = ''
-      - JOB: "${pkgs.interception-tools}/bin/intercept -g $DEVNODE | ${pkgs.interception-tools-plugins.caps2esc}/bin/caps2esc -m 1| ${pkgs.interception-tools}/bin/uinput -d $DEVNODE"
-        DEVICE:
-          EVENTS:
-             EV_KEY: [KEY_CAPSLOCK, KEY_ESC]
-    '';
+  # If changing any of the keyboard settings for xkb, make sure to rum:
+  # $ gsettings reset org.gnome.desktop.input-sources xkb-options
+  # $ gsettings reset org.gnome.desktop.input-sources sources
+  # # sudo nixos-rebuild switch
+  # $ reboot
+  services.xserver= {
+    layout = "us, us(intl)";
+    xkbOptions = "grp:alt_space_toggle, caps:escape";
   };
 }
