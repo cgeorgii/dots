@@ -24,6 +24,7 @@
     ];
 
     home.file.".tmux.conf".source = config.lib.file.mkOutOfStoreSymlink ../config/tmux.conf;
+    home.file.".emacs".source = config.lib.file.mkOutOfStoreSymlink ../config/emacs;
     home.file."./projects/tweag/.gitconfig".source =
       config.lib.file.mkOutOfStoreSymlink ../config/gitconfig-work;
 
