@@ -8,7 +8,7 @@
     isNormalUser = true;
     shell = pkgs.zsh;
     home = "/home/cgeorgii";
-    extraGroups = [ "wheel" ];
+    extraGroups = [ "wheel" "networkmanager" ];
   };
 
   environment = {
