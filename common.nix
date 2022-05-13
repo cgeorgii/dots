@@ -18,6 +18,7 @@
     vim
     wget
     xclip
+    zenith
   ];
 
   fonts.fonts = with pkgs; [

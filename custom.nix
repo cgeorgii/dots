@@ -2,7 +2,7 @@
 
 {
   imports =
-    [ ./users/cgeorgii.nix
+    [ ./home/cgeorgii.nix
       ./common.nix
     ];
 }
