@@ -1,14 +1,17 @@
-Installation
-------------
+Configuring git
+---------------
 
-  1. Clone repo.
-
-  ```
-  $ git clone git@github.com:cgeorgii/dots.git ~/dotfiles
-  ```
-
-  2. Symlink everything into ~/
+  1. Login with `gh`:
 
   ```
-  $ TODO: add script to symlink everything automatically
+  $ gh auth login
+  ```
+
+  2. Create personal access token for machine by going to `https://github.com/settings/tokens` and paste it in `~/.config/hub`
+
+  ```
+  github.com:
+   - user: cgeorgii
+     oauth_token: PASTE_TOKEN_HERE
+     protocol: https
   ```
