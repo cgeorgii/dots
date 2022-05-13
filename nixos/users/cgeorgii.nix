@@ -126,6 +126,10 @@
       ];
     };
 
+    # Git
+    home.file."./projects/tweag/.gitconfig".source =
+      config.lib.file.mkOutOfStoreSymlink ../config/gitconfig-work;
+
     programs.git = {
       enable = true;
       lfs.enable = true;
