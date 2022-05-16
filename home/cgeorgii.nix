@@ -50,6 +50,7 @@
       neovim
       nix-direnv
       nodejs
+      protonvpn-gui
       rbenv
       signal-desktop
       slack
