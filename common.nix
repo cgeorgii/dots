@@ -35,6 +35,6 @@
   # $ reboot
   services.xserver= {
     layout = "us, us(intl)";
-    xkbOptions = "grp:alt_space_toggle, caps:escape";
+    xkbOptions = "grp:alts_toggle, caps:escape";
   };
 }
