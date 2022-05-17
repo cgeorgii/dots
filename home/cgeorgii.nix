@@ -51,6 +51,7 @@
       nix-direnv
       nodejs
       protonvpn-gui
+      ranger
       rbenv
       signal-desktop
       slack
