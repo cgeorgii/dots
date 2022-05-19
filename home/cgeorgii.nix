@@ -48,6 +48,7 @@
       keepassxc
       logseq
       neovim
+      niv
       nix-direnv
       nodejs
       protonvpn-gui
