@@ -94,8 +94,11 @@
         bindkey -e '^[b' backward-word
         bindkey -e '^[f' forward-word
 
-        # Enter vim mode with ESC
+        # Enter vim normal mode with ESC
         bindkey -e '^[' vi-cmd-mode
+
+        # No delay entering vim normal mode
+        export KEYTIMEOUT=1
 
         export BAT_THEME=base16
       ";
