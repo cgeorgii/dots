@@ -110,6 +110,7 @@
       shellAliases = {
         update = "sudo nixos-rebuild switch";
         edit = "sudoedit /etc/nixos/configuration.nix";
+        link = "sudo ln -s /home/cgeorgii/dots/* /etc/nixos";
         tkill = "tmux kill-server";
         there = "tmux new-session -d -s $(basename \"$PWD\" | tr . -); tmux switch-client -t $(basename \"$PWD\" | tr . -) || tmux attach -t $(basename \"$PWD\" | tr . -);";
 
