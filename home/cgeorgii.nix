@@ -4,13 +4,6 @@
   imports =
     [ <home-manager/nixos> ];
 
-  users.users.cgeorgii = {
-    isNormalUser = true;
-    shell = pkgs.zsh;
-    home = "/home/cgeorgii";
-    extraGroups = [ "wheel" "networkmanager" ];
-  };
-
   environment = {
     variables = {
       EDITOR = "nvim";
@@ -23,15 +16,15 @@
       "slack"
     ];
 
-    home.file.".tmux.conf".source = config.lib.file.mkOutOfStoreSymlink ../config/tmux.conf;
-    home.file.".emacs".source = config.lib.file.mkOutOfStoreSymlink ../config/emacs;
+    home.file.".tmux.conf".source = config.lib.file.mkOutOfStoreSymlink ../dotfiles/tmux.conf;
+    home.file.".emacs".source = config.lib.file.mkOutOfStoreSymlink ../dotfiles/emacs;
     home.file."./projects/tweag/.gitconfig".source =
-      config.lib.file.mkOutOfStoreSymlink ../config/gitconfig-work;
+      config.lib.file.mkOutOfStoreSymlink ../dotfiles/gitconfig-work;
 
     xdg.configFile = {
-      "alacritty/alacritty.yml".source = config.lib.file.mkOutOfStoreSymlink ../config/alacritty.yml;
-      "nvim/init.vim".source = config.lib.file.mkOutOfStoreSymlink ../config/init.vim;
-      "nvim/coc-settings.json".source = config.lib.file.mkOutOfStoreSymlink ../config/coc-settings.json;
+      "alacritty/alacritty.yml".source = config.lib.file.mkOutOfStoreSymlink ../dotfiles/alacritty.yml;
+      "nvim/init.vim".source = config.lib.file.mkOutOfStoreSymlink ../dotfiles/init.vim;
+      "nvim/coc-settings.json".source = config.lib.file.mkOutOfStoreSymlink ../dotfiles/coc-settings.json;
     };
 
     home.packages = with pkgs; [
@@ -59,6 +52,8 @@
       slack
       starship
     ];
+
+    services.caffeine.enable = true;
 
     programs.tmux.newSession = true;
 
@@ -155,7 +150,7 @@
           condition = "gitdir:~/projects/tweag/";
         }
       ];
-      ignores = pkgs.lib.strings.splitString "\n" (builtins.readFile ../config/gitignore);
+      ignores = pkgs.lib.strings.splitString "\n" (builtins.readFile ../dotfiles/gitignore);
       extraConfig = {
         user.name = "Christian Georgii";
         user.email = "cgeorgii@gmail.com";
