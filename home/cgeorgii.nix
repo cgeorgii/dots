@@ -38,6 +38,7 @@
       alacritty
       albert
       autojump
+      beekeeper-studio
       calibre
       chromium
       direnv
