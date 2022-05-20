@@ -89,6 +89,9 @@
         bindkey -e '^P' history-beginning-search-backward-end
         bindkey -e '^N' history-beginning-search-forward-end
 
+        # stop backward-kill-word on directory delimiter
+        WORDCHARS='*?_-.[]~=&;!#$%^(){}<>'
+
         bindkey -e '^b' backward-char
         bindkey -e '^f' forward-char
 
