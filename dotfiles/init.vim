@@ -143,12 +143,13 @@ endfun
 command! -nargs=* ViewBundleGem call ViewBundleGem( "<args>" )
 
 fun! ToggleClipboard ()
-  if &clipboard == 'unnamed'
+  if &clipboard == 'unnamedplus'
     execute ':set clipboard='
+    echom("Clipboard: NVIM")
   else
-    execute ':set clipboard=unnamed'
+    execute ':set clipboard=unnamedplus'
+    echom("Clipboard: SYSTEM")
   endif
-  echom("clipboard set to: " . &clipboard)
 endfun
 command! ToggleClipboard call ToggleClipboard()
 map <leader>cc :ToggleClipboard<CR>
