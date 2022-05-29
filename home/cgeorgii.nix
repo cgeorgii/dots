@@ -34,17 +34,17 @@
       beekeeper-studio
       calibre
       chromium
-      direnv
       dropbox
+      ferdi
       fzf
       gh
       hub
+      imagemagick
       keepassxc
+      libreoffice
       logseq
-      neovim
+      neofetch
       niv
-      nix-direnv
-      nodejs
       protonvpn-gui
       ranger
       rbenv
@@ -53,7 +53,10 @@
       starship
     ];
 
-    services.caffeine.enable = true;
+    programs.neovim = {
+      enable = true;
+      withNodeJs = true;
+    };
 
     programs.tmux.newSession = true;
 

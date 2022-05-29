@@ -18,7 +18,6 @@
     rnix-lsp
     silver-searcher
     tmux
-    vim
     wget
     xclip
     zenith
