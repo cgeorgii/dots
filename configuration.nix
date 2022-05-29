@@ -37,9 +37,19 @@
     trustedBinaryCaches = [ "https://cache.nixos.org" ];
 
     extraOptions = ''
+      keep-outputs = true
+      keep-derivations = true
       experimental-features = nix-command flakes
     '';
    };
+
+  nix.autoOptimiseStore = true;
+
+  nix.gc = {
+    automatic = true;
+    dates = "weekly";
+    options = "--delete-older-than 30d";
+  };
 
   # Necessary for encrypted disk
   boot.initrd.luks.devices = {
