@@ -27,7 +27,7 @@
     isNormalUser = true;
     shell = pkgs.zsh;
     home = "/home/cgeorgii";
-    extraGroups = [ "wheel" "networkmanager" ];
+    extraGroups = [ "wheel" "networkmanager" "docker" ];
   };
 
   nix = {
@@ -99,6 +99,8 @@
 
   # Add fingerprint with `fprintd-enroll`
   services.fprintd.enable = true;
+
+  virtualisation.docker.enable = true;
 
   # If changing any of the keyboard settings for xkb, make sure to rum:
   # $ gsettings reset org.gnome.desktop.input-sources xkb-options
