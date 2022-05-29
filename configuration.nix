@@ -10,7 +10,7 @@
   environment.systemPackages = with pkgs; [
     bat
     file
-    firefox
+    firefox-wayland
     git
     git-lfs
     gnomeExtensions.dash-to-dock
