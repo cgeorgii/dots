@@ -157,7 +157,7 @@ map <leader>cc :ToggleClipboard<CR>
 " bind K to grep word under cursor
 nnoremap K :silent grep! <cword> \| copen<CR>
 nnoremap \| :Tags<CR>
-nnoremap <C-P> :Files<CR>
+nnoremap <C-P> :GFiles<CR>
 nnoremap <leader>; :Buffers<CR>
 nnoremap <leader>r :e!<CR>
 nnoremap <leader>R :source $MYVIMRC<CR>
