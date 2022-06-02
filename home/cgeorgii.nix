@@ -35,6 +35,7 @@
       calibre
       chromium
       dropbox
+      fd
       ferdi
       fzf
       gh
@@ -45,7 +46,6 @@
       logseq
       neofetch
       niv
-      protonvpn-gui
       ranger
       rbenv
       signal-desktop
