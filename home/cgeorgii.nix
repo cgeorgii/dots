@@ -42,6 +42,7 @@
       hub
       imagemagick
       keepassxc
+      lazygit
       libreoffice
       logseq
       neofetch
@@ -51,6 +52,7 @@
       signal-desktop
       slack
       starship
+      wl-clipboard
     ];
 
     programs.neovim = {
