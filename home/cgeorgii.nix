@@ -14,6 +14,7 @@
     nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (pkgs.lib.getName pkg) [
       "dropbox"
       "slack"
+      "teams"
     ];
 
     home.file.".tmux.conf".source = config.lib.file.mkOutOfStoreSymlink ../dotfiles/tmux.conf;
@@ -28,6 +29,7 @@
     };
 
     home.packages = with pkgs; [
+      teams
       alacritty
       albert
       autojump
