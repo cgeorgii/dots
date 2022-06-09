@@ -37,6 +37,7 @@
       calibre
       chromium
       dropbox
+      exa
       fd
       ferdi
       fzf
@@ -122,6 +123,7 @@
         g = "git";
         gst = "git status";
         gitconfig = "nvim ~/.gitconfig";
+        ls = "exa --icons -a --group-directories-first";
       };
 
       plugins = with pkgs; [
