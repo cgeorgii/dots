@@ -48,6 +48,7 @@
       lazygit
       libreoffice
       logseq
+      protonvpn-gui
       neofetch
       niv
       ranger
