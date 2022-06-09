@@ -3,10 +3,6 @@ set nocompatible
 let mapleader = ";"
 let maplocalleader = ";"
 
-" Edit vim config
-command! VimConfig :tabnew $MYVIMRC
-map <silent> <leader>v :VimConfig<CR>
-
 set encoding=utf-8
 set backspace=indent,eol,start
 set nobackup
@@ -19,13 +15,9 @@ set shortmess+=I
 set signcolumn=yes
 set lazyredraw
 set inccommand=nosplit
-" Enable scrolling with mouse inside tmux
-set mouse=a
+set mouse=a " Enable scrolling with mouse inside tmux
 
-nnoremap * #
-nnoremap # *
-
-filetype plugin indent on    " required
+filetype plugin indent on " required
 
 let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
 if empty(glob(data_dir . '/autoload/plug.vim'))
@@ -68,10 +60,17 @@ Plug 'vim-ruby/vim-ruby'
 Plug 'vmchale/dhall-vim'
 Plug 'w0rp/ale'
 Plug 'wavded/vim-stylus'
+Plug 'direnv/direnv.vim'
+
+" TODO - experimental stuff
+Plug 'voldikss/vim-floaterm'
+Plug 'ThePrimeagen/git-worktree.nvim'
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
+Plug 'folke/which-key.nvim'
 
 call plug#end()
 
-nnoremap \ :Ack!<Space>
 if executable('ag')
   let g:ackprg = 'ag --vimgrep'
 endif
@@ -126,10 +125,6 @@ augroup END
 " indentLine config
 let g:indentLine_char = '▏'
 
-" ArgWrap config
-nnoremap <silent> <leader>a :ArgWrap<CR>
-let g:argwrap_padded_braces = '{'
-
 fun! ViewBundleGem ( gemName )
   let gemPath = system("RUBYOPT='-W0' bundle info --path " . a:gemName)
   if v:shell_error == 0
@@ -142,44 +137,121 @@ fun! ViewBundleGem ( gemName )
 endfun
 command! -nargs=* ViewBundleGem call ViewBundleGem( "<args>" )
 
+" Edit vim config
+command! VimConfig :tabnew $MYVIMRC
+
 fun! ToggleClipboard ()
   if &clipboard == 'unnamedplus'
     execute ':set clipboard='
-    echom("Clipboard: NVIM")
+    echom("Clipboard: EDITOR")
   else
     execute ':set clipboard=unnamedplus'
     echom("Clipboard: SYSTEM")
   endif
 endfun
 command! ToggleClipboard call ToggleClipboard()
-map <leader>cc :ToggleClipboard<CR>
 
-" bind K to grep word under cursor
+" -------------- Git worktree experiment
+lua <<EOF
+require("git-worktree").setup({
+    -- change_directory_command = "tcd"
+})
+require("telescope").load_extension("git_worktree")
+local Worktree = require("git-worktree")
+
+-- op = Operations.Switch, Operations.Create, Operations.Delete
+-- metadata = table of useful values (structure dependent on op)
+--      Switch
+--          path = path you switched to
+--          prev_path = previous worktree path
+--      Create
+--          path = path where worktree created
+--          branch = branch name
+--          upstream = upstream remote name
+--      Delete
+--          path = path where worktree deleted
+
+Worktree.on_tree_change(function(op, metadata)
+  if op == Worktree.Operations.Switch then
+    vim.wait(1000)
+    vim.cmd(":CocRestart")
+  end
+end)
+EOF
+" -------------- Git worktree experiment
+
+" ArgWrap config
+" nnoremap <silent> <leader>a :ArgWrap<CR>
+let g:argwrap_padded_braces = '{'
+
+" -------------- Key maps
+nnoremap \ :Ack!<Space>
 nnoremap K :silent grep! <cword> \| copen<CR>
 nnoremap \| :Tags<CR>
 nnoremap <C-P> :GFiles<CR>
-nnoremap <leader>; :Buffers<CR>
-nnoremap <leader>r :e!<CR>
-nnoremap <leader>R :source $MYVIMRC<CR>
 nnoremap <leader>bo :ViewBundleGem<SPACE>
 nnoremap <leader>bp o(::Kernel.require 'pry'; ::Kernel.binding.pry)<ESC>
-nnoremap <leader>cb :!cat % \| pbcopy<CR><CR>
-nnoremap <leader>n :cnext<CR>
-nnoremap <leader>p :cprevious<CR>
-nnoremap <leader>f :call CocAction('format')<CR>
-nnoremap <leader>F :!rubocop % -a<CR><CR>
-nnoremap <leader>s :%s/
-nnoremap <leader>S :%S/
 nnoremap <silent><leader>k :call <SID>show_documentation()<CR>
-nnoremap <silent> <leader>t :tabnew<CR>
-nnoremap <silent> <leader>h :tabprevious<CR>
-nnoremap <silent> <leader>l :tabnext<CR>
-nnoremap <silent> <leader>q :tabclose<CR>
-
 nnoremap H ^
 nnoremap L g_
 vnoremap H ^
 vnoremap L g_
+nnoremap * #
+nnoremap # *
+
+" -------------- Git whichkey
+" Timeout for which-key
+set timeoutlen=200
+
+lua << EOF
+  local wk = require("which-key")
+  wk.register({
+    a = { "<cmd>Argwrap<cr>", "Wrap/Unwrap argument list" },
+    b = {
+      name = "buffers",
+      b = { "<cmd>Buffers<cr>", "Buffer picker" },
+      c = { "<cmd>w ! wl-copy<cr><cr>", "Copy content to clipboard" }
+    },
+    c = {
+      name = "clipboard",
+      c = { "<cmd>ToggleClipboard<cr>", "Toggle between editor/system clipboard" }
+    },
+    C = {
+      name = "config",
+      e = { "<cmd>VimConfig<cr>", "Edit vimconfig" },
+      R = { "<cmd>source $MYVIMRC<cr>", "Reload vimconfig" },
+    },
+    e = { "<cmd>e!<cr>", "Reload current file" },
+    f = {
+      name = "files",
+      f = { "<cmd>Telescope find_files<cr>", "Find file" },
+      F = { "<cmd>call CocAction('format')<cr>", "Format file" },
+      ["1"] = "which_key_ignore",  -- special label to hide it in the popup TODO what why where
+    },
+  g = {
+    name = "git",
+    w = {
+      name = "Worktrees",
+        a = { function() require('telescope').extensions.git_worktree.create_git_worktree() end, "Add worktree" },
+        l = { function() require('telescope').extensions.git_worktree.git_worktrees() end, "List worktrees" },
+      },
+  },
+  L = {
+    name = "LSP",
+    R = { "<cmd>CocRestart<cr><cr>", "Reload LSP" },
+  },
+  r = { "<cmd>e!<cr>", "Reload file" },
+  -- Tab management
+  t = { "<cmd>tabnew<cr>", "New tab"},
+  h = { "<cmd>tabprevious<cr>", "Previous tab"},
+  l = { "<cmd>tabnext<cr>", "Next tab"},
+  q = { "<cmd>tabclose<cr>", "Close tab"},
+  -- Quickfix shortcuts
+  n = { "<cmd>cnext<cr>", "Quickfix - next"},
+  p = { "<cmd>cprevious<cr>", "Quickfix - previous"},
+  }, { prefix = "<leader>" })
+EOF
+" -------------- Git whichkey
 
 " --------------------------------------------------------------------------
 " CoC configuration
@@ -202,8 +274,6 @@ endfunction
 inoremap <expr> <C-l>
       \ pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
-inoremap jj <ESC>
-
 " Remap keys for gotos
 nmap <silent>gd <Plug>(coc-definition)
 nmap <silent>gy <Plug>(coc-type-definition)
@@ -212,11 +282,11 @@ nmap <silent>gr <Plug>(coc-references)
 nmap <leader>qf <Plug>(coc-fix-current)
 nmap <silent><leader>N <Plug>(coc-diagnostic-prev)
 nmap <silent><leader>n <Plug>(coc-diagnostic-next)
-
-let g:ormolu_command="fourmolu"
-
 " Use <leader>K to show documentation in preview window
 nnoremap <silent><leader>k :call <SID>show_documentation()<CR>
+
+
+" let g:ormolu_command="fourmolu"
 
 function! s:show_documentation()
   if (index(['vim','help'], &filetype) >= 0)
