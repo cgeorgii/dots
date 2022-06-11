@@ -59,7 +59,6 @@ Plug 'vim-ruby/vim-ruby'
 Plug 'vmchale/dhall-vim'
 Plug 'w0rp/ale'
 Plug 'wavded/vim-stylus'
-Plug 'direnv/direnv.vim'
 Plug 'folke/which-key.nvim'
 Plug 'RRethy/nvim-base16'
 
