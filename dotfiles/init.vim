@@ -32,7 +32,6 @@ Plug 'ElmCast/elm-vim'
 Plug 'FooSoft/vim-argwrap'
 Plug 'Yggdroot/indentLine'
 Plug 'alvan/vim-closetag'
-Plug 'chriskempson/base16-vim'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'mileszs/ack.vim'
 Plug 'jiangmiao/auto-pairs'
@@ -61,6 +60,7 @@ Plug 'vmchale/dhall-vim'
 Plug 'w0rp/ale'
 Plug 'wavded/vim-stylus'
 Plug 'direnv/direnv.vim'
+Plug 'RRethy/nvim-base16'
 
 " TODO - experimental stuff
 Plug 'voldikss/vim-floaterm'
@@ -70,6 +70,9 @@ Plug 'nvim-telescope/telescope.nvim'
 Plug 'folke/which-key.nvim'
 
 call plug#end()
+
+set termguicolors
+colorscheme base16-onedark
 
 if executable('ag')
   let g:ackprg = 'ag --vimgrep'
@@ -324,6 +327,3 @@ endfunction
 nnoremap <leader>. :w<cr>:call AltCommand(expand('%'), ':e')<cr>
 
 let g:ale_pattern_options = {'\.hs$': {'ale_enabled': 0}}
-
-set termguicolors
-colorscheme base16-onedark
