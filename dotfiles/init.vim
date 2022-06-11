@@ -219,7 +219,7 @@ EOF
 " -------------- Git worktree experiment
 
 " ArgWrap config
-" nnoremap <silent> <leader>a :ArgWrap<CR>
+nnoremap <silent> <leader>a :ArgWrap<CR>
 let g:argwrap_padded_braces = '{'
 
 " -------------- Key maps
