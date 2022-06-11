@@ -1,5 +1,3 @@
-set nocompatible
-
 let mapleader = ";"
 let maplocalleader = ";"
 
@@ -10,14 +8,11 @@ set nowritebackup
 set noswapfile
 set ignorecase
 set smartcase
-set showcmd
-set shortmess+=I
-set signcolumn=yes
-set lazyredraw
+set shortmess+=I " Do not show welcome message
+set signcolumn=yes " yes prevents screen jump on diagnostics
 set inccommand=nosplit
 set mouse=a " Enable scrolling with mouse inside tmux
-
-filetype plugin indent on " required
+set noshowmode " No need to show -- INSERT -- in command box
 
 let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
 if empty(glob(data_dir . '/autoload/plug.vim'))
@@ -37,7 +32,6 @@ Plug 'mileszs/ack.vim'
 Plug 'jiangmiao/auto-pairs'
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
-Plug 'junegunn/goyo.vim'
 Plug 'junegunn/vim-easy-align'
 Plug 'mustache/vim-mustache-handlebars'
 Plug 'nelstrom/vim-visual-star-search'
@@ -83,7 +77,6 @@ set grepprg=ag\ --nogroup\ --nocolor
 
 " Display line numbers
 set number rnu
-set title
 
 " Search highlighting (real time and all results)
 set hlsearch incsearch
@@ -94,9 +87,6 @@ autocmd FileType elm setlocal softtabstop=4 shiftwidth=4 expandtab
 
 " Enter paste mode
 set pastetoggle=<F2>
-
-" set statusline="%f"
-set laststatus=2
 
 " Open NerdTree with Ctrl+n
 map <C-n> :NERDTreeToggle<CR>
