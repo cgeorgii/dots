@@ -60,6 +60,7 @@ Plug 'vmchale/dhall-vim'
 Plug 'w0rp/ale'
 Plug 'wavded/vim-stylus'
 Plug 'direnv/direnv.vim'
+Plug 'folke/which-key.nvim'
 Plug 'RRethy/nvim-base16'
 
 " TODO - experimental stuff
@@ -67,7 +68,6 @@ Plug 'voldikss/vim-floaterm'
 Plug 'ThePrimeagen/git-worktree.nvim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
-Plug 'folke/which-key.nvim'
 
 call plug#end()
 
@@ -208,6 +208,16 @@ set timeoutlen=200
 
 lua << EOF
   local wk = require("which-key")
+
+  wk.setup {
+    triggers_blacklist = {
+    -- list of mode / prefixes that should never be hooked by WhichKey
+    n = { "d" },
+    i = { "j", "k" },
+    v = { "j", "k" },
+  },
+  }
+
   wk.register({
     a = { "<cmd>Argwrap<cr>", "Wrap/Unwrap argument list" },
     b = {
