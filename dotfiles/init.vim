@@ -70,6 +70,10 @@ Plug 'nvim-telescope/telescope.nvim'
 
 call plug#end()
 
+augroup YankHighlight
+  autocmd!
+  autocmd TextYankPost * silent! lua vim.highlight.on_yank()
+augroup end
 
 lua require('gitsigns').setup()
 
