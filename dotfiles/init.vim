@@ -283,6 +283,7 @@ lua << EOF
     e = { "<cmd>e!<cr>", "Reload current file" },
     f = {
       name = "files",
+      r = { "<cmd>e!<cr>", "Reload current file" },
       f = { "<cmd>Telescope find_files<cr>", "Find file" },
       F = { "<cmd>call CocAction('format')<cr>", "Format file" },
       ["1"] = "which_key_ignore",  -- special label to hide it in the popup TODO what why where
