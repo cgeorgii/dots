@@ -6,13 +6,13 @@ set backspace=indent,eol,start
 set nobackup
 set nowritebackup
 set noswapfile
-set ignorecase
-set smartcase
-set shortmess+=I " Do not show welcome message
-set signcolumn=yes " yes prevents screen jump on diagnostics
-set inccommand=nosplit
-set mouse=a " Enable scrolling with mouse inside tmux
-set noshowmode " No need to show -- INSERT -- in command box
+set ignorecase         " Case insensitive search
+set smartcase          " Unless capital letter in search term
+set inccommand=nosplit " Incremental search
+set shortmess+=I       " Do not show welcome message
+set signcolumn=yes     " Prevents screen jump on diagnostics
+set mouse=a            " Enable scrolling with mouse inside tmux
+set noshowmode         " No need to show -- INSERT -- in command box
 
 let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
 if empty(glob(data_dir . '/autoload/plug.vim'))
