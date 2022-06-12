@@ -55,8 +55,12 @@ Plug 'w0rp/ale'
 Plug 'wavded/vim-stylus'
 Plug 'folke/which-key.nvim'
 Plug 'RRethy/nvim-base16'
+Plug 'lewis6991/gitsigns.nvim'
+
+" lualine
 Plug 'nvim-lualine/lualine.nvim'
 Plug 'kyazdani42/nvim-web-devicons'
+" /lualine
 
 " TODO - experimental stuff
 Plug 'voldikss/vim-floaterm'
@@ -65,6 +69,9 @@ Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
 
 call plug#end()
+
+
+lua require('gitsigns').setup()
 
 set termguicolors
 colorscheme base16-onedark
