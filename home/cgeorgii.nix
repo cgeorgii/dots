@@ -109,7 +109,7 @@
         # No delay entering vim normal mode
         export KEYTIMEOUT=1
 
-        export BAT_THEME=base16
+        export BAT_THEME=gruvbox-dark
       ";
 
       shellAliases = {

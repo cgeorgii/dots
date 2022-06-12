@@ -78,13 +78,14 @@ augroup end
 lua require('gitsigns').setup()
 
 set termguicolors
-colorscheme base16-onedark
+let g:afterglow_inherit_background=1
+colorscheme base16-gruvbox-dark-medium
 
 lua << END
 require('lualine').setup {
   options = {
     icons_enabled = true,
-    theme = 'auto',
+    theme = 'gruvbox_dark',
     component_separators = { left = '', right = ''},
     section_separators = { left = '', right = ''},
     disabled_filetypes = {},
