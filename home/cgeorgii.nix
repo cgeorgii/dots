@@ -124,6 +124,7 @@
         g = "git";
         gst = "git status";
         gitconfig = "nvim ~/.gitconfig";
+        lg = "lazygit";
         ls = "exa --icons -a --group-directories-first";
       };
 
