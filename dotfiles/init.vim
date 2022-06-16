@@ -231,7 +231,6 @@ EOF
 " -------------- Git worktree experiment
 
 " ArgWrap config
-nnoremap <silent> <leader>a :ArgWrap<CR>
 let g:argwrap_padded_braces = '{'
 
 " -------------- Key maps
@@ -266,7 +265,7 @@ lua << EOF
   }
 
   wk.register({
-    a = { "<cmd>Argwrap<cr>", "Wrap/Unwrap argument list" },
+    a = { "<cmd>ArgWrap<cr>", "Wrap/Unwrap argument list" },
     b = {
       name = "buffers",
       b = { "<cmd>Buffers<cr>", "Buffer picker" },
