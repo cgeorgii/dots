@@ -33,3 +33,4 @@ task/task/*.data
 .env.test
 .env.development
 node_modules/
+.direnv/
