@@ -2,7 +2,8 @@
 
 {
   imports =
-    [ ./hardware-configuration.nix
+    [
+      ./hardware-configuration.nix
       <nixos-hardware/lenovo/thinkpad/x1/9th-gen>
       ./home/cgeorgii.nix
     ];
