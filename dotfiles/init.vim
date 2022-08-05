@@ -254,7 +254,8 @@ nnoremap # *
 
 " -------------- Git whichkey
 " Timeout for which-key
-set timeoutlen=200
+" Do not set a value too low, as it interferes with vim-commentary
+set timeoutlen=500
 
 lua << EOF
   local wk = require("which-key")
@@ -262,7 +263,7 @@ lua << EOF
   wk.setup {
     triggers_blacklist = {
     -- list of mode / prefixes that should never be hooked by WhichKey
-    n = { "d" },
+    n = { "d", "v", "y", "g" }, -- TODO Do not ignore all "g"-prefixed, only gc for comments
     i = { "j", "k" },
     v = { "j", "k" },
   },
@@ -273,7 +274,8 @@ lua << EOF
     b = {
       name = "buffers",
       b = { "<cmd>Buffers<cr>", "Buffer picker" },
-      c = { "<cmd>w ! wl-copy<cr><cr>", "Copy content to clipboard" }
+      c = { "<cmd>w ! wl-copy<cr><cr>", "Copy content to clipboard" },
+      s = { "<cmd>BLines<cr>", "Fuzzy search current buffer" }
     },
     c = {
       name = "clipboard",
@@ -288,8 +290,8 @@ lua << EOF
     f = {
       name = "files",
       r = { "<cmd>e!<cr>", "Reload current file" },
-      f = { "<cmd>Telescope find_files<cr>", "Find file" },
-      F = { "<cmd>call CocAction('format')<cr>", "Format file" },
+      F = { "<cmd>Telescope find_files<cr>", "Find file" },
+      f = { "<cmd>call CocAction('format')<cr>", "Format file" },
       ["1"] = "which_key_ignore",  -- special label to hide it in the popup TODO what why where
     },
   g = {
@@ -313,6 +315,7 @@ lua << EOF
   -- Quickfix shortcuts
   n = { "<cmd>cnext<cr>", "Quickfix - next"},
   p = { "<cmd>cprevious<cr>", "Quickfix - previous"},
+  s = { "<cmd>Telescope live_grep<cr>", "Search for string" }
   }, { prefix = "<leader>" })
 EOF
 " -------------- Git whichkey
