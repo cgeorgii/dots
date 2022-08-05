@@ -10,7 +10,7 @@
     };
   };
 
-  home-manager.users.cgeorgii = { config, pkgs, ...}: {
+  home-manager.users.cgeorgii = { config, pkgs, ... }: {
     nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (pkgs.lib.getName pkg) [
       "dropbox"
       "slack"
@@ -65,8 +65,8 @@
       settings = {
         gui = {
           theme = {
-            selectedLineBgColor= ["reverse"];
-            selectedRangeBgColor= ["reverse"];
+            selectedLineBgColor = [ "reverse" ];
+            selectedRangeBgColor = [ "reverse" ];
           };
         };
       };
