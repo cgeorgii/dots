@@ -21,6 +21,8 @@
     wget
     xclip
     zenith
+    easyeffects # Required for shitty sounding speakers to be somewhat useful
+    gnome.gnome-tweaks
   ];
 
   users.users.cgeorgii = {
@@ -116,12 +118,14 @@
     dockerCompat = true;
   };
 
+  services.fwupd.enable = true;
+
   # If changing any of the keyboard settings for xkb, make sure to rum:
   # $ gsettings reset org.gnome.desktop.input-sources xkb-options
   # $ gsettings reset org.gnome.desktop.input-sources sources
   # # sudo nixos-rebuild switch
   # $ reboot
-  services.xserver= {
+  services.xserver = {
     exportConfiguration = true;
     layout = "us, us(intl)";
     xkbOptions = "grp:alts_toggle, caps:escape";
