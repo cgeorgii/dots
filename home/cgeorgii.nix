@@ -39,13 +39,12 @@
       dropbox
       exa
       fd
-      ferdi
       fzf
       gh
       hub
       imagemagick
+      insomnia
       keepassxc
-      lazygit
       libreoffice
       logseq
       protonvpn-gui
@@ -56,8 +55,22 @@
       signal-desktop
       slack
       starship
+      whatsapp-for-linux
       wl-clipboard
+      protonvpn-cli
     ];
+
+    programs.lazygit = {
+      enable = true;
+      settings = {
+        gui = {
+          theme = {
+            selectedLineBgColor= ["reverse"];
+            selectedRangeBgColor= ["reverse"];
+          };
+        };
+      };
+    };
 
     programs.neovim = {
       enable = true;
@@ -114,6 +127,7 @@
 
       shellAliases = {
         update = "sudo nixos-rebuild switch";
+        upgrade = "sudo nix-channel --update";
         edit = "sudoedit /etc/nixos/configuration.nix";
         link = "sudo ln -s /home/cgeorgii/dots/* /etc/nixos";
         tkill = "tmux kill-server";
@@ -123,9 +137,12 @@
         git = "hub";
         g = "git";
         gst = "git status";
+        gaa = "git add .";
+        gan = "git add . -N";
         gitconfig = "nvim ~/.gitconfig";
         lg = "lazygit";
         ls = "exa --icons -a --group-directories-first";
+        z = "zenith";
       };
 
       plugins = with pkgs; [
@@ -188,7 +205,7 @@
         pp = "pull --prune";
         co = "checkout";
         cm = "commit";
-        cmm = "commit -m";
+        cmm = "commit --allow-empty -m";
         cma = "commit --amend --no-edit";
         st = "status";
         du = "diff @{upstream}";
@@ -222,5 +239,7 @@
         package.disabled = true;
       };
     };
+
+    home.stateVersion = "21.11";
   };
 }
