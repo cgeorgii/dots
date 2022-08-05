@@ -68,7 +68,11 @@ Plug 'ThePrimeagen/git-worktree.nvim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
 
+Plug 'dhruvasagar/vim-table-mode'
 call plug#end()
+
+let g:table_mode_corner_corner='+'
+let g:table_mode_header_fillchar='='
 
 augroup YankHighlight
   autocmd!
