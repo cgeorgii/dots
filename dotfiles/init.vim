@@ -39,7 +39,6 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'neoclide/vim-jsx-improve'
 Plug 'neovimhaskell/haskell-vim'
 Plug 'ntpeters/vim-better-whitespace'
-Plug 'scrooloose/nerdtree'
 Plug 'stephpy/vim-yaml'
 Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-commentary'
@@ -62,6 +61,8 @@ Plug 'nvim-lualine/lualine.nvim'
 Plug 'kyazdani42/nvim-web-devicons'
 " /lualine
 
+Plug 'kyazdani42/nvim-tree.lua'
+
 " TODO - experimental stuff
 Plug 'voldikss/vim-floaterm'
 Plug 'ThePrimeagen/git-worktree.nvim'
@@ -70,6 +71,10 @@ Plug 'nvim-telescope/telescope.nvim'
 
 Plug 'dhruvasagar/vim-table-mode'
 call plug#end()
+
+lua <<END
+require("nvim-tree").setup()
+END
 
 let g:table_mode_corner_corner='+'
 let g:table_mode_header_fillchar='='
@@ -151,7 +156,7 @@ autocmd FileType elm setlocal softtabstop=4 shiftwidth=4 expandtab
 set pastetoggle=<F2>
 
 " Open NerdTree with Ctrl+n
-map <C-n> :NERDTreeToggle<CR>
+map <C-n> :NvimTreeToggle<CR>
 
 " Persistent undo between vim sessions
 set undofile
