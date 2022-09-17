@@ -17,6 +17,7 @@
       "teams"
     ];
 
+    home.file.".gitignore".source = config.lib.file.mkOutOfStoreSymlink ../dotfiles/gitignore;
     home.file.".tmux.conf".source = config.lib.file.mkOutOfStoreSymlink ../dotfiles/tmux.conf;
     home.file.".emacs".source = config.lib.file.mkOutOfStoreSymlink ../dotfiles/emacs;
     home.file."./projects/tweag/.gitconfig".source =
@@ -179,7 +180,6 @@
           condition = "gitdir:~/projects/tweag/";
         }
       ];
-      ignores = pkgs.lib.strings.splitString "\n" (builtins.readFile ../dotfiles/gitignore);
       extraConfig = {
         user.name = "Christian Georgii";
         user.email = "cgeorgii@gmail.com";
