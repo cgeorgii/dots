@@ -20,6 +20,7 @@
     silver-searcher
     tmux
     wget
+    wally-cli
     xclip
     zenith
     easyeffects # Required for shitty sounding speakers to be somewhat useful
@@ -89,6 +90,7 @@
   services.xserver.displayManager.gdm.enable = true;
   services.xserver.desktopManager.gnome.enable = true;
 
+  hardware.keyboard.zsa.enable = true;
   hardware.video.hidpi.enable = lib.mkDefault true;
 
   # Configure pipewire so loudspeakers are not useless
