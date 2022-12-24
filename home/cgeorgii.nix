@@ -12,6 +12,7 @@
 
   home-manager.users.cgeorgii = { config, pkgs, ... }: {
     nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (pkgs.lib.getName pkg) [
+      "steam"
       "dropbox"
       "slack"
       "teams"
@@ -56,6 +57,7 @@
       signal-desktop
       slack
       starship
+      thunderbird
       whatsapp-for-linux
       wl-clipboard
       protonvpn-cli

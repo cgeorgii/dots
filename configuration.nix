@@ -31,24 +31,24 @@
     isNormalUser = true;
     shell = pkgs.zsh;
     home = "/home/cgeorgii";
-    extraGroups = [ "wheel" "networkmanager" ];
+    extraGroups = [ "wheel" "networkmanager" "docker" ];
   };
 
   nix = {
-    package = pkgs.nixFlakes;
+    package = pkgs.nixVersions.stable;
 
     settings = {
       auto-optimise-store = true;
       trusted-public-keys = [
         "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
-        "hydra.iohk.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ="
-        "iohk.cachix.org-1:DpRUyj7h7V830dp/i6Nti+NEO2/nhblbov/8MW7Rqoo="
+        "zeuslogics-nix-cache-buildkite:RpfcOgIp6w2cvPyhTfErGcWkR9QSHc1gpp4UwyH3ovU="
+        "ryantrinkle.com-1:JJiAKaRv9mWgpVAz8dwewnZe0AzzEAzPkagE9SP5NWI="
       ];
       trusted-users = [ "root" "cgeorgii" ];
       substituters = [
         "https://cache.nixos.org"
-        "https://hydra.iohk.io"
-        "https://iohk.cachix.org"
+        "https://storage.googleapis.com/zeuslogics-nix-cache-buildkite"
+        "https://nixcache.reflex-frp.org"
       ];
     };
 
@@ -77,8 +77,14 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  networking.hostName = "tweag-laptop"; # Define your hostname.
+  networking.hostName = "coco"; # The co-dependent computer
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+
+  networking.extraHosts =
+  ''
+    127.0.0.1       zeus-bucket.localhost
+    127.0.0.1       dev.zeuslogics.com
+  '';
 
   networking.useDHCP = false;
   networking.interfaces.wlp0s20f3.useDHCP = true;
@@ -91,6 +97,7 @@
   services.xserver.desktopManager.gnome.enable = true;
 
   hardware.keyboard.zsa.enable = true;
+
   hardware.video.hidpi.enable = lib.mkDefault true;
 
   # Configure pipewire so loudspeakers are not useless
@@ -114,11 +121,12 @@
   ];
 
   # Add fingerprint with `fprintd-enroll`
-  services.fprintd.enable = true;
+  # Disabled because of me new moonlander.
+  # services.fprintd.enable = true;
 
-  virtualisation.podman = {
+  virtualisation.docker = {
     enable = true;
-    dockerCompat = true;
+    # dockerCompat = true;
   };
 
   services.fwupd.enable = true;
@@ -133,6 +141,7 @@
     layout = "us, us(intl)";
     xkbOptions = "grp:alts_toggle, caps:escape";
   };
+
   # Leave this as is
   system.stateVersion = "21.11"; # Did you read the comment?
 }
