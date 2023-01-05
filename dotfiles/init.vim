@@ -47,7 +47,7 @@ Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
-Plug 'w0rp/ale'
+Plug 'dense-analysis/ale'
 Plug 'folke/which-key.nvim'
 Plug 'RRethy/nvim-base16'
 Plug 'lewis6991/gitsigns.nvim'
@@ -190,9 +190,7 @@ set splitright
 nmap ga <Plug>(EasyAlign)
 
 let g:jsx_ext_required = 1
-
 au BufNewFile,BufRead *.ejs set filetype=html
-au BufNewFile,BufRead *.ts set filetype=javascript
 
 augroup vimrc_autocmds
   autocmd BufWrite *.* StripWhitespace
