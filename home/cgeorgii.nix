@@ -57,7 +57,6 @@
       signal-desktop
       slack
       starship
-      thunderbird
       whatsapp-for-linux
       wl-clipboard
       protonvpn-cli
