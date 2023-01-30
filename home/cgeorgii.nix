@@ -31,7 +31,6 @@
     };
 
     home.packages = with pkgs; [
-      teams
       alacritty
       albert
       autojump
@@ -49,17 +48,18 @@
       keepassxc
       libreoffice
       logseq
-      protonvpn-gui
       neofetch
       niv
+      protonvpn-cli
+      protonvpn-gui
       ranger
       rbenv
       signal-desktop
       slack
       starship
+      teams
       whatsapp-for-linux
       wl-clipboard
-      protonvpn-cli
     ];
 
     programs.lazygit = {
