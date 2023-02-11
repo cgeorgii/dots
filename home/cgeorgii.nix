@@ -4,30 +4,9 @@
   imports =
     [ <home-manager/nixos> ];
 
-  environment = {
-    variables = {
-      EDITOR = "nvim";
-    };
-  };
+  environment.variables.EDITOR = "NVIM";
 
   home-manager.users.cgeorgii = { config, pkgs, ... }: {
-    nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (pkgs.lib.getName pkg) [
-      "dropbox"
-      "slack"
-    ];
-
-    home.file.".gitignore".source = config.lib.file.mkOutOfStoreSymlink ../dotfiles/gitignore;
-    home.file.".tmux.conf".source = config.lib.file.mkOutOfStoreSymlink ../dotfiles/tmux.conf;
-    home.file.".emacs".source = config.lib.file.mkOutOfStoreSymlink ../dotfiles/emacs;
-    home.file."./projects/tweag/.gitconfig".source =
-      config.lib.file.mkOutOfStoreSymlink ../dotfiles/gitconfig-work;
-
-    xdg.configFile = {
-      "alacritty/alacritty.yml".source = config.lib.file.mkOutOfStoreSymlink ../dotfiles/alacritty.yml;
-      "nvim/init.vim".source = config.lib.file.mkOutOfStoreSymlink ../dotfiles/init.vim;
-      "nvim/coc-settings.json".source = config.lib.file.mkOutOfStoreSymlink ../dotfiles/coc-settings.json;
-    };
-
     home.packages = with pkgs; [
       alacritty
       albert
@@ -58,6 +37,23 @@
       starship
       whatsapp-for-linux
       wl-clipboard
+    ];
+
+    home.file.".gitignore".source = config.lib.file.mkOutOfStoreSymlink ../dotfiles/gitignore;
+    home.file.".tmux.conf".source = config.lib.file.mkOutOfStoreSymlink ../dotfiles/tmux.conf;
+    home.file.".emacs".source = config.lib.file.mkOutOfStoreSymlink ../dotfiles/emacs;
+    home.file."./projects/tweag/.gitconfig".source =
+      config.lib.file.mkOutOfStoreSymlink ../dotfiles/gitconfig-work;
+
+    xdg.configFile = {
+      "alacritty/alacritty.yml".source = config.lib.file.mkOutOfStoreSymlink ../dotfiles/alacritty.yml;
+      "nvim/init.vim".source = config.lib.file.mkOutOfStoreSymlink ../dotfiles/init.vim;
+      "nvim/coc-settings.json".source = config.lib.file.mkOutOfStoreSymlink ../dotfiles/coc-settings.json;
+    };
+
+    nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (pkgs.lib.getName pkg) [
+      "dropbox"
+      "slack"
     ];
 
     programs.lazygit = {
