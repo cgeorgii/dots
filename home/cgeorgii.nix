@@ -12,10 +12,8 @@
 
   home-manager.users.cgeorgii = { config, pkgs, ... }: {
     nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (pkgs.lib.getName pkg) [
-      "steam"
       "dropbox"
       "slack"
-      "teams"
     ];
 
     home.file.".gitignore".source = config.lib.file.mkOutOfStoreSymlink ../dotfiles/gitignore;
@@ -37,6 +35,7 @@
       beekeeper-studio
       calibre
       chromium
+      dbeaver
       dropbox
       exa
       fd
@@ -57,7 +56,6 @@
       signal-desktop
       slack
       starship
-      teams
       whatsapp-for-linux
       wl-clipboard
     ];

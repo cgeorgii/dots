@@ -38,16 +38,16 @@
     package = pkgs.nixVersions.stable;
 
     settings = {
+      trusted-users = [ "root" "cgeorgii" ];
       auto-optimise-store = true;
       trusted-public-keys = [
         "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
-        "zeuslogics-nix-cache-buildkite:RpfcOgIp6w2cvPyhTfErGcWkR9QSHc1gpp4UwyH3ovU="
         "ryantrinkle.com-1:JJiAKaRv9mWgpVAz8dwewnZe0AzzEAzPkagE9SP5NWI="
+        "zeuslogics-nix-cache-github:RpfcOgIp6w2cvPyhTfErGcWkR9QSHc1gpp4UwyH3ovU="
       ];
-      trusted-users = [ "root" "cgeorgii" ];
       substituters = [
         "https://cache.nixos.org"
-        "https://storage.googleapis.com/zeuslogics-nix-cache-buildkite"
+        "https://storage.googleapis.com/zeuslogics-nix-cache-github"
         "https://nixcache.reflex-frp.org"
       ];
     };
@@ -81,10 +81,10 @@
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   networking.extraHosts =
-  ''
-    127.0.0.1       zeus-bucket.localhost
-    127.0.0.1       dev.zeuslogics.com
-  '';
+    ''
+      127.0.0.1       zeus-bucket.localhost
+      127.0.0.1       dev.zeuslogics.com
+    '';
 
   networking.useDHCP = false;
   networking.interfaces.wlp0s20f3.useDHCP = true;
