@@ -4,7 +4,7 @@
   imports =
     [ <home-manager/nixos> ];
 
-  environment.variables.EDITOR = "NVIM";
+  environment.variables.EDITOR = "nvim";
 
   home-manager.users.cgeorgii = { config, pkgs, ... }: {
     home.packages = with pkgs; [
