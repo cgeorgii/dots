@@ -98,7 +98,7 @@
 
   hardware.keyboard.zsa.enable = true;
 
-  hardware.video.hidpi.enable = lib.mkDefault true;
+  hardware.video.hidpi.enable = true;
 
   # Configure pipewire so loudspeakers are not useless
   hardware.pulseaudio.enable = false;
