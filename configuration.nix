@@ -134,7 +134,16 @@
     xkbOptions = "grp:alts_toggle, caps:escape";
   };
 
+  # enable firewall and block all ports
+  networking.firewall.enable = true;
+  networking.firewall.allowedTCPPorts = [ ];
+  networking.firewall.allowedUDPPorts = [ ];
+
+  # enable antivirus clamav and
+  # keep the signatures' database updated
+  services.clamav.daemon.enable = true;
+  services.clamav.updater.enable = true;
+
   # Leave this as is
   system.stateVersion = "21.11"; # Did you read the comment?
 }
-
