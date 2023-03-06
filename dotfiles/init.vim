@@ -51,6 +51,7 @@ Plug 'dense-analysis/ale'
 Plug 'folke/which-key.nvim'
 Plug 'RRethy/nvim-base16'
 Plug 'lewis6991/gitsigns.nvim'
+Plug 'isobit/vim-caddyfile'
 
 " lualine
 Plug 'nvim-lualine/lualine.nvim'
@@ -67,7 +68,18 @@ Plug 'nvim-telescope/telescope.nvim'
 call plug#end()
 
 lua <<END
-require("nvim-tree").setup()
+require("nvim-tree").setup({
+  view = {
+    relativenumber = true,
+    float = {
+      enable = true,
+      open_win_config = {
+          width = 40,
+          height = 32
+        },
+    },
+  }
+})
 END
 
 let g:table_mode_corner_corner='+'
