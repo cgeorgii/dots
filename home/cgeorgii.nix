@@ -119,6 +119,9 @@
         export KEYTIMEOUT=1
 
         export BAT_THEME=gruvbox-dark
+
+        # Make direnv shutup when entering a shell
+        export DIRENV_LOG_FORMAT=
       ";
 
       shellAliases = {
