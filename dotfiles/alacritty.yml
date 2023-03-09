@@ -11,7 +11,7 @@ window:
 font:
   size: 15.5
   normal:
-    family: Iosevka Nerd Font
+    family: IosevkaTerm Nerd Font
 
 # Open links with shit+click
 mouse:
