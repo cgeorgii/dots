@@ -77,7 +77,7 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  networking.hostName = "coco"; # The co-dependent computer
+  networking.hostName = "coco"; # The codependent computer
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   networking.extraHosts =
@@ -123,7 +123,7 @@
 
   services.fwupd.enable = true;
 
-  # If changing any of the keyboard settings for xkb, make sure to rum:
+  # If changing any of the keyboard settings for xkb, make sure to run:
   # $ gsettings reset org.gnome.desktop.input-sources xkb-options
   # $ gsettings reset org.gnome.desktop.input-sources sources
   # # sudo nixos-rebuild switch

@@ -34,6 +34,7 @@
       rbenv
       signal-desktop
       slack
+      spotify
       starship
       whatsapp-for-linux
       wl-clipboard
@@ -54,6 +55,7 @@
     nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (pkgs.lib.getName pkg) [
       "dropbox"
       "slack"
+      "spotify"
     ];
 
     programs.lazygit = {
