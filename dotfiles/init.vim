@@ -208,7 +208,7 @@ augroup vimrc_autocmds
   autocmd BufWrite *.* StripWhitespace
   autocmd BufEnter * highlight OverLength cterm=underline guibg=#111111
   autocmd BufWrite *.rb call CocAction('format')
-  autocmd BufWrite *.purs call CocAction('format')
+  " autocmd BufWrite *.purs call CocAction('format')
 augroup END
 
 " indentLine config
