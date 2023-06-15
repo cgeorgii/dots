@@ -52,6 +52,10 @@ Plug 'folke/which-key.nvim'
 Plug 'RRethy/nvim-base16'
 Plug 'lewis6991/gitsigns.nvim'
 Plug 'isobit/vim-caddyfile'
+Plug 'rlane/pounce.nvim'
+Plug 'vmchale/dhall-vim'
+Plug 'hashivim/vim-terraform'
+Plug 'github/copilot.vim'
 
 " lualine
 Plug 'nvim-lualine/lualine.nvim'
@@ -94,6 +98,7 @@ lua require('gitsigns').setup()
 
 set termguicolors
 let g:afterglow_inherit_background=1
+" colorscheme base16-gruvbox-light-medium
 colorscheme base16-gruvbox-dark-medium
 
 lua << END
@@ -244,6 +249,7 @@ command! ToggleClipboard call ToggleClipboard()
 let g:argwrap_padded_braces = '{'
 
 " -------------- Key maps
+nnoremap <Space> :Pounce<CR>
 nnoremap \ :Ack!<Space>
 nnoremap K :silent grep! <cword> \| copen<CR>
 nnoremap \| :Tags<CR>
@@ -277,6 +283,7 @@ lua << EOF
   }
 
   wk.register({
+    ["<tab>"] = { "<cmd>Pounce<cr>", "Pounce" },
     a = { "<cmd>ArgWrap<cr>", "Wrap/Unwrap argument list" },
     b = {
       name = "buffers",
@@ -290,10 +297,9 @@ lua << EOF
     },
     C = {
       name = "config",
-      e = { "<cmd>VimConfig<cr>", "Edit vimconfig" },
+      E = { "<cmd>VimConfig<cr>", "Edit vimconfig" },
       R = { "<cmd>source $MYVIMRC<cr>", "Reload vimconfig" },
     },
-    e = { "<cmd>e!<cr>", "Reload current file" },
     f = {
       name = "files",
       r = { "<cmd>e!<cr>", "Reload current file" },
@@ -362,13 +368,13 @@ endfunction
 
 " Using CocList
 " Show all diagnostics
-nnoremap <silent> <space>a  :<C-u>CocList diagnostics<cr>
+nnoremap <silent> <leader><space>a  :<C-u>CocList diagnostics<cr>
 " Manage extensions
-nnoremap <silent> <space>e  :<C-u>CocList extensions<cr>
+nnoremap <silent> <leader><space>e  :<C-u>CocList extensions<cr>
 " Show commands
-nnoremap <silent> <space>c  :<C-u>CocList commands<cr>
+nnoremap <silent> <leader><space>c  :<C-u>CocList commands<cr>
 " Resume latest coc list
-nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
+nnoremap <silent> <leader><space>p  :<C-u>CocListResume<CR>
 " --------------------------------------------------------------------------
 
 let g:elm_format_autosave = 1

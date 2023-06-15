@@ -15,6 +15,7 @@
     git
     git-lfs
     gnomeExtensions.dash-to-dock
+    pass
     readline
     rnix-lsp
     silver-searcher
@@ -26,6 +27,10 @@
     easyeffects # Required for shitty sounding speakers to be somewhat useful
     gnome.gnome-tweaks
   ];
+
+  programs.zsh = {
+    enable = true;
+  };
 
   users.users.cgeorgii = {
     isNormalUser = true;
@@ -98,8 +103,6 @@
 
   hardware.keyboard.zsa.enable = true;
 
-  hardware.video.hidpi.enable = lib.mkDefault true;
-
   hardware.pulseaudio.enable = true;
 
   # Enable touchpad support (enabled default in most desktopManager).
@@ -143,6 +146,12 @@
   # keep the signatures' database updated
   services.clamav.daemon.enable = true;
   services.clamav.updater.enable = true;
+
+  services.pcscd.enable = true;
+  programs.gnupg.agent = {
+    enable = true;
+    enableSSHSupport = true;
+  };
 
   # Leave this as is
   system.stateVersion = "21.11"; # Did you read the comment?

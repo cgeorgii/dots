@@ -15,6 +15,7 @@
       calibre
       chromium
       dbeaver
+      discord
       dropbox
       exa
       fd
@@ -56,6 +57,7 @@
       "dropbox"
       "slack"
       "spotify"
+      "discord"
     ];
 
     programs.lazygit = {
