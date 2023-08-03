@@ -36,7 +36,6 @@ Plug 'junegunn/vim-easy-align'
 Plug 'mustache/vim-mustache-handlebars'
 Plug 'nelstrom/vim-visual-star-search'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'leafgarland/typescript-vim'
 Plug 'neovimhaskell/haskell-vim'
 Plug 'ntpeters/vim-better-whitespace'
 Plug 'stephpy/vim-yaml'
@@ -56,6 +55,7 @@ Plug 'rlane/pounce.nvim'
 Plug 'vmchale/dhall-vim'
 Plug 'hashivim/vim-terraform'
 Plug 'github/copilot.vim'
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
 " lualine
 Plug 'nvim-lualine/lualine.nvim'
@@ -72,14 +72,27 @@ Plug 'nvim-telescope/telescope.nvim'
 call plug#end()
 
 lua <<END
+require'nvim-treesitter.configs'.setup {
+  ensure_installed = { "lua", "vim", "vimdoc", "typescript", "tsx", "sql" },
+  highlight = {
+    enable = true,
+    additional_vim_regex_highlighting = false,
+  },
+  indent = {
+    enable = true
+  }
+}
+END
+
+lua <<END
 require("nvim-tree").setup({
   view = {
     relativenumber = true,
     float = {
       enable = true,
       open_win_config = {
-          width = 40,
-          height = 32
+          width = 60,
+          height = 40
         },
     },
   }
@@ -254,7 +267,7 @@ nnoremap \ :Ack!<Space>
 nnoremap K :silent grep! <cword> \| copen<CR>
 nnoremap \| :Tags<CR>
 nnoremap <C-P> :GFiles<CR>
-nnoremap <C-\> :Files<CR>
+nnoremap <C-Bslash> :Files<CR>
 nnoremap <leader>bo :ViewBundleGem<SPACE>
 nnoremap <leader>bp o(::Kernel.require 'pry'; ::Kernel.binding.pry)<ESC>
 nnoremap <silent><leader>k :call <SID>show_documentation()<CR>
@@ -351,7 +364,7 @@ nmap <leader>qf <Plug>(coc-fix-current)
 nmap <leader>qq <Plug>(coc-codeaction-cursor)
 nmap <silent><leader>N <Plug>(coc-diagnostic-prev)
 nmap <silent><leader>n <Plug>(coc-diagnostic-next)
-" Use <leader>K to show documentation in preview window
+" Use <leader>k to show documentation in preview window
 nnoremap <silent><leader>k :call <SID>show_documentation()<CR>
 
 vmap <leader>f <Plug>(coc-format-selected)

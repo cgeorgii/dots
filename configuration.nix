@@ -16,6 +16,7 @@
     git-lfs
     gnomeExtensions.dash-to-dock
     pass
+    pinentry
     readline
     rnix-lsp
     silver-searcher
@@ -24,6 +25,7 @@
     wally-cli
     xclip
     zenith
+    gcc # Required for neovim-treesitter
     easyeffects # Required for shitty sounding speakers to be somewhat useful
     gnome.gnome-tweaks
   ];
@@ -111,7 +113,7 @@
   i18n.defaultLocale = "en_US.UTF-8";
   time.timeZone = "Europe/Berlin";
 
-  fonts.fonts = with pkgs; [
+  fonts.packages = with pkgs; [
     (pkgs.nerdfonts.override { fonts = [ "Iosevka" ]; })
   ];
 
@@ -151,6 +153,7 @@
   programs.gnupg.agent = {
     enable = true;
     enableSSHSupport = true;
+    pinentryFlavor = "gnome3";
   };
 
   # Leave this as is
