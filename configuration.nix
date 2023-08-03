@@ -4,7 +4,6 @@
   imports =
     [
       ./hardware-configuration.nix
-      <nixos-hardware/lenovo/thinkpad/x1/9th-gen>
       ./home/cgeorgii.nix
     ];
 
@@ -42,7 +41,7 @@
   };
 
   nix = {
-    package = pkgs.nixVersions.stable;
+    package = pkgs.nixFlakes;
 
     settings = {
       trusted-users = [ "root" "cgeorgii" ];

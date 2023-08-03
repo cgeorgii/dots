@@ -1,10 +1,17 @@
 { config, pkgs, ... }:
 
 {
-  imports =
-    [ <home-manager/nixos> ];
-
   environment.variables.EDITOR = "nvim";
+
+  # Needed to install unfree packages within flake.
+  home-manager.useGlobalPkgs = true;
+
+  nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (pkgs.lib.getName pkg) [
+    "dropbox"
+    "slack"
+    "spotify"
+    "discord"
+  ];
 
   home-manager.users.cgeorgii = { config, pkgs, ... }: {
     home.packages = with pkgs; [
@@ -52,13 +59,6 @@
       "nvim/init.vim".source = config.lib.file.mkOutOfStoreSymlink ../dotfiles/init.vim;
       "nvim/coc-settings.json".source = config.lib.file.mkOutOfStoreSymlink ../dotfiles/coc-settings.json;
     };
-
-    nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (pkgs.lib.getName pkg) [
-      "dropbox"
-      "slack"
-      "spotify"
-      "discord"
-    ];
 
     programs.lazygit = {
       enable = true;
@@ -129,14 +129,14 @@
       ";
 
       shellAliases = {
-        update = "sudo nixos-rebuild switch";
-        upgrade = "sudo nix-channel --update";
-        edit = "sudoedit /etc/nixos/configuration.nix";
-        link = "sudo ln -s /home/cgeorgii/dots/* /etc/nixos";
+        # [[ NIX ]]
+        update = "sudo nixos-rebuild --flake .#coco switch";
+
+        # [[ TMUX ]]
         tkill = "tmux kill-server";
         there = "tmux new-session -d -s $(basename \"$PWD\" | tr . -); tmux switch-client -t $(basename \"$PWD\" | tr . -) || tmux attach -t $(basename \"$PWD\" | tr . -);";
 
-        cat = "bat";
+        # [[ GIT ]]
         git = "hub";
         g = "git";
         gst = "git status";
@@ -144,6 +144,9 @@
         gan = "git add . -N";
         gitconfig = "nvim ~/.gitconfig";
         lg = "lazygit";
+
+        # [[ UTILS ]]
+        cat = "bat";
         ls = "exa --icons -a --group-directories-first";
         z = "zenith";
       };
