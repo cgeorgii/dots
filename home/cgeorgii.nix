@@ -130,7 +130,8 @@
 
       shellAliases = {
         # [[ NIX ]]
-        update = "sudo nixos-rebuild --flake .#coco switch";
+        nixos-update = "sudo nixos-rebuild switch";
+        nixos-link = "sudo ln -s /home/cgeorgii/dots/* /etc/nixos";
 
         # [[ TMUX ]]
         tkill = "tmux kill-server";
@@ -223,9 +224,24 @@
       };
     };
 
+    programs.jq = {
+      enable = true;
+    };
+
     programs.fzf = {
       enable = true;
       enableZshIntegration = true;
+    };
+
+    programs.jujutsu = {
+      enable = true;
+      enableZshIntegration = true;
+      settings = {
+        user = {
+          name = "Christian Georgii";
+          email = "cgeorgii@gmail.com";
+        };
+      };
     };
 
     programs.starship = {
