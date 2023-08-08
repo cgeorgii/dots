@@ -308,6 +308,11 @@ lua << EOF
       name = "clipboard",
       c = { "<cmd>ToggleClipboard<cr>", "Toggle between editor/system clipboard" }
     },
+    r = {
+        name = "Reload/rename",
+        r = { "<cmd>e!<cr>", "Reload current file" },
+        n = { "<Plug>(coc-rename)", "Rename current symbol" }
+    },
     C = {
       name = "config",
       E = { "<cmd>VimConfig<cr>", "Edit vimconfig" },
@@ -320,36 +325,35 @@ lua << EOF
       f = { "<cmd>call CocActionAsync('format')<cr>", "Format file" },
       ["1"] = "which_key_ignore",  -- special label to hide it in the popup TODO what why where
     },
-  g = {
-    name = "git",
-    w = {
-      name = "Worktrees",
-        a = { function() require('telescope').extensions.git_worktree.create_git_worktree() end, "Add worktree" },
-        l = { function() require('telescope').extensions.git_worktree.git_worktrees() end, "List worktrees" },
-      },
-  },
-  L = {
-    name = "LSP",
-    R = { "<cmd>CocRestart<cr><cr>", "Reload LSP" },
-  },
-  r = { "<cmd>e!<cr>", "Reload file" },
-  -- Tab management
-  t = { "<cmd>tabnew<cr>", "New tab"},
-  h = { "<cmd>tabprevious<cr>", "Previous tab"},
-  l = { "<cmd>tabnext<cr>", "Next tab"},
-  q = { "<cmd>tabclose<cr>", "Close tab"},
-  -- Quickfix shortcuts
-  n = { "<cmd>call CocAction('diagnosticNext')<cr>", "Next diagnostic" },
-  N = {
-    name = "Neorg",
-    e = { "<cmd>Neorg gtd edit<cr>", "Edit todo" },
-    v = { "<cmd>Neorg gtd views<cr>", "GTD Views" }
-  },
-  p = { "<cmd>call CocAction('diagnosticPrevious')<cr>", "Previous diagnostic" },
-  s = {
-    name = "Search functions",
-    s = { "<cmd>Telescope live_grep<cr>", "Search for string" },
-    t = { "<cmd>Ack! TODO<cr>", "Search for TODOS" }
+    g = {
+      name = "git",
+      w = {
+        name = "Worktrees",
+          a = { function() require('telescope').extensions.git_worktree.create_git_worktree() end, "Add worktree" },
+          l = { function() require('telescope').extensions.git_worktree.git_worktrees() end, "List worktrees" },
+        },
+    },
+    L = {
+      name = "LSP",
+      R = { "<cmd>CocRestart<cr><cr>", "Reload LSP" },
+    },
+    -- Tab management
+    t = { "<cmd>tabnew<cr>", "New tab"},
+    h = { "<cmd>tabprevious<cr>", "Previous tab"},
+    l = { "<cmd>tabnext<cr>", "Next tab"},
+    q = { "<cmd>tabclose<cr>", "Close tab"},
+    -- Quickfix shortcuts
+    n = { "<cmd>call CocAction('diagnosticNext')<cr>", "Next diagnostic" },
+    N = {
+      name = "Neorg",
+      e = { "<cmd>Neorg gtd edit<cr>", "Edit todo" },
+      v = { "<cmd>Neorg gtd views<cr>", "GTD Views" }
+    },
+    p = { "<cmd>call CocAction('diagnosticPrevious')<cr>", "Previous diagnostic" },
+    s = {
+      name = "Search functions",
+      s = { "<cmd>Telescope live_grep<cr>", "Search for string" },
+      t = { "<cmd>Ack! TODO<cr>", "Search for TODOS" }
     }
   }, { prefix = "<leader>" })
 EOF
