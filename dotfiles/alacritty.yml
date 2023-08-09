@@ -5,14 +5,13 @@ env:
 window:
   decorations: None
   padding:
-    x: 5
+    x: 0
     y: 5
 
 font:
   size: 15.5
   normal:
-    family: Iosevka Nerd Font
-    # family: IosevkaTerm Nerd Font
+    family: "Iosevka Nerd Font Mono"
 
 # Open links with shit+click
 mouse:
@@ -20,13 +19,12 @@ mouse:
     launcher:
       program: xdg-open
 
-# Gruvbox
+# Theme: Gruvbox
 colors:
   # Default colors
   primary:
-    # hard contrast: background = '0x1d2021'
-    background: '0x282828'
-    # soft contrast: background = '0x32302f'
+    background: '0x282828' # normal contrast
+    # background: '0x1d2021' # hard contrast
     foreground: '0xebdbb2'
 
   # Normal colors

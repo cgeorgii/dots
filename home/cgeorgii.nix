@@ -210,7 +210,7 @@
           enable = true;
           options = {
             navigate = true;
-            syntax-theme = "TwoDark";
+            syntax-theme = "gruvbox-dark";
             light = false;
           };
         };
