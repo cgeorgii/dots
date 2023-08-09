@@ -118,7 +118,7 @@ lua << END
 require('lualine').setup {
   options = {
     icons_enabled = true,
-    theme = 'gruvbox_dark',
+    theme = 'gruvbox',
     component_separators = { left = '', right = ''},
     section_separators = { left = '', right = ''},
     disabled_filetypes = {},
@@ -128,9 +128,9 @@ require('lualine').setup {
   sections = {
     lualine_a = {
       'branch',
-      'diff'
     },
     lualine_b = {
+      'diff',
       {
       'filename',
       path = 1,
@@ -147,16 +147,16 @@ require('lualine').setup {
     }
     },
     lualine_c = {},
-    lualine_x = {'encoding', 'fileformat', {'filetype', icon_only = true}},
+    lualine_x = {'encoding'},
     lualine_y = {},
     lualine_z = {}
   },
   inactive_sections = {
     lualine_a = {
-      'branch',
-      'diff'
+      'branch'
     },
     lualine_b = {
+      'diff',
       {
       'filename',
       path = 1,
@@ -173,7 +173,7 @@ require('lualine').setup {
     }
     },
     lualine_c = {},
-    lualine_x = {'encoding', 'fileformat', {'filetype', icon_only = true}},
+    lualine_x = {'encoding'},
     lualine_y = {},
     lualine_z = {}
   },
