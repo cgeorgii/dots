@@ -1,12 +1,6 @@
 { config, lib, pkgs, ... }:
 
 {
-  imports =
-    [
-      ./hardware-configuration.nix
-      ./home/cgeorgii.nix
-    ];
-
   environment.systemPackages = with pkgs; [
     bat
     file
@@ -40,6 +34,13 @@
     extraGroups = [ "wheel" "networkmanager" "docker" ];
   };
 
+  users.users.i3 = {
+    isNormalUser = true;
+    shell = pkgs.zsh;
+    home = "/home/i3";
+    extraGroups = [ "networkmanager" ];
+  };
+
   nix = {
     package = pkgs.nixFlakes;
 
@@ -58,6 +59,7 @@
       ];
     };
 
+    # Why is this necessary?
     extraOptions = ''
       keep-outputs = true
       keep-derivations = true
@@ -84,7 +86,6 @@
   boot.loader.efi.canTouchEfiVariables = true;
 
   networking.hostName = "coco"; # The codependent computer
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   networking.extraHosts =
     ''
@@ -154,6 +155,18 @@
     enableSSHSupport = true;
     pinentryFlavor = "gnome3";
   };
+
+  environment.variables.EDITOR = "nvim";
+
+  # Needed to install unfree packages within flake.
+  home-manager.useGlobalPkgs = true;
+
+  nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (pkgs.lib.getName pkg) [
+    "dropbox"
+    "slack"
+    "spotify"
+    "discord"
+  ];
 
   # Leave this as is
   system.stateVersion = "21.11"; # Did you read the comment?

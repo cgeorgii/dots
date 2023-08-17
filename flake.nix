@@ -12,10 +12,17 @@
       coco = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         modules = [
-          ./configuration.nix
+          # Hardware config
+          ./hardware-configuration.nix
           nixos-hardware.nixosModules.lenovo-thinkpad-x1-9th-gen
+
+          # Home-manager
           home-manager.nixosModules.home-manager
+
+          # User config
+          ./configuration.nix
           ./home/cgeorgii.nix
+          ./home/i3.nix
         ];
       };
     };

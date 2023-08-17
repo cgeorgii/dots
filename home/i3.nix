@@ -1,7 +1,7 @@
 { config, pkgs, ... }:
 
 {
-  home-manager.users.cgeorgii = { config, pkgs, ... }:
+  home-manager.users.i3 = { config, pkgs, ... }:
     # Using a string here instead of the direct path because otherwise a config with
     # flakes will not symlink but copy the files, making hot-reloading the config
     # impossible without a rebuild.
@@ -10,10 +10,7 @@
         "${config.home.homeDirectory}/dots/dotfiles/${file}";
     in
     {
-      home.file.".gitignore".source = link-dotfile "gitignore";
       home.file.".tmux.conf".source = link-dotfile "tmux.conf";
-      home.file.".emacs".source = link-dotfile "emacs";
-      home.file."./projects/tweag/.gitconfig".source = link-dotfile "gitconfig-work";
 
       xdg.configFile = {
         "alacritty/alacritty.yml".source = link-dotfile "alacritty.yml";
@@ -24,61 +21,22 @@
       home.packages = with pkgs; [
         alacritty
         autojump
-        chromium
-        dbeaver
-        dropbox
-        entr
         exa
         fd
         fzf
-        gh
-        hub
-        imagemagick
-        insomnia
-        keepassxc
-        libreoffice
-        logseq
-        neofetch
         protonvpn-cli
         protonvpn-gui
-        signal-desktop
-        slack
         spotify
         starship
         whatsapp-for-linux
         wl-clipboard
       ];
 
-
-      programs.lazygit = {
-        enable = true;
-        settings = {
-          gui = {
-            theme = {
-              selectedLineBgColor = [ "reverse" ];
-              selectedRangeBgColor = [ "reverse" ];
-            };
-          };
-        };
-      };
-
       programs.neovim = {
         enable = true;
-        withNodeJs = true;
       };
 
       programs.tmux.newSession = true;
-
-      programs.autojump = {
-        enable = true;
-        enableZshIntegration = true;
-      };
-
-      programs.direnv = {
-        enable = true;
-        nix-direnv.enable = true;
-        enableZshIntegration = true;
-      };
 
       programs.zsh = {
         enable = true;
@@ -119,22 +77,16 @@
       ";
 
         shellAliases = {
-          # [[ NIX ]]
-          nixos-update = "sudo nixos-rebuild switch";
-          nixos-link = "sudo ln -s /home/cgeorgii/dots/* /etc/nixos";
-
           # [[ TMUX ]]
           tkill = "tmux kill-server";
           there = "tmux new-session -d -s $(basename \"$PWD\" | tr . -); tmux switch-client -t $(basename \"$PWD\" | tr . -) || tmux attach -t $(basename \"$PWD\" | tr . -);";
 
           # [[ GIT ]]
-          git = "hub";
           g = "git";
           gst = "git status";
           gaa = "git add .";
           gan = "git add . -N";
           gitconfig = "nvim ~/.gitconfig";
-          lg = "lazygit";
 
           # [[ UTILS ]]
           cat = "bat";
@@ -168,33 +120,6 @@
 
       programs.git = {
         enable = true;
-        lfs.enable = true;
-        includes = [
-          { path = "~/.gitconfig"; } # GH adds auth information to this file
-          {
-            path = "~/projects/tweag/.gitconfig";
-            condition = "gitdir:~/projects/tweag/";
-          }
-        ];
-        extraConfig = {
-          user.name = "Christian Georgii";
-          user.email = "cgeorgii@gmail.com";
-          github.user = "cgeorgii";
-          push.default = "simple";
-          rerere.enable = true;
-          branch.autosetuprebase = "always";
-          core.excludefile = "~/.gitignore";
-          core.excludesfile = "~/.gitignore";
-          hub.protocol = "https";
-        };
-        delta = {
-          enable = true;
-          options = {
-            navigate = true;
-            syntax-theme = "gruvbox-dark";
-            light = false;
-          };
-        };
         aliases = {
           b = "branch";
           cb = "checkout -b";
@@ -221,17 +146,6 @@
       programs.fzf = {
         enable = true;
         enableZshIntegration = true;
-      };
-
-      programs.jujutsu = {
-        enable = true;
-        enableZshIntegration = true;
-        settings = {
-          user = {
-            name = "Christian Georgii";
-            email = "cgeorgii@gmail.com";
-          };
-        };
       };
 
       programs.starship = {
