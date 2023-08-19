@@ -11,7 +11,7 @@ window:
 font:
   size: 15.5
   normal:
-    family: "Iosevka Nerd Font Mono"
+    family: "IosevkaTerm Nerd Font Mono"
 
 # Open links with shit+click
 mouse:

@@ -114,7 +114,7 @@
   time.timeZone = "Europe/Berlin";
 
   fonts.packages = with pkgs; [
-    (pkgs.nerdfonts.override { fonts = [ "Iosevka" ]; })
+    (pkgs.nerdfonts.override { fonts = [ "Iosevka" "IosevkaTerm" ]; })
   ];
 
   # Add fingerprint with `fprintd-enroll`
