@@ -39,19 +39,14 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'neovimhaskell/haskell-vim'
 Plug 'ntpeters/vim-better-whitespace'
 Plug 'stephpy/vim-yaml'
-Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-commentary'
-Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-eunuch'
-Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
 Plug 'dense-analysis/ale'
 Plug 'folke/which-key.nvim'
 Plug 'RRethy/nvim-base16'
 Plug 'lewis6991/gitsigns.nvim'
 Plug 'isobit/vim-caddyfile'
-Plug 'rlane/pounce.nvim'
 Plug 'vmchale/dhall-vim'
 Plug 'hashivim/vim-terraform'
 Plug 'github/copilot.vim'
@@ -262,7 +257,6 @@ command! ToggleClipboard call ToggleClipboard()
 let g:argwrap_padded_braces = '{'
 
 " -------------- Key maps
-nnoremap <Space> :Pounce<CR>
 nnoremap \ :Ack!<Space>
 nnoremap K :silent grep! <cword> \| copen<CR>
 nnoremap \| :Tags<CR>
@@ -296,7 +290,6 @@ lua << EOF
   }
 
   wk.register({
-    ["<tab>"] = { "<cmd>Pounce<cr>", "Pounce" },
     a = { "<cmd>ArgWrap<cr>", "Wrap/Unwrap argument list" },
     b = {
       name = "buffers",
@@ -320,18 +313,8 @@ lua << EOF
     },
     f = {
       name = "files",
-      r = { "<cmd>e!<cr>", "Reload current file" },
-      F = { "<cmd>Telescope find_files<cr>", "Find file" },
       f = { "<cmd>call CocActionAsync('format')<cr>", "Format file" },
       ["1"] = "which_key_ignore",  -- special label to hide it in the popup TODO what why where
-    },
-    g = {
-      name = "git",
-      w = {
-        name = "Worktrees",
-          a = { function() require('telescope').extensions.git_worktree.create_git_worktree() end, "Add worktree" },
-          l = { function() require('telescope').extensions.git_worktree.git_worktrees() end, "List worktrees" },
-        },
     },
     L = {
       name = "LSP",
@@ -344,17 +327,7 @@ lua << EOF
     q = { "<cmd>tabclose<cr>", "Close tab"},
     -- Quickfix shortcuts
     n = { "<cmd>call CocAction('diagnosticNext')<cr>", "Next diagnostic" },
-    N = {
-      name = "Neorg",
-      e = { "<cmd>Neorg gtd edit<cr>", "Edit todo" },
-      v = { "<cmd>Neorg gtd views<cr>", "GTD Views" }
-    },
     p = { "<cmd>call CocAction('diagnosticPrevious')<cr>", "Previous diagnostic" },
-    s = {
-      name = "Search functions",
-      s = { "<cmd>Telescope live_grep<cr>", "Search for string" },
-      t = { "<cmd>Ack! TODO<cr>", "Search for TODOS" }
-    }
   }, { prefix = "<leader>" })
 EOF
 " -------------- Git whichkey
