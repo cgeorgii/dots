@@ -17,7 +17,8 @@
 
       xdg.configFile = {
         "alacritty/alacritty.yml".source = link-dotfile "alacritty.yml";
-        "nvim/init.vim".source = link-dotfile "init.vim";
+        "nvim/legacy.vim".source = link-dotfile "nvim/legacy.vim";
+        "nvim/init.lua".source = link-dotfile "nvim/init.lua";
         "nvim/coc-settings.json".source = link-dotfile "coc-settings.json";
       };
 
