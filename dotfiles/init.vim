@@ -393,3 +393,12 @@ endfunction
 nnoremap <leader>. :w<cr>:call AltCommand(expand('%'), ':e')<cr>
 
 let g:ale_pattern_options = {'\.hs$': {'ale_enabled': 0}}
+
+" Tmux navigation explicit mappings.
+" This is necessary to avoid a <C-\> conflict.
+let g:tmux_navigator_no_mappings = 1
+
+noremap <silent> <C-h> :<C-U>TmuxNavigateLeft<cr>
+noremap <silent> <C-j> :<C-U>TmuxNavigateDown<cr>
+noremap <silent> <C-k> :<C-U>TmuxNavigateUp<cr>
+noremap <silent> <C-l> :<C-U>TmuxNavigateRight<cr>
