@@ -95,7 +95,7 @@ augroup vimrc_autocmds
   autocmd BufEnter * highlight OverLength cterm=underline guibg=#111111
   autocmd BufWrite *.* StripWhitespace
   autocmd BufWrite *.rb call CocAction('format')
-  autocmd BufWrite *.hs call CocAction('format')
+  " autocmd BufWritePost *.hs call CocAction('format')
   autocmd BufWritePost package.yaml call Hpack()
 augroup END
 

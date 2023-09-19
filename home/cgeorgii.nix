@@ -29,10 +29,11 @@
         dbeaver
         dropbox
         entr
-        exa
+        eza
         fd
         fzf
         gh
+        home-manager
         hub
         imagemagick
         insomnia
@@ -139,7 +140,7 @@
 
           # [[ UTILS ]]
           cat = "bat";
-          ls = "exa --icons -a --group-directories-first";
+          ls = "eza --icons -a --group-directories-first";
           z = "zenith";
         };
 
@@ -251,6 +252,16 @@
           package.disabled = true;
         };
       };
+
+      # home.pointerCursor = {
+      #   name = "Adwaita";
+      #   package = pkgs.gnome.adwaita-icon-theme;
+      #   size = 24;
+      #   x11 = {
+      #     enable = true;
+      #     defaultCursor = "Adwaita";
+      #   };
+      # };
 
       home.stateVersion = "21.11";
     };
