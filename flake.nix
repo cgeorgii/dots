@@ -22,7 +22,24 @@
           # User config
           ./configuration.nix
           ./home/cgeorgii.nix
-          ./home/i3.nix
+        ];
+      };
+
+      oco = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        modules = [
+          # Hardware config
+          ./hardware-configuration-oco.nix
+
+          # Common config
+          ./common.nix
+
+          # System-specific config
+          ./configuration-oco.nix
+
+          # Home-manager
+          home-manager.nixosModules.home-manager
+          ./home/cgeorgii.nix
         ];
       };
     };

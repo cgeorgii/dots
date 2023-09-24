@@ -51,7 +51,6 @@
         wl-clipboard
       ];
 
-
       programs.lazygit = {
         enable = true;
         settings = {
@@ -187,7 +186,7 @@
           branch.autosetuprebase = "always";
           core.excludefile = "~/.gitignore";
           core.excludesfile = "~/.gitignore";
-          hub.protocol = "https";
+          hub.protocol = "git";
         };
         delta = {
           enable = true;
