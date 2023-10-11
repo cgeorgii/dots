@@ -31,5 +31,11 @@
         }
       }
     }
+  },
+  "hover.floatConfig": {
+    "border": true,
+    "rounded": true,
+    "close": true,
+    "shadow": true
   }
 }

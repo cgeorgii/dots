@@ -13,7 +13,7 @@
       home.file.".gitignore".source = link-dotfile "gitignore";
       home.file.".tmux.conf".source = link-dotfile "tmux.conf";
       home.file.".emacs".source = link-dotfile "emacs";
-      home.file."./projects/tweag/.gitconfig".source = link-dotfile "gitconfig-work";
+      home.file."./code/tweag/.gitconfig".source = link-dotfile "gitconfig-work";
 
       xdg.configFile = {
         "alacritty/alacritty.yml".source = link-dotfile "alacritty.yml";
@@ -173,8 +173,8 @@
         includes = [
           { path = "~/.gitconfig"; } # GH adds auth information to this file
           {
-            path = "~/projects/tweag/.gitconfig";
-            condition = "gitdir:~/projects/tweag/";
+            path = "~/code/tweag/.gitconfig";
+            condition = "gitdir:~/code/tweag/";
           }
         ];
         extraConfig = {
