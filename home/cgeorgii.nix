@@ -27,6 +27,7 @@
         autojump
         chromium
         dbeaver
+        digikam
         dropbox
         entr
         eza
@@ -139,7 +140,7 @@
 
           # [[ UTILS ]]
           cat = "bat";
-          ls = "eza --icons -a --group-directories-first";
+          ls = "eza --git --icons -a --group-directories-first";
           z = "zenith";
         };
 
