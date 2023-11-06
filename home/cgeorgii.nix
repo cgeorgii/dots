@@ -50,6 +50,7 @@
         slack
         spotify
         starship
+        sway-contrib.grimshot # Screenshot tool
         whatsapp-for-linux
         wl-clipboard
       ];
