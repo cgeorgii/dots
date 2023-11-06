@@ -20,6 +20,7 @@
         "nvim/legacy.vim".source = link-dotfile "nvim/legacy.vim";
         "nvim/init.lua".source = link-dotfile "nvim/init.lua";
         "nvim/coc-settings.json".source = link-dotfile "coc-settings.json";
+        "sway/extra".source = link-dotfile "sway";
       };
 
       home.packages = with pkgs; [
@@ -42,6 +43,7 @@
         libreoffice
         logseq
         neofetch
+        pavucontrol
         protonvpn-cli
         protonvpn-gui
         signal-desktop
@@ -62,6 +64,22 @@
             };
           };
         };
+      };
+
+      wayland.windowManager.sway = {
+        enable = true;
+        wrapperFeatures.gtk = true;
+        config = rec {
+          modifier = "Mod4";
+          terminal = "alacritty";
+          startup = [
+            # Launch Firefox on start
+            { command = "firefox"; }
+          ];
+        };
+        extraConfig = ''
+          include ~/.config/sway/extra
+        '';
       };
 
       programs.neovim = {

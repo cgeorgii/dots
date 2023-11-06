@@ -137,10 +137,16 @@
   # Needed to install unfree packages within flake.
   home-manager.useGlobalPkgs = true;
 
-  nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (pkgs.lib.getName pkg) [
-    "dropbox"
-    "slack"
-    "spotify"
-    "discord"
-  ];
+  nixpkgs.config = {
+    allowUnfreePredicate = pkg: builtins.elem (pkgs.lib.getName pkg) [
+      "dropbox"
+      "slack"
+      "spotify"
+      "discord"
+    ];
+    # TODO: Logseq requires this :/
+    permittedInsecurePackages = [
+      "electron-24.8.6"
+    ];
+  };
 }
