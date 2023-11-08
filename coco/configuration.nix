@@ -50,6 +50,11 @@
   # Required for sway
   security.polkit.enable = true;
 
+  # Start sway on boot
+  environment.loginShellInit = ''
+    [[ "$(tty)" == /dev/tty1 ]] && sway
+  '';
+
   # Figure out if this is still needed after the migration to sway
   security.pam.services.sddm.enableGnomeKeyring = true;
 
