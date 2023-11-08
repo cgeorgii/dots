@@ -68,6 +68,11 @@
         };
       };
 
+      # For sharing the screen on firefox.
+      home.sessionVariables = {
+        XDG_CURRENT_DESKTOP = "sway";
+      };
+
       wayland.windowManager.sway = {
         enable = true;
         wrapperFeatures.gtk = true;

@@ -1,3 +1,7 @@
+# Ensure that the environment variables are correctly set for the user systemd units.
+# This ensures all user units started after the command set the variables, so keep it at the top of this file.
+exec systemctl --user import-environment
+
 input type:pointer {
   natural_scroll enable
 }
