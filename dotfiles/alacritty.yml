@@ -6,10 +6,10 @@ window:
   decorations: None
   padding:
     x: 0
-    y: 5
+    y: 0
 
 font:
-  size: 15.5
+  size: 14
   normal:
     family: "IosevkaTerm Nerd Font Mono"
 
