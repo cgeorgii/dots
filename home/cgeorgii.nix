@@ -29,6 +29,7 @@
         chromium
         dbeaver
         digikam
+        discord
         dropbox
         entr
         eza
@@ -38,7 +39,6 @@
         home-manager
         hub
         imagemagick
-        insomnia
         keepassxc
         libreoffice
         logseq
@@ -50,6 +50,7 @@
         slack
         spotify
         starship
+        steam
         sway-contrib.grimshot # Screenshot tool
         whatsapp-for-linux
         wl-clipboard

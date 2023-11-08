@@ -139,10 +139,12 @@
 
   nixpkgs.config = {
     allowUnfreePredicate = pkg: builtins.elem (pkgs.lib.getName pkg) [
+      "discord"
       "dropbox"
       "slack"
       "spotify"
-      "discord"
+      "steam"
+      "steam-original"
     ];
     # TODO: Logseq requires this :/
     permittedInsecurePackages = [
