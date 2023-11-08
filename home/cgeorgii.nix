@@ -79,10 +79,102 @@
         config = rec {
           modifier = "Mod4";
           terminal = "alacritty";
+          fonts = {
+            names = [ "Iosevka" ];
+            size = 9.0;
+          };
           startup = [
             # Launch Firefox on start
             { command = "firefox"; }
           ];
+          colors =
+            # TODO Unify these colors with the ones from alacritty.yaml
+            let
+              magenta = "#b16286";
+              cyan = "#689d6a";
+              white = "#ebdbb2";
+              red = "#cc241d";
+              black = "#282828";
+              gray = "#928374";
+            in
+            {
+              focused = {
+                background = black;
+                border = gray;
+                childBorder = black;
+                indicator = black;
+                text = white;
+              };
+              focusedInactive = {
+                background = black;
+                border = black;
+                childBorder = black;
+                indicator = black;
+                text = white;
+              };
+              unfocused = {
+                background = gray;
+                border = black;
+                childBorder = gray;
+                indicator = gray;
+                text = black;
+              };
+              urgent = {
+                background = red;
+                border = red;
+                childBorder = red;
+                indicator = red;
+                text = white;
+              };
+              placeholder = {
+                background = "#000000";
+                border = "#000000";
+                childBorder = "#000000";
+                indicator = "#000000";
+                text = white;
+              };
+            };
+          bars =
+            let
+              magenta = "#b16286";
+              cyan = "#689d6a";
+              white = "#ebdbb2";
+              red = "#cc241d";
+              black = "#282828";
+              gray = "#928374";
+            in
+            [
+              {
+                statusCommand = "${pkgs.i3status}/bin/i3status";
+                fonts = { names = [ "Iosevka" ]; size = 9.0; };
+                position = "bottom";
+                colors = {
+                  background = black;
+                  separator = "#666666";
+                  statusline = white;
+                  activeWorkspace = {
+                    border = gray;
+                    background = gray;
+                    text = black;
+                  };
+                  focusedWorkspace = {
+                    border = gray;
+                    background = black;
+                    text = white;
+                  };
+                  inactiveWorkspace = {
+                    border = black;
+                    background = black;
+                    text = white;
+                  };
+                  urgentWorkspace = {
+                    border = red;
+                    background = red;
+                    text = white;
+                  };
+                };
+              }
+            ];
         };
         extraConfig = ''
           include ~/.config/sway/extra
