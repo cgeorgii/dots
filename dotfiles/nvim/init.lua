@@ -59,7 +59,6 @@ require('lualine').setup {
       'branch',
     },
     lualine_b = {
-      'diff',
       {
       'filename',
       path = 1,
