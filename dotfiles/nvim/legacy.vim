@@ -9,7 +9,6 @@ call plug#begin('~/.local/share/nvim/plugged')
 Plug 'LnL7/vim-nix'
 Plug 'ElmCast/elm-vim'
 Plug 'FooSoft/vim-argwrap'
-Plug 'Yggdroot/indentLine'
 Plug 'alvan/vim-closetag'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'mileszs/ack.vim'
@@ -98,9 +97,6 @@ augroup vimrc_autocmds
   " autocmd BufWritePost *.hs call CocAction('format')
   autocmd BufWritePost package.yaml call Hpack()
 augroup END
-
-" indentLine config
-let g:indentLine_char = '▏'
 
 fun! ViewBundleGem ( gemName )
   let gemPath = system("RUBYOPT='-W0' bundle info --path " . a:gemName)
