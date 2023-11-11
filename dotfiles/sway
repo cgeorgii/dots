@@ -1,11 +1,3 @@
-# Ensure that the environment variables are correctly set for the user systemd units.
-# This ensures all user units started after the command set the variables, so keep it at the top of this file.
-exec systemctl --user import-environment
-
-input type:pointer {
-  natural_scroll enable
-}
-
 # Disable screen when laptop is closed
 bindswitch lid:on output eDP-1 disable
 bindswitch lid:off output eDP-1 enable
@@ -21,3 +13,7 @@ workspace 2 output DP-2
 
 workspace 3 output DP-3
 workspace 4 output DP-3
+
+for_window [app_id="(?i)firefox"] title_format "<span foreground='#fb4934'><tt> </tt></span> %title"
+for_window [app_id="(?i)slack"] title_format "<span foreground='#fb4934'><tt> </tt></span> %title"
+for_window [app_id="Alacritty"] title_format "<span foreground='#98971a'><tt> </tt></span> %title"

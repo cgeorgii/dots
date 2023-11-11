@@ -79,14 +79,21 @@
         config = rec {
           modifier = "Mod4";
           terminal = "alacritty";
-          fonts = {
-            names = [ "Iosevka" ];
-            size = 9.0;
-          };
+          fonts = { names = [ "IosevkaTerm Nerd Font Mono" ]; size = 9.0; };
           startup = [
+            # Ensure that the environment variables are correctly set for the user
+            # systemd units. This ensures all user units started after the command set the
+            # variables, so keep it at the top of this file.
+            { command = " exec systemctl --user import-environment "; }
             # Launch Firefox on start
             { command = "firefox"; }
           ];
+          input = {
+            "type:pointer" = {
+              natural_scroll = "enabled";
+            };
+          };
+          window.border = 1;
           colors =
             # TODO Unify these colors with the ones from alacritty.yaml
             let
@@ -96,28 +103,30 @@
               red = "#cc241d";
               black = "#282828";
               gray = "#928374";
+              yellow = "#d79921";
+              brightYellow = "#fabd2f";
             in
             {
               focused = {
                 background = black;
-                border = gray;
-                childBorder = black;
-                indicator = black;
-                text = white;
-              };
-              focusedInactive = {
-                background = black;
-                border = black;
-                childBorder = black;
-                indicator = black;
+                border = yellow;
+                childBorder = yellow;
+                indicator = brightYellow;
                 text = white;
               };
               unfocused = {
-                background = gray;
-                border = black;
+                background = black;
+                border = gray;
                 childBorder = gray;
                 indicator = gray;
-                text = black;
+                text = gray;
+              };
+              focusedInactive = {
+                background = black;
+                border = white;
+                childBorder = black;
+                indicator = black;
+                text = gray;
               };
               urgent = {
                 background = red;
@@ -142,6 +151,7 @@
               red = "#cc241d";
               black = "#282828";
               gray = "#928374";
+              yellow = "#d79921";
             in
             [
               {
@@ -158,9 +168,9 @@
                     text = black;
                   };
                   focusedWorkspace = {
-                    border = gray;
-                    background = black;
-                    text = white;
+                    border = black;
+                    background = yellow;
+                    text = black;
                   };
                   inactiveWorkspace = {
                     border = black;
