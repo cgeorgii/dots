@@ -80,19 +80,11 @@
   # Steam stuff
   hardware.opengl.driSupport32Bit = true;
 
-  # Power management
-  services.auto-cpufreq = {
+  services.thermald.enable = true;
+  powerManagement = {
     enable = true;
-    settings = {
-      battery = {
-        governor = "powersave";
-        turbo = "never";
-      };
-      charger = {
-        governor = "performance";
-        turbo = "auto";
-      };
-    };
+    cpuFreqGovernor = "performance";
+    cpufreq.max = 2800000;
   };
 
   # This value determines the NixOS release from which the default

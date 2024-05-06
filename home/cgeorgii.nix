@@ -16,7 +16,7 @@
       home.file."./code/tweag/.gitconfig".source = link-dotfile "gitconfig-work";
 
       xdg.configFile = {
-        "alacritty/alacritty.yml".source = link-dotfile "alacritty.yml";
+        "alacritty/alacritty.toml".source = link-dotfile "alacritty.toml";
         "nvim/legacy.vim".source = link-dotfile "nvim/legacy.vim";
         "nvim/init.lua".source = link-dotfile "nvim/init.lua";
         "nvim/coc-settings.json".source = link-dotfile "coc-settings.json";
@@ -26,6 +26,7 @@
       home.packages = with pkgs; [
         alacritty
         autojump
+        bemenu
         chromium
         dbeaver
         digikam
@@ -41,11 +42,10 @@
         imagemagick
         keepassxc
         libreoffice
+        libsForQt5.dolphin
         logseq
         neofetch
         pavucontrol
-        protonvpn-cli
-        protonvpn-gui
         signal-desktop
         slack
         spotify
@@ -80,6 +80,7 @@
           modifier = "Mod4";
           terminal = "alacritty";
           fonts = { names = [ "IosevkaTerm Nerd Font Mono" ]; size = 9.0; };
+          menu = "bemenu-run";
           startup = [
             # Ensure that the environment variables are correctly set for the user
             # systemd units. This ensures all user units started after the command set the
@@ -87,12 +88,23 @@
             { command = " exec systemctl --user import-environment "; }
             # Launch Firefox on start
             { command = "firefox"; }
+            { command = "exec udiskie --smart-tray"; }
           ];
           input = {
             "type:pointer" = {
               natural_scroll = "enabled";
             };
+
+            "type:touchpad" = {
+              natural_scroll = "enabled";
+              tap = "enabled";
+            };
+
+            "type:keyboard" = {
+              xkb_options = "caps:escape";
+            };
           };
+
           window.border = 1;
           colors =
             # TODO Unify these colors with the ones from alacritty.yaml
@@ -350,17 +362,6 @@
       programs.fzf = {
         enable = true;
         enableZshIntegration = true;
-      };
-
-      programs.jujutsu = {
-        enable = true;
-        enableZshIntegration = true;
-        settings = {
-          user = {
-            name = "Christian Georgii";
-            email = "cgeorgii@gmail.com";
-          };
-        };
       };
 
       programs.starship = {
