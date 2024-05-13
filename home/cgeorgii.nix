@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ ... }:
 
 {
   home-manager.users.cgeorgii = { config, pkgs, ... }:
@@ -76,7 +76,7 @@
       wayland.windowManager.sway = {
         enable = true;
         wrapperFeatures.gtk = true;
-        config = rec {
+        config = {
           modifier = "Mod4";
           terminal = "alacritty";
           fonts = { names = [ "IosevkaTerm Nerd Font Mono" ]; size = 9.0; };
@@ -109,8 +109,8 @@
           colors =
             # TODO Unify these colors with the ones from alacritty.yaml
             let
-              magenta = "#b16286";
-              cyan = "#689d6a";
+              # magenta = "#b16286";
+              # cyan = "#689d6a";
               white = "#ebdbb2";
               red = "#cc241d";
               black = "#282828";
@@ -157,8 +157,8 @@
             };
           bars =
             let
-              magenta = "#b16286";
-              cyan = "#689d6a";
+              # magenta = "#b16286";
+              # cyan = "#689d6a";
               white = "#ebdbb2";
               red = "#cc241d";
               black = "#282828";
@@ -223,7 +223,9 @@
 
       programs.zsh = {
         enable = true;
-        enableAutosuggestions = true;
+        autosuggestion = {
+          enable = true;
+        };
         enableCompletion = true;
         autocd = true;
 

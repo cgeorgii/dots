@@ -18,7 +18,7 @@
       }
     },
     "nix": {
-      "command": "rnix-lsp",
+      "command": "nil",
       "filetypes": [
         "nix"
       ]

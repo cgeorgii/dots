@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ pkgs, ... }:
 
 {
   environment.systemPackages = with pkgs; [
@@ -12,7 +12,7 @@
     pass
     pinentry
     readline
-    rnix-lsp
+    nil
     silver-searcher
     tmux
     wget
@@ -76,7 +76,7 @@
       127.0.0.1       dev.zeuslogics.com
     '';
 
-  fonts.packages = with pkgs; [
+  fonts.packages = [
     (pkgs.nerdfonts.override { fonts = [ "Iosevka" "IosevkaTerm" ]; })
   ];
 
@@ -115,8 +115,10 @@
   # $ reboot
   services.xserver = {
     exportConfiguration = true;
-    layout = "us, us(intl)";
-    xkbOptions = "grp:alts_toggle, caps:escape";
+    xkb = {
+      layout = "us, us(intl)";
+      options = "grp:alts_toggle, caps:escape";
+    };
   };
 
   # enable firewall and block all ports
@@ -134,7 +136,7 @@
   programs.gnupg.agent = {
     enable = true;
     enableSSHSupport = true;
-    pinentryFlavor = "gnome3";
+    # pinentryFlavor = "gnome3";
   };
 
   environment.variables.EDITOR = "nvim";
