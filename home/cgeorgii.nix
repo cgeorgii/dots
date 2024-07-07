@@ -28,7 +28,6 @@
         autojump
         bemenu
         chromium
-        dbeaver
         digikam
         discord
         dropbox
