@@ -28,7 +28,6 @@
         autojump
         bemenu
         chromium
-        dbeaver
         digikam
         discord
         dropbox
@@ -329,6 +328,7 @@
           core.excludefile = "~/.gitignore";
           core.excludesfile = "~/.gitignore";
           hub.protocol = "git";
+          push.autoSetupRemote = true;
         };
         delta = {
           enable = true;

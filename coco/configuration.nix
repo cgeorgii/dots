@@ -69,17 +69,15 @@
   # Autologin
   services.getty.autologinUser = "cgeorgii";
 
-  hardware.opengl = {
-    enable = true;
-    driSupport = true;
-  };
-
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true;
   services.blueman.enable = true;
 
   # Steam stuff
-  hardware.opengl.driSupport32Bit = true;
+  hardware.graphics = {
+    enable = true;
+    enable32Bit = true;
+  };
 
   services.thermald.enable = true;
   powerManagement = {
