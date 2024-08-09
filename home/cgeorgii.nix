@@ -44,6 +44,7 @@
         libsForQt5.dolphin
         logseq
         neofetch
+        nixpkgs-fmt
         pavucontrol
         signal-desktop
         slack
@@ -71,6 +72,8 @@
       home.sessionVariables = {
         XDG_CURRENT_DESKTOP = "sway";
       };
+
+      programs.swaylock.enable = true;
 
       wayland.windowManager.sway = {
         enable = true;

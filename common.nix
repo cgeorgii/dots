@@ -28,6 +28,8 @@
     enable = true;
   };
 
+  security.pam.services.swaylock = {};
+
   users.users.cgeorgii = {
     isNormalUser = true;
     shell = pkgs.zsh;
