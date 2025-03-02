@@ -1,18 +1,26 @@
+# To get the names sway uses to refer to the monitors:
+# $ swaymsg -t get_outputs
+
+# Store the monitor codes in variables:
+set $laptop eDP-1
+set $dell DP-3
+set $asus HDMI-A-1
+
 # Disable screen when laptop is closed
-bindswitch lid:on output eDP-1 disable
-bindswitch lid:off output eDP-1 enable
+bindswitch lid:on output $laptop disable
+bindswitch lid:off output $laptop enable
 
 # Set the positions correctly
-output eDP-1 resolution 3840x2400 scale 2 position 0 0
-output DP-2  resolution 3840x2160 scale 2 position 1920 0
-output DP-3  resolution 1920x1080         position 3840 0
+output $laptop resolution 3840x2400 scale 2 position 0 0
+output $dell   resolution 3840x2160 scale 2 position 1920 0
+output $asus   resolution 1920x1080         position 3840 0
 
 # Bind workspaces to monitors
-workspace 1 output DP-2
-workspace 2 output DP-2
+workspace 1 output $dell
+workspace 2 output $dell
 
-workspace 3 output DP-3
-workspace 4 output DP-3
+workspace 3 output $asus
+workspace 4 output $asus
 
 for_window [app_id="(?i)firefox"] title_format "<span foreground='#fb4934'><tt> </tt></span> %title"
 for_window [app_id="(?i)slack"] title_format "<span foreground='#fb4934'><tt> </tt></span> %title"

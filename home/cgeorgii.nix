@@ -1,13 +1,14 @@
 { ... }:
 
 {
-  home-manager.users.cgeorgii = { config, pkgs, ... }:
+  home-manager.users.cgeorgii = { lib, config, pkgs, ... }:
     # Using a string here instead of the direct path because otherwise a config with
     # flakes will not symlink but copy the files, making hot-reloading the config
     # impossible without a rebuild.
-    let link-dotfile = file:
-      config.lib.file.mkOutOfStoreSymlink
-        "${config.home.homeDirectory}/dots/dotfiles/${file}";
+    let
+      link-dotfile = file:
+        config.lib.file.mkOutOfStoreSymlink
+          "${config.home.homeDirectory}/dots/dotfiles/${file}";
     in
     {
       home.file.".gitignore".source = link-dotfile "gitignore";
@@ -50,10 +51,11 @@
         slack
         spotify
         starship
-        steam
         sway-contrib.grimshot # Screenshot tool
         whatsapp-for-linux
         wl-clipboard
+        xfce.thunar
+        nemo
       ];
 
       programs.lazygit = {
@@ -75,10 +77,35 @@
 
       programs.swaylock.enable = true;
 
+      gtk = {
+        enable = true;
+        # theme = {
+        #   name = "Gruvbox-Dark";
+        #   package = pkgs.gruvbox-gtk-theme;
+        # };
+        theme = {
+          name = "Adwaita-dark";
+          package = pkgs.gnome-themes-extra;
+        };
+        iconTheme = {
+          name = "Mint-Y-Sand";
+          package = pkgs.mint-y-icons;
+        };
+        # cursorTheme = {
+        #   name = "Bibata-Original-Classic";
+        #   package = pkgs.bibata-cursors;
+        # };
+      };
+
+      qt = {
+        enable = true;
+        platformTheme.name = "gtk";
+      };
+
       wayland.windowManager.sway = {
         enable = true;
         wrapperFeatures.gtk = true;
-        config = {
+        config = rec {
           modifier = "Mod4";
           terminal = "alacritty";
           fonts = { names = [ "IosevkaTerm Nerd Font Mono" ]; size = 9.0; };
@@ -87,10 +114,11 @@
             # Ensure that the environment variables are correctly set for the user
             # systemd units. This ensures all user units started after the command set the
             # variables, so keep it at the top of this file.
-            { command = " exec systemctl --user import-environment "; }
+            { command = "exec systemctl --user import-environment "; }
             # Launch Firefox on start
             { command = "firefox"; }
             { command = "exec udiskie --smart-tray"; }
+            { command = "dropbox start -i"; }
           ];
           input = {
             "type:pointer" = {
@@ -108,6 +136,13 @@
           };
 
           window.border = 1;
+
+          keybindings = lib.mkOptionDefault {
+            "F9" = "exec swaylock -f -c 000000";
+            "F10" = "exec swaylock -f -c 000000 && systemctl suspend";
+            "${modifier}+Shift+s" = "exec grimshot copy area";
+          };
+
           colors =
             # TODO Unify these colors with the ones from alacritty.yaml
             let
@@ -330,7 +365,7 @@
           branch.autosetuprebase = "always";
           core.excludefile = "~/.gitignore";
           core.excludesfile = "~/.gitignore";
-          hub.protocol = "git";
+          hub.protocol = "ssh";
           push.autoSetupRemote = true;
         };
         delta = {

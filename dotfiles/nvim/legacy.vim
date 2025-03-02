@@ -167,16 +167,6 @@ function! s:show_documentation()
   endif
 endfunction
 
-" Using CocList
-" Show all diagnostics
-nnoremap <silent> <leader><space>a  :<C-u>CocList diagnostics<cr>
-" Manage extensions
-nnoremap <silent> <leader><space>e  :<C-u>CocList extensions<cr>
-" Show commands
-nnoremap <silent> <leader><space>c  :<C-u>CocList commands<cr>
-" Resume latest coc list
-nnoremap <silent> <leader><space>p  :<C-u>CocListResume<CR>
-
 " Auto-run hpack on change
 function Hpack()
   let err = system('hpack ' . expand('%'))

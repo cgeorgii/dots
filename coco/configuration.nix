@@ -6,11 +6,7 @@
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-
-  # Setup keyfile
-  boot.initrd.secrets = {
-    "/crypto_keyfile.bin" = null;
-  };
+  boot.initrd.luks.devices."luks-d80ba783-00e7-4805-b96f-bb0205ee56aa".device = "/dev/disk/by-uuid/d80ba783-00e7-4805-b96f-bb0205ee56aa";
 
   # Enable networking
   networking.networkmanager.enable = true;
@@ -44,6 +40,7 @@
     alsa.support32Bit = true;
     pulse.enable = true;
   };
+
   xdg = {
     portal = {
       enable = true;
@@ -92,5 +89,5 @@
   # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "23.05"; # Did you read the comment?
+  system.stateVersion = "24.05"; # Did you read the comment?
 }

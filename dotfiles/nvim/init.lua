@@ -116,61 +116,70 @@ require('lualine').setup {
 vim.opt.timeoutlen = 500
 
 local wk = require("which-key")
+wk.add({
+  { "<leader>a", "<cmd>ArgWrap<cr>", desc = "Wrap/Unwrap argument list" },
 
-wk.setup {
-  triggers_blacklist = {
-  -- list of mode / prefixes that should never be hooked by WhichKey
-  n = { "d", "v", "y", "g" }, -- TODO Do not ignore all "g"-prefixed, only gc for comments
-  i = { "j", "k" },
-  v = { "j", "k" },
-},
-}
+  { "<leader>b", group = "buffers" },
+  { "<leader>bb", "<cmd>Buffers<cr>", desc = "Buffer picker" },
+  { "<leader>bc", "<cmd>w ! wl-copy<cr><cr>", desc = "Copy content to clipboard" },
+  { "<leader>bs", "<cmd>BLines<cr>", desc = "Fuzzy search current buffer" },
 
-wk.register({
-  a = { "<cmd>ArgWrap<cr>", "Wrap/Unwrap argument list" },
-  b = {
-    name = "buffers",
-    b = { "<cmd>Buffers<cr>", "Buffer picker" },
-    c = { "<cmd>w ! wl-copy<cr><cr>", "Copy content to clipboard" },
-    s = { "<cmd>BLines<cr>", "Fuzzy search current buffer" }
-  },
-  c = {
-    name = "clipboard",
-    c = { "<cmd>ToggleClipboard<cr>", "Toggle between editor/system clipboard" }
-  },
-  r = {
-      name = "Reload/rename",
-      r = { "<cmd>e!<cr>", "Reload current file" },
-      n = { "<Plug>(coc-rename)", "Rename current symbol" }
-  },
-  C = {
-    name = "config",
-    E = { "<cmd>VimConfig<cr>", "Edit vimconfig" },
-    R = { "<cmd>source $MYVIMRC<cr>", "Reload vimconfig" },
-  },
-  f = {
-    name = "files",
-    f = { "<cmd>call CocActionAsync('format')<cr>", "Format file" },
-    ["1"] = "which_key_ignore",  -- special label to hide it in the popup TODO what why where
-  },
-  L = {
-    name = "LSP",
-    R = { "<cmd>CocRestart<cr><cr>", "Reload LSP" },
-  },
+  { "<leader>c", group = "clipboard" },
+  { "<leader>cc", "<cmd>ToggleClipboard<cr>", desc = "Toggle between editor/system clipboard" },
+
+  { "<leader>r", group = "Reload/rename" },
+  { "<leader>rr", "<cmd>e!<cr>", desc = "Reload current file" },
+  { "<leader>rn", "<Plug>(coc-rename)", desc = "Rename current symbol" },
+
+  { "<leader>C", group = "config" },
+  { "<leader>CE", "<cmd>VimConfig<cr>", desc = "Edit vimconfig" },
+  { "<leader>CR", "<cmd>source $MYVIMRC<cr>", desc = "Reload vimconfig" },
+
+  { "<leader>f", group = "files" },
+  { "<leader>ff", "<cmd>call CocActionAsync('format')<cr>", desc = "Format file" },
+  { "<leader>f", "<Plug>(coc-format-selected)", desc = "Format selected", mode = "v" },
+  { "<leader>f1", hidden = true },
+
+  { "<leader>L", group = "LSP" },
+  { "<leader>LR", "<cmd>CocRestart<cr><cr>", desc = "Reload LSP" },
+
   -- Tab management
-  t = { "<cmd>tabnew<cr>", "New tab"},
-  h = { "<cmd>tabprevious<cr>", "Previous tab"},
-  l = { "<cmd>tabnext<cr>", "Next tab"},
-  q = { "<cmd>tabclose<cr>", "Close tab"},
+  { "<leader>t", "<cmd>tabnew<cr>", desc = "New tab" },
+  { "<leader>h", "<cmd>tabprevious<cr>", desc = "Previous tab" },
+  { "<leader>l", "<cmd>tabnext<cr>", desc = "Next tab" },
+  { "<leader>q", "<cmd>tabclose<cr>", desc = "Close tab" },
+
   -- Quickfix shortcuts
-  n = { "<cmd>call CocAction('diagnosticNext')<cr>", "Next diagnostic" },
-  p = { "<cmd>call CocAction('diagnosticPrevious')<cr>", "Previous diagnostic" },
-}, { prefix = "<leader>" })
+  { "<leader>n", "<Plug>(coc-diagnostic-next)", desc = "Next diagnostic" },
+  { "<leader>N", "<Plug>(coc-diagnostic-prev)", desc = "Previous diagnostic" },
+  { "<leader>p", "<cmd>call CocAction('diagnosticPrevious')<cr>", desc = "Previous diagnostic (alt)" },
+
+  -- Quick fixes
+  { "<leader>qf", "<Plug>(coc-fix-current)", desc = "Fix current" },
+  { "<leader>qq", "<Plug>(coc-codeaction-cursor)", desc = "Code action" },
+
+  { "<leader>k", "<cmd>call CocActionAsync('doHover')<cr>", desc = "Show documentation" },
+
+  -- CocList commands
+  { "<leader><space>", group = "CocList" },
+  { "<leader><space>a", "<cmd>CocList diagnostics<cr>", desc = "Show all diagnostics" },
+  { "<leader><space>e", "<cmd>CocList extensions<cr>", desc = "Manage extensions" },
+  { "<leader><space>c", "<cmd>CocList commands<cr>", desc = "Show commands" },
+  { "<leader><space>p", "<cmd>CocListResume<cr>", desc = "Resume latest coc list" },
+
+  -- Goto mappings
+  { "gd", "<Plug>(coc-definition)", desc = "Go to definition" },
+  { "gy", "<Plug>(coc-type-definition)", desc = "Go to type definition" },
+  { "gi", "<Plug>(coc-implementation)", desc = "Go to implementation" },
+  { "gr", "<Plug>(coc-references)", desc = "Go to references" },
+
+  -- Tmux navigation
+  { "<C-h>", "<cmd>TmuxNavigateLeft<cr>", desc = "Navigate Left" },
+  { "<C-j>", "<cmd>TmuxNavigateDown<cr>", desc = "Navigate Down" },
+  { "<C-k>", "<cmd>TmuxNavigateUp<cr>", desc = "Navigate Up" },
+  { "<C-l>", "<cmd>TmuxNavigateRight<cr>", desc = "Navigate Right" },
+})
 
 -- Tmux navigation explicit mappings.
 -- This is necessary to avoid a <C-\> conflict.
 vim.g.tmux_navigator_no_mappings  = 1
-vim.keymap.set('n', '<C-h>', '<cmd>TmuxNavigateLeft<cr>')
-vim.keymap.set('n', '<C-j>', '<cmd>TmuxNavigateDown<cr>')
-vim.keymap.set('n', '<C-k>', '<cmd>TmuxNavigateUp<cr>')
-vim.keymap.set('n', '<C-l>', '<cmd>TmuxNavigateRight<cr>')

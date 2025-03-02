@@ -3,15 +3,17 @@
 {
   environment.systemPackages = with pkgs; [
     bat
+    dconf
     file
     firefox
     gamemode
     git
     git-lfs
-    gnomeExtensions.dash-to-dock
+    file-roller
     pass
     pinentry
     readline
+    swaylock
     nil
     silver-searcher
     tmux
@@ -28,32 +30,31 @@
     enable = true;
   };
 
-  security.pam.services.swaylock = {};
+  security.pam.services.swaylock = { };
 
   users.users.cgeorgii = {
     isNormalUser = true;
     shell = pkgs.zsh;
     home = "/home/cgeorgii";
-    extraGroups = [ "wheel" "networkmanager" "docker" ];
+    extraGroups = [ "audio" "wheel" "networkmanager" "docker" ];
   };
 
   nix = {
-    package = pkgs.nixFlakes;
+    package = pkgs.nixVersions.stable;
 
     settings = {
-      trusted-users = [ "root" "cgeorgii" "oco" ];
+      trusted-users = [ "root" "cgeorgii" ];
       auto-optimise-store = true;
       trusted-public-keys = [
-        "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
-        "ryantrinkle.com-1:JJiAKaRv9mWgpVAz8dwewnZe0AzzEAzPkagE9SP5NWI="
+        # "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+        # "ryantrinkle.com-1:JJiAKaRv9mWgpVAz8dwewnZe0AzzEAzPkagE9SP5NWI="
         "zeuslogics-nix-cache-github:RpfcOgIp6w2cvPyhTfErGcWkR9QSHc1gpp4UwyH3ovU="
         "haskell-language-server.cachix.org-1:juFfHrwkOxqIOZShtC4YC1uT1bBcq2RSvC7OMKx0Nz8="
 
       ];
       substituters = [
-        "https://cache.nixos.org"
-        "https://storage.googleapis.com/zeuslogics-nix-cache-github"
-        "https://nixcache.reflex-frp.org"
+        "https://aseipp-nix-cache.global.ssl.fastly.net"
+        # "https://nixcache.reflex-frp.org"
         "https://haskell-language-server.cachix.org"
       ];
     };
@@ -78,8 +79,9 @@
       127.0.0.1       dev.zeuslogics.com
     '';
 
-  fonts.packages = [
-    (pkgs.nerdfonts.override { fonts = [ "Iosevka" "IosevkaTerm" ]; })
+  fonts.packages = with pkgs; [
+    nerd-fonts.iosevka
+    nerd-fonts.iosevka-term
   ];
 
   # Add fingerprint with `fprintd-enroll`
@@ -128,10 +130,10 @@
   networking.firewall.allowedTCPPorts = [ ];
   networking.firewall.allowedUDPPorts = [ ];
 
-  # enable antivirus clamav and
-  # keep the signatures' database updated
-  services.clamav.daemon.enable = true;
-  services.clamav.updater.enable = true;
+  # # enable antivirus clamav and
+  # # keep the signatures' database updated
+  # services.clamav.daemon.enable = true;
+  # services.clamav.updater.enable = true;
 
   services.pcscd.enable = true;
   programs.light.enable = true;
@@ -152,8 +154,6 @@
       "dropbox"
       "slack"
       "spotify"
-      "steam"
-      "steam-original"
     ];
 
     # TODO: Logseq requires this :/
