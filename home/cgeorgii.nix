@@ -44,9 +44,12 @@
         libreoffice
         libsForQt5.dolphin
         logseq
+        lua-language-server
+        nemo
         neofetch
         nixpkgs-fmt
         pavucontrol
+        ripgrep
         signal-desktop
         slack
         spotify
@@ -55,7 +58,6 @@
         whatsapp-for-linux
         wl-clipboard
         xfce.thunar
-        nemo
       ];
 
       programs.lazygit = {
