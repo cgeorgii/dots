@@ -18,10 +18,9 @@
 
       xdg.configFile = {
         "alacritty/alacritty.toml".source = link-dotfile "alacritty.toml";
-        "nvim/legacy.vim".source = link-dotfile "nvim/legacy.vim";
-        "nvim/init.lua".source = link-dotfile "nvim/init.lua";
-        "nvim/coc-settings.json".source = link-dotfile "coc-settings.json";
         "sway/extra".source = link-dotfile "sway";
+        # Link the entire nvim directory structure
+        "nvim".source = link-dotfile "nvim";
       };
 
       home.packages = with pkgs; [
