@@ -535,6 +535,18 @@ require("lazy").setup({
       vim.g.table_mode_header_fillchar = '='
     end,
   },
+  {
+    "nvim-pack/nvim-spectre",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+    },
+    cmd = "Spectre",
+    keys = {
+      { "<leader>srr", function() require("spectre").toggle() end,                            desc = "Toggle Spectre" },
+      { "<leader>srw", function() require("spectre").open_visual({ select_word = true }) end, desc = "Search current word" },
+      { "<leader>srf", function() require("spectre").open_file_search() end,                  desc = "Search in current file" },
+    },
+  }
 }, {
   -- Lazy.nvim options
   checker = {
