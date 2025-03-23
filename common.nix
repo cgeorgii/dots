@@ -1,6 +1,11 @@
 { pkgs, ... }:
 
 {
+  # Import mullvad
+  imports = [
+    ./nix/mullvad.nix
+  ];
+
   environment.systemPackages = with pkgs; [
     bat
     dconf
