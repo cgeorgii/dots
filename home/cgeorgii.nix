@@ -43,7 +43,6 @@
         keepassxc
         libreoffice
         libsForQt5.dolphin
-        logseq
         lua-language-server
         nemo
         neofetch
