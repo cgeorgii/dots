@@ -505,50 +505,12 @@ require("lazy").setup({
       vim.g.jsx_ext_required = 1
     end,
   },
-  -- Add this to your lazy.nvim plugin specifications, ideally near your other LSP plugins
   {
     "j-hui/fidget.nvim",
-    event = "LspAttach", -- Load when LSP attaches to a buffer
-    config = function()
-      require("fidget").setup({
-        -- Options for the notification window
-        notification = {
-          window = {
-            winblend = 0,      -- Background opacity (0-100)
-            border = "none",   -- Border style
-            relative = "editor", -- Position relative to editor
-            zindex = 45,       -- Stacking priority
-          },
-          view = {
-            stack_upwards = true,  -- New notifications appear on top
-            icon_separator = " ",  -- Separator between icon and title
-            group_separator = "---", -- Separator between groups
-          },
-          -- Customize colors, icons, and formats
-          filter = {
-            event = function(event)
-              -- Filter out progress messages from being displayed
-              return event.kind ~= "progress"
-            end,
-          },
-        },
-        -- Options for displaying LSP progress
-        progress = {
-          display = {
-            render_limit = 5,  -- Max number of LSP progress messages to show
-            done_ttl = 3,      -- How long completed progress stays visible (seconds)
-            progress_ttl = 60, -- How long running progress stays visible (seconds)
-            icon_style = "fade", -- Icon display style ("fade" or "static")
-          },
-        },
-        -- Integration with nvim-tree if you're using it
-        integration = {
-          ["nvim-tree"] = {
-            enable = true, -- Hide fidget when nvim-tree is open
-          },
-        },
-      })
-    end,
+    tag = "v1.0.0",
+    opts = {
+      -- options
+    },
   },
   { "jiangmiao/auto-pairs" },
   { "mustache/vim-mustache-handlebars" },
