@@ -141,6 +141,25 @@
   # services.clamav.updater.enable = true;
 
   services.pcscd.enable = true;
+
+  # Run `captive-browser` from the terminal
+  programs.captive-browser = {
+    enable = true;
+
+    # Replace "wlan0" with your actual wireless interface name
+    # To find out the interface name, run `ip a`
+    interface = "wlp0s20f3";
+
+#     # Browser to use for the captive portal
+#     browser = "${pkgs.firefox}/bin/firefox";
+
+#     # Use DHCP-provided DNS servers rather than system ones
+#     dhcp-dns = true;
+
+#     # Optional: specify additional args to the browser
+#     # browserArgs = [ "--private-window" ];
+  };
+
   programs.light.enable = true;
   programs.gnupg.agent = {
     enable = true;
