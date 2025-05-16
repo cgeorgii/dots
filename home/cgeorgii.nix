@@ -205,8 +205,9 @@
             in
             [
               {
-                statusCommand = "${pkgs.i3status}/bin/i3status";
-                fonts = { names = [ "Iosevka" ]; size = 9.0; };
+                statusCommand = "${pkgs.i3status-rust}/bin/i3status-rs ~/.config/i3status-rust/config-default.toml";
+                trayOutput = "*";
+                fonts = { names = [ "Iosevka" ]; size = 10.0; };
                 position = "bottom";
                 colors = {
                   background = black;
@@ -239,6 +240,74 @@
         extraConfig = ''
           include ~/.config/sway/extra
         '';
+      };
+      programs.i3status-rust = {
+        enable = true;
+        bars = {
+          default = {
+            theme = "gruvbox-dark";
+            icons = "awesome6";
+            blocks = [
+              # Keyboard layout
+              {
+                block = "keyboard_layout";
+                driver = "sway";
+                format = " $layout $variant ";
+              }
+              # Backlight/brightness control block
+              {
+                block = "backlight";
+                device = "intel_backlight";
+                step_width = 5;
+                format = "☀ {$brightness}";
+                invert_icons = false;
+              }
+              # Wireless connection
+              {
+                block = "net";
+                format = "$icon  {$ssid $frequency $signal_strength|Disconnected} ";
+                format_alt = " $icon  {$ip/$ipv6|Disconnected} ";
+                interval = 5;
+              }
+              # Disk space
+              {
+                block = "disk_space";
+                path = "/";
+                info_type = "available";
+                alert_unit = "GB";
+                interval = 60;
+                warning = 20.0;
+                alert = 10.0;
+                format = " $icon  $used/$total ";
+              }
+              # Memory usage
+              {
+                block = "memory";
+                format = " $icon  $mem_used_percents ";
+                format_alt = "$icon  $mem_used/$mem_total ";
+              }
+              # CPU usage
+              {
+                block = "cpu";
+                interval = 1;
+                format = " $icon $utilization ";
+              }
+              # Battery
+              {
+                block = "battery";
+                format = " $icon  $percentage {$time |}";
+                device = "BAT0";
+                interval = 10;
+              }
+              # Time and date
+              {
+                block = "time";
+                interval = 60;
+                format = " $icon  $timestamp.datetime(f:'%a %d/%m %R') ";
+              }
+            ];
+          };
+        };
       };
 
       programs.neovim = {
