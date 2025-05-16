@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 
 {
   # Import mullvad
@@ -51,15 +51,12 @@
       trusted-users = [ "root" "cgeorgii" ];
       auto-optimise-store = true;
       trusted-public-keys = [
-        # "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
-        # "ryantrinkle.com-1:JJiAKaRv9mWgpVAz8dwewnZe0AzzEAzPkagE9SP5NWI="
+        "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
         "zeuslogics-nix-cache-github:RpfcOgIp6w2cvPyhTfErGcWkR9QSHc1gpp4UwyH3ovU="
         "haskell-language-server.cachix.org-1:juFfHrwkOxqIOZShtC4YC1uT1bBcq2RSvC7OMKx0Nz8="
 
       ];
       substituters = [
-        "https://aseipp-nix-cache.global.ssl.fastly.net"
-        # "https://nixcache.reflex-frp.org"
         "https://haskell-language-server.cachix.org"
       ];
     };

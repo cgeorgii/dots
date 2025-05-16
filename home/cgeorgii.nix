@@ -131,7 +131,8 @@
             };
 
             "type:keyboard" = {
-              xkb_options = "caps:escape";
+              xkb_layout = "us,us(intl)";
+              xkb_options = "caps:escape,grp:ctrl_space_toggle";
             };
           };
 
