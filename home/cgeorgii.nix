@@ -108,7 +108,7 @@
         config = rec {
           modifier = "Mod4";
           terminal = "alacritty";
-          fonts = { names = [ "IosevkaTerm Nerd Font Mono" ]; size = 9.0; };
+          fonts = { names = [ "IosevkaTerm Nerd Font Mono" ]; size = 11.0; };
           menu = "bemenu-run";
           startup = [
             # Ensure that the environment variables are correctly set for the user
@@ -207,7 +207,7 @@
               {
                 statusCommand = "${pkgs.i3status-rust}/bin/i3status-rs ~/.config/i3status-rust/config-default.toml";
                 trayOutput = "*";
-                fonts = { names = [ "Iosevka" ]; size = 10.0; };
+                fonts = { names = [ "Iosevka" ]; size = 11.0; };
                 position = "bottom";
                 colors = {
                   background = black;
@@ -241,18 +241,28 @@
           include ~/.config/sway/extra
         '';
       };
+
       programs.i3status-rust = {
         enable = true;
         bars = {
           default = {
-            theme = "gruvbox-dark";
             icons = "awesome6";
+            settings = {
+              theme = {
+                theme = "gruvbox-dark";
+                overrides = {
+                };
+              };
+            };
             blocks = [
               # Keyboard layout
               {
                 block = "keyboard_layout";
                 driver = "sway";
                 format = " $layout $variant ";
+                theme_overrides = {
+                  idle_bg = "#282828"; # Gruvbox dark background
+                };
               }
               # Backlight/brightness control block
               {
@@ -261,11 +271,14 @@
                 step_width = 5;
                 format = "☀ {$brightness}";
                 invert_icons = false;
+                theme_overrides = {
+                  idle_bg = "#3c3836"; # Gruvbox light background
+                };
               }
               # Wireless connection
               {
                 block = "net";
-                format = "$icon  {$ssid $frequency $signal_strength|Disconnected} ";
+                format = " $icon  {$ssid $frequency $signal_strength|Disconnected} ";
                 format_alt = " $icon  {$ip/$ipv6|Disconnected} ";
                 interval = 5;
               }
@@ -279,31 +292,47 @@
                 warning = 20.0;
                 alert = 10.0;
                 format = " $icon  $used/$total ";
+                theme_overrides = {
+                  idle_bg = "#3c3836"; # Gruvbox light background
+                };
               }
               # Memory usage
               {
                 block = "memory";
                 format = " $icon  $mem_used_percents ";
-                format_alt = "$icon  $mem_used/$mem_total ";
+                format_alt = " $icon  $mem_used/$mem_total ";
               }
               # CPU usage
               {
                 block = "cpu";
                 interval = 1;
                 format = " $icon $utilization ";
+                theme_overrides = {
+                  idle_bg = "#3c3836"; # Gruvbox light background
+                  good_bg = "#3c3836"; # Gruvbox light background
+                  info_bg = "#3c3836"; # Gruvbox light background
+                };
               }
               # Battery
               {
                 block = "battery";
-                format = " $icon  $percentage {$time |}";
+                format = " $icon  $percentage {$time }";
                 device = "BAT0";
                 interval = 10;
+                theme_overrides = {
+                  idle_bg = "#282828"; # Gruvbox dark background
+                  good_bg = "#282828"; # Gruvbox dark background
+                  info_bg = "#282828"; # Gruvbox dark background
+                };
               }
               # Time and date
               {
                 block = "time";
                 interval = 60;
                 format = " $icon  $timestamp.datetime(f:'%a %d/%m %R') ";
+                theme_overrides = {
+                  idle_bg = "#3c3836"; # Gruvbox light background
+                };
               }
             ];
           };
