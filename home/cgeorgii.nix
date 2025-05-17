@@ -9,12 +9,17 @@
       link-dotfile = file:
         config.lib.file.mkOutOfStoreSymlink
           "${config.home.homeDirectory}/dots/dotfiles/${file}";
+
+      colorScheme = import ./colors.nix;
     in
     {
       home.file.".gitignore".source = link-dotfile "gitignore";
       home.file.".tmux.conf".source = link-dotfile "tmux.conf";
       home.file.".emacs".source = link-dotfile "emacs";
       home.file."./code/tweag/.gitconfig".source = link-dotfile "gitconfig-work";
+
+      # # Export colors.yaml to be used by other applications like Alacritty
+      # home.file."dots/colors.yaml".source = ./../dotfiles/colors.yaml;
 
       xdg.configFile = {
         "alacritty/alacritty.toml".source = link-dotfile "alacritty.toml";
@@ -79,10 +84,6 @@
 
       gtk = {
         enable = true;
-        # theme = {
-        #   name = "Gruvbox-Dark";
-        #   package = pkgs.gruvbox-gtk-theme;
-        # };
         theme = {
           name = "Adwaita-dark";
           package = pkgs.gnome-themes-extra;
@@ -91,10 +92,6 @@
           name = "Mint-Y-Sand";
           package = pkgs.mint-y-icons;
         };
-        # cursorTheme = {
-        #   name = "Bibata-Original-Classic";
-        #   package = pkgs.bibata-cursors;
-        # };
       };
 
       qt = {
@@ -144,98 +141,77 @@
             "${modifier}+Shift+s" = "exec grimshot copy area";
           };
 
-          colors =
-            # TODO Unify these colors with the ones from alacritty.yaml
-            let
-              # magenta = "#b16286";
-              # cyan = "#689d6a";
-              white = "#ebdbb2";
-              red = "#cc241d";
-              black = "#282828";
-              gray = "#928374";
-              yellow = "#d79921";
-              brightYellow = "#fabd2f";
-            in
-            {
-              focused = {
-                background = black;
-                border = yellow;
-                childBorder = yellow;
-                indicator = brightYellow;
-                text = white;
-              };
-              unfocused = {
-                background = black;
-                border = gray;
-                childBorder = gray;
-                indicator = gray;
-                text = gray;
-              };
-              focusedInactive = {
-                background = black;
-                border = white;
-                childBorder = black;
-                indicator = black;
-                text = gray;
-              };
-              urgent = {
-                background = red;
-                border = red;
-                childBorder = red;
-                indicator = red;
-                text = white;
-              };
-              placeholder = {
-                background = "#000000";
-                border = "#000000";
-                childBorder = "#000000";
-                indicator = "#000000";
-                text = white;
-              };
+          colors = {
+            focused = {
+              background = colorScheme.black;
+              border = colorScheme.yellow;
+              childBorder = colorScheme.yellow;
+              indicator = colorScheme.bright_yellow;
+              text = colorScheme.white;
             };
-          bars =
-            let
-              # magenta = "#b16286";
-              # cyan = "#689d6a";
-              white = "#ebdbb2";
-              red = "#cc241d";
-              black = "#282828";
-              gray = "#928374";
-              yellow = "#d79921";
-            in
-            [
-              {
-                statusCommand = "${pkgs.i3status-rust}/bin/i3status-rs ~/.config/i3status-rust/config-default.toml";
-                trayOutput = "*";
-                fonts = { names = [ "Iosevka" ]; size = 11.0; };
-                position = "bottom";
-                colors = {
-                  background = black;
-                  separator = "#666666";
-                  statusline = white;
-                  activeWorkspace = {
-                    border = gray;
-                    background = gray;
-                    text = black;
-                  };
-                  focusedWorkspace = {
-                    border = black;
-                    background = yellow;
-                    text = black;
-                  };
-                  inactiveWorkspace = {
-                    border = black;
-                    background = black;
-                    text = white;
-                  };
-                  urgentWorkspace = {
-                    border = red;
-                    background = red;
-                    text = white;
-                  };
+            unfocused = {
+              background = colorScheme.black;
+              border = colorScheme.gray;
+              childBorder = colorScheme.gray;
+              indicator = colorScheme.gray;
+              text = colorScheme.gray;
+            };
+            focusedInactive = {
+              background = colorScheme.black;
+              border = colorScheme.white;
+              childBorder = colorScheme.black;
+              indicator = colorScheme.black;
+              text = colorScheme.gray;
+            };
+            urgent = {
+              background = colorScheme.red;
+              border = colorScheme.red;
+              childBorder = colorScheme.red;
+              indicator = colorScheme.red;
+              text = colorScheme.white;
+            };
+            placeholder = {
+              background = "#000000";
+              border = "#000000";
+              childBorder = "#000000";
+              indicator = "#000000";
+              text = colorScheme.white;
+            };
+          };
+
+          bars = [
+            {
+              statusCommand = "${pkgs.i3status-rust}/bin/i3status-rs ~/.config/i3status-rust/config-default.toml";
+              trayOutput = "*";
+              fonts = { names = [ "Iosevka" ]; size = 11.0; };
+              position = "bottom";
+              colors = {
+                background = colorScheme.black;
+                separator = "#666666";
+                statusline = colorScheme.white;
+                activeWorkspace = {
+                  border = colorScheme.gray;
+                  background = colorScheme.gray;
+                  text = colorScheme.black;
                 };
-              }
-            ];
+                focusedWorkspace = {
+                  border = colorScheme.black;
+                  background = colorScheme.yellow;
+                  text = colorScheme.black;
+                };
+                inactiveWorkspace = {
+                  border = colorScheme.black;
+                  background = colorScheme.black;
+                  text = colorScheme.white;
+                };
+                urgentWorkspace = {
+                  border = colorScheme.red;
+                  background = colorScheme.red;
+                  text = colorScheme.white;
+                };
+              };
+            }
+          ];
         };
         extraConfig = ''
           include ~/.config/sway/extra
@@ -251,6 +227,10 @@
               theme = {
                 theme = "gruvbox-dark";
                 overrides = {
+                  # separator = " | ";
+                  # Optionally customize separator colors
+                  # separator_bg = "${colorScheme.black}"; # Match gruvbox-dark background
+                  # separator_fg = "${colorScheme.white}"; # Match gruvbox-dark foreground
                 };
               };
             };
@@ -261,7 +241,7 @@
                 driver = "sway";
                 format = " $layout $variant ";
                 theme_overrides = {
-                  idle_bg = "#282828"; # Gruvbox dark background
+                  idle_bg = colorScheme.black; # Gruvbox dark background
                 };
               }
               # Backlight/brightness control block
@@ -320,9 +300,9 @@
                 device = "BAT0";
                 interval = 10;
                 theme_overrides = {
-                  idle_bg = "#282828"; # Gruvbox dark background
-                  good_bg = "#282828"; # Gruvbox dark background
-                  info_bg = "#282828"; # Gruvbox dark background
+                  idle_bg = colorScheme.black; # Gruvbox dark background
+                  good_bg = colorScheme.black; # Gruvbox dark background
+                  info_bg = colorScheme.black; # Gruvbox dark background
                 };
               }
               # Time and date
@@ -519,16 +499,6 @@
           package.disabled = true;
         };
       };
-
-      # home.pointerCursor = {
-      #   name = "Adwaita";
-      #   package = pkgs.gnome.adwaita-icon-theme;
-      #   size = 24;
-      #   x11 = {
-      #     enable = true;
-      #     defaultCursor = "Adwaita";
-      #   };
-      # };
 
       home.stateVersion = "21.11";
     };
