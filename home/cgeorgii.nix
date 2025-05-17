@@ -279,14 +279,14 @@
               # Memory usage
               {
                 block = "memory";
-                format = " $icon  $mem_used_percents ";
-                format_alt = " $icon  $mem_used/$mem_total ";
+                format = " $icon  $mem_used/$mem_total ";
+                format_alt = " $icon  $mem_used_percents ";
               }
               # CPU usage
               {
                 block = "cpu";
                 interval = 1;
-                format = " $icon $utilization ";
+                format = " CPU $utilization ";
                 theme_overrides = {
                   idle_bg = "#3c3836"; # Gruvbox light background
                   good_bg = "#3c3836"; # Gruvbox light background
@@ -309,7 +309,7 @@
               {
                 block = "time";
                 interval = 60;
-                format = " $icon  $timestamp.datetime(f:'%a %d/%m %R') ";
+                format = " $icon   $timestamp.datetime(f:'%a %d/%m %R')  ";
                 theme_overrides = {
                   idle_bg = "#3c3836"; # Gruvbox light background
                 };
