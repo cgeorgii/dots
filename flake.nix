@@ -23,13 +23,21 @@
             nixpkgs-fmt.enable = true;
             # Check for common issues
             deadnix.enable = true;
+            # Custom hook to ensure repomix is up-to-date
+            repomix-update = {
+              enable = true;
+              name = "Update repomix";
+              entry = "${pkgs.repomix}/bin/repomix";
+            };
           };
         };
 
         # Development shell with pre-commit hooks installed
         devShells.default = pkgs.mkShell {
           inherit (config.checks.pre-commit-check) shellHook;
-          buildInputs = config.checks.pre-commit-check.enabledPackages;
+          buildInputs = config.checks.pre-commit-check.enabledPackages ++ [
+            pkgs.repomix
+          ];
         };
       };
 

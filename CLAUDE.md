@@ -14,6 +14,7 @@
   - nixpkgs-fmt: Auto-formats Nix files
   - statix: Lints Nix code for anti-patterns
   - deadnix: Finds unused variables in Nix files
+  - repomix-update: Updates repomix data before commits
 
 ## NixOS/Home-Manager Style Guidelines
 - Use 2-space indentation in all files
@@ -36,3 +37,7 @@
 - Use `hub` as git wrapper
 - Use `lazygit` for interactive Git operations
 - Prefer rebase over merge for linear history
+
+## Repomix Integration
+- Always check repomix-output.xml when making repository changes
+- Consider the metadata in repomix-output.xml for compatibility decisions
