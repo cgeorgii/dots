@@ -33,6 +33,7 @@
         autojump
         bemenu
         chromium
+        claude-code
         digikam
         discord
         dropbox
