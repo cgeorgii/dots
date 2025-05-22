@@ -1,9 +1,10 @@
 { pkgs, lib, ... }:
 
 {
-  # Import mullvad
+  # Import modules
   imports = [
     ./nix/mullvad.nix
+    ./nix/git-repos.nix
   ];
 
   environment.systemPackages = with pkgs; [
@@ -147,14 +148,14 @@
     # To find out the interface name, run `ip a`
     interface = "wlp0s20f3";
 
-#     # Browser to use for the captive portal
-#     browser = "${pkgs.firefox}/bin/firefox";
+    #     # Browser to use for the captive portal
+    #     browser = "${pkgs.firefox}/bin/firefox";
 
-#     # Use DHCP-provided DNS servers rather than system ones
-#     dhcp-dns = true;
+    #     # Use DHCP-provided DNS servers rather than system ones
+    #     dhcp-dns = true;
 
-#     # Optional: specify additional args to the browser
-#     # browserArgs = [ "--private-window" ];
+    #     # Optional: specify additional args to the browser
+    #     # browserArgs = [ "--private-window" ];
   };
 
   programs.light.enable = true;
@@ -168,6 +169,23 @@
 
   # Needed to install unfree packages within flake.
   home-manager.useGlobalPkgs = true;
+
+  # Configure git repositories to be automatically cloned and kept up-to-date
+  services.gitRepos = {
+    enable = true;
+    repositories = {
+      dots = {
+        url = "https://github.com/cgeorgii/dots.git";
+        path = "/home/cgeorgii/dots";
+        branch = "master";
+      };
+      servant-template = {
+        url = "https://github.com/tweag/servant-template.git";
+        path = "/home/cgeorgii/code/tweag/servant-template";
+        branch = "main";
+      };
+    };
+  };
 
   nixpkgs.config = {
     allowUnfreePredicate = pkg: builtins.elem (pkgs.lib.getName pkg) [

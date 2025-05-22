@@ -80,7 +80,6 @@
       home.sessionVariables = {
         XDG_CURRENT_DESKTOP = "sway";
       };
-
       programs.swaylock.enable = true;
 
       gtk = {

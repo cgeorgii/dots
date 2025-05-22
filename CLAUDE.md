@@ -1,5 +1,9 @@
 # CLAUDE.md - NixOS Dotfiles Repository Guide
 
+## Assistant Guidelines
+- Never run sudo commands directly; always ask the user to run them
+- User will run sudo commands in a separate terminal and paste the results
+
 ## Build/Test Commands
 - NixOS rebuild: `sudo nixos-rebuild switch`
 - Link dotfiles: `sudo ln -s /home/cgeorgii/dots/* /etc/nixos`

@@ -68,6 +68,7 @@ home/
   cgeorgii.nix
   colors.nix
 nix/
+  git-repos.nix
   mullvad.nix
 .envrc
 .gitignore
@@ -143,7 +144,7 @@ NIX_CC='/nix/store/gj9lra51hwhxnhz05jqk5lh03wipamv0-gcc-wrapper-14-20241116'
 export NIX_CC
 NIX_CC_WRAPPER_TARGET_HOST_x86_64_unknown_linux_gnu='1'
 export NIX_CC_WRAPPER_TARGET_HOST_x86_64_unknown_linux_gnu
-NIX_CFLAGS_COMPILE=' -frandom-seed=29fx4cy6s8'
+NIX_CFLAGS_COMPILE=' -frandom-seed=4yc8bkkw7m'
 export NIX_CFLAGS_COMPILE
 NIX_ENFORCE_NO_NATIVE='1'
 export NIX_ENFORCE_NO_NATIVE
@@ -295,7 +296,7 @@ else
   # and prevents installation loops by lorri.
 
   if ! readlink "${GIT_WC}/.pre-commit-config.yaml" >/dev/null \
-    || [[ $(readlink "${GIT_WC}/.pre-commit-config.yaml") != /nix/store/7b4a8s2q2id4w589y5by17vc6da7wbph-pre-commit-config.json ]]; then
+    || [[ $(readlink "${GIT_WC}/.pre-commit-config.yaml") != /nix/store/j295vh89cd5afxsqrad18n1rh183yyvj-pre-commit-config.json ]]; then
     echo 1>&2 "git-hooks.nix: updating $PWD repo"
     [ -L "${GIT_WC}/.pre-commit-config.yaml" ] && unlink "${GIT_WC}/.pre-commit-config.yaml"
 
@@ -309,9 +310,9 @@ else
       echo 1>&2 "    3. Add .pre-commit-config.yaml to .gitignore"
     else
       if true; then
-        nix-store --add-root "${GIT_WC}/.pre-commit-config.yaml" --indirect --realise /nix/store/7b4a8s2q2id4w589y5by17vc6da7wbph-pre-commit-config.json
+        nix-store --add-root "${GIT_WC}/.pre-commit-config.yaml" --indirect --realise /nix/store/j295vh89cd5afxsqrad18n1rh183yyvj-pre-commit-config.json
       else
-        ln -fs /nix/store/7b4a8s2q2id4w589y5by17vc6da7wbph-pre-commit-config.json "${GIT_WC}/.pre-commit-config.yaml"
+        ln -fs /nix/store/j295vh89cd5afxsqrad18n1rh183yyvj-pre-commit-config.json "${GIT_WC}/.pre-commit-config.yaml"
       fi
       # Remove any previously installed hooks (since pre-commit itself has no convergent design)
       hooks="commit-msg post-checkout post-commit post-merge post-rewrite pre-commit pre-merge-commit pre-push pre-rebase prepare-commit-msg"
@@ -3511,7 +3512,6 @@ run '~/.tmux/plugins/tpm/tpm'
       home.sessionVariables = {
         XDG_CURRENT_DESKTOP = "sway";
       };
-
       programs.swaylock.enable = true;
 
       gtk = {
@@ -3968,6 +3968,102 @@ run '~/.tmux/plugins/tpm/tpm'
 }
 </file>
 
+<file path="nix/git-repos.nix">
+{ config, lib, pkgs, ... }:
+
+with lib;
+
+let
+  cfg = config.services.gitRepos;
+
+  repoOpts = { ... }: {
+    options = {
+      url = mkOption {
+        type = types.str;
+        description = "Git repository URL";
+        example = "https://github.com/username/repo.git";
+      };
+
+      path = mkOption {
+        type = types.path;
+        description = "Local path for the repository";
+        example = "/home/user/repos/my-repo";
+      };
+
+      branch = mkOption {
+        type = types.str;
+        default = "main";
+        description = "Branch to checkout";
+      };
+
+      recursive = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Clone submodules recursively";
+      };
+    };
+  };
+in
+{
+  options.services.gitRepos = {
+    enable = mkEnableOption "git repository management";
+
+    repositories = mkOption {
+      type = types.attrsOf (types.submodule repoOpts);
+      default = { };
+      description = "Git repositories to manage";
+    };
+  };
+
+  config = mkIf cfg.enable {
+    systemd.services.git-repos-sync = {
+      description = "Sync git repositories";
+      after = [ "network-online.target" ];
+      wants = [ "network-online.target" ];
+      wantedBy = [ "multi-user.target" ]; # Enable the service to run once on activation
+
+      serviceConfig = {
+        Type = "oneshot";
+        User = "cgeorgii";
+      };
+
+      path = [ pkgs.git pkgs.openssh ];
+
+      script = ''
+        ${concatStringsSep "\n" (mapAttrsToList (_name: repo: ''
+          if [ ! -d "${repo.path}" ]; then
+            ${pkgs.git}/bin/git clone \
+              ${optionalString repo.recursive "--recursive"} \
+              -b ${repo.branch} \
+              "${repo.url}" "${repo.path}"
+          else
+            cd "${repo.path}"
+            # Check if repository is dirty
+            if [ -n "$(${pkgs.git}/bin/git status --porcelain)" ]; then
+              echo "Repository ${repo.path} has uncommitted changes, skipping update"
+            else
+              ${pkgs.git}/bin/git fetch
+              ${pkgs.git}/bin/git checkout ${repo.branch}
+              ${pkgs.git}/bin/git pull
+              ${optionalString repo.recursive "${pkgs.git}/bin/git submodule update --init --recursive"}
+            fi
+          fi
+        '') cfg.repositories)}
+      '';
+    };
+
+    # Run on boot and periodically
+    systemd.timers.git-repos-sync = {
+      wantedBy = [ "timers.target" ];
+      timerConfig = {
+        OnBootSec = "1min";
+        OnUnitActiveSec = "30min";
+      };
+    };
+  };
+}
+</file>
+
 <file path="nix/mullvad.nix">
 { pkgs, ... }:
 
@@ -4004,6 +4100,10 @@ use flake
 
 <file path="CLAUDE.md">
 # CLAUDE.md - NixOS Dotfiles Repository Guide
+
+## Assistant Guidelines
+- Never run sudo commands directly; always ask the user to run them
+- User will run sudo commands in a separate terminal and paste the results
 
 ## Build/Test Commands
 - NixOS rebuild: `sudo nixos-rebuild switch`
@@ -4052,9 +4152,10 @@ use flake
 { pkgs, lib, ... }:
 
 {
-  # Import mullvad
+  # Import modules
   imports = [
     ./nix/mullvad.nix
+    ./nix/git-repos.nix
   ];
 
   environment.systemPackages = with pkgs; [
@@ -4198,14 +4299,14 @@ use flake
     # To find out the interface name, run `ip a`
     interface = "wlp0s20f3";
 
-#     # Browser to use for the captive portal
-#     browser = "${pkgs.firefox}/bin/firefox";
+    #     # Browser to use for the captive portal
+    #     browser = "${pkgs.firefox}/bin/firefox";
 
-#     # Use DHCP-provided DNS servers rather than system ones
-#     dhcp-dns = true;
+    #     # Use DHCP-provided DNS servers rather than system ones
+    #     dhcp-dns = true;
 
-#     # Optional: specify additional args to the browser
-#     # browserArgs = [ "--private-window" ];
+    #     # Optional: specify additional args to the browser
+    #     # browserArgs = [ "--private-window" ];
   };
 
   programs.light.enable = true;
@@ -4219,6 +4320,23 @@ use flake
 
   # Needed to install unfree packages within flake.
   home-manager.useGlobalPkgs = true;
+
+  # Configure git repositories to be automatically cloned and kept up-to-date
+  services.gitRepos = {
+    enable = true;
+    repositories = {
+      dots = {
+        url = "https://github.com/cgeorgii/dots.git";
+        path = "/home/cgeorgii/dots";
+        branch = "master";
+      };
+      servant-template = {
+        url = "https://github.com/tweag/servant-template.git";
+        path = "/home/cgeorgii/code/tweag/servant-template";
+        branch = "main";
+      };
+    };
+  };
 
   nixpkgs.config = {
     allowUnfreePredicate = pkg: builtins.elem (pkgs.lib.getName pkg) [
@@ -4439,8 +4557,6 @@ use flake
               enable = true;
               name = "Update repomix";
               entry = "${pkgs.repomix}/bin/repomix";
-              pass_filenames = false;
-              language = "system";
             };
           };
         };
