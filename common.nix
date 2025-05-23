@@ -13,10 +13,12 @@
     file
     firefox
     gamemode
-    git
+    gitAndTools.gitFull
     git-lfs
     file-roller
+    libsecret
     pass
+    git-credential-manager
     pinentry
     readline
     swaylock

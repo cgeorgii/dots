@@ -3,6 +3,9 @@
 ## Assistant Guidelines
 - Never run sudo commands directly; always ask the user to run them
 - User will run sudo commands in a separate terminal and paste the results
+- Never modify system files directly; always make changes through NixOS/Home-Manager configuration files
+- All configuration changes should be done declaratively through Nix configuration files
+- Don't edit systemd service files directly; use the appropriate Nix modules instead
 
 ## Build/Test Commands
 - NixOS rebuild: `sudo nixos-rebuild switch`
@@ -42,6 +45,12 @@
 - Use `lazygit` for interactive Git operations
 - Prefer rebase over merge for linear history
 - Do not include co-authored by Claude information in commits
+- Git config location: `~/.config/git/config`
+- Use libsecret credential helper for HTTPS credentials
+- For credential storage:
+  - Initialize pass: `pass init YOUR_GPG_KEY_ID`
+  - Uses pass-secret-service to bridge between libsecret and pass
+  - Credentials stored securely with GPG encryption
 
 ## Repomix Integration
 - Always check repomix-output.xml when making repository changes

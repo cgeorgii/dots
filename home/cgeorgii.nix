@@ -447,6 +447,10 @@
           core.excludesfile = "~/.gitignore";
           hub.protocol = "ssh";
           push.autoSetupRemote = true;
+          credential = {
+            helper = "manager";
+            credentialStore = "gpg";
+          };
         };
         delta = {
           enable = true;
@@ -502,5 +506,12 @@
       };
 
       home.stateVersion = "21.11";
+
+      # Enable pass-secret-service
+      services.pass-secret-service = {
+        enable = true;
+        storePath = "${config.home.homeDirectory}/.password-store";
+      };
+      programs.password-store.enable = true;
     };
 }
