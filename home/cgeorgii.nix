@@ -394,6 +394,7 @@
           gan = "git add . -N";
           gitconfig = "nvim ~/.gitconfig";
           lg = "lazygit";
+          gb = "git bug";
 
           # [[ UTILS ]]
           cat = "bat";

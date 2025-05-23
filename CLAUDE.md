@@ -45,3 +45,13 @@
 ## Repomix Integration
 - Always check repomix-output.xml when making repository changes
 - Consider the metadata in repomix-output.xml for compatibility decisions
+
+## Git-Bug Issue Tracker
+- Use `git bug` to manage issues directly in the repository
+- List issues: `git bug ls`
+- Create a new issue: `git bug new`
+- Show issue details: `git bug show <id>`
+- Add a comment: `git bug comment <id>`
+- Edit an issue: `git bug edit <id>`
+- Change issue status: `git bug status <id> <new-status>`
+- Pull/push issues: `git bug pull` and `git bug push`

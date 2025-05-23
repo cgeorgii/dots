@@ -37,6 +37,7 @@
           inherit (config.checks.pre-commit-check) shellHook;
           buildInputs = config.checks.pre-commit-check.enabledPackages ++ [
             pkgs.repomix
+            pkgs.git-bug
           ];
         };
       };
