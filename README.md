@@ -9,20 +9,28 @@ Run `sudo nixos-rebuild switch`.
 Configuring git
 ---------------
 
-  1. Login with `gh`:
+### Using HTTPS with git-credential-manager
 
-  ```
-  $ gh auth login
-  ```
+The dotfiles include configuration for secure credential storage using git-credential-manager and pass-secret-service:
 
-  2. Create personal access token for machine by going to `https://github.com/settings/tokens` and paste it in `~/.config/hub`
+1. Initialize the password store (only needed once):
+   ```
+   $ pass init YOUR_GPG_KEY_ID
+   ```
 
-  ```
-  github.com:
-   - user: cgeorgii
-     oauth_token: PASTE_TOKEN_HERE
-     protocol: https
-  ```
+2. Authentication workflow:
+   - First-time authentication: You'll be prompted to enter a Personal Access Token (PAT)
+   - PAT is securely stored in the pass password store via GPG encryption
+   - Future authentications will use the stored PAT automatically
+   - No browser-based auth - uses CLI-based token entry only
+
+3. The configuration in home/cgeorgii.nix includes:
+   ```nix
+   credential = {
+     helper = "manager";
+     credentialStore = "gpg";
+   };
+   ```
 
 Configuring fingerprint reader
 ------------------------------
