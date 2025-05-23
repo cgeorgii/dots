@@ -41,6 +41,7 @@
 - Use `hub` as git wrapper
 - Use `lazygit` for interactive Git operations
 - Prefer rebase over merge for linear history
+- Do not include co-authored by Claude information in commits
 
 ## Repomix Integration
 - Always check repomix-output.xml when making repository changes

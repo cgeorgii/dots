@@ -56,7 +56,7 @@ in
         User = "cgeorgii";
       };
 
-      path = [ pkgs.git pkgs.openssh ];
+      path = [ pkgs.git pkgs.openssh pkgs.gitAndTools.hub ];
 
       script = ''
         ${concatStringsSep "\n" (mapAttrsToList (_name: repo: ''
@@ -71,9 +71,8 @@ in
             if [ -n "$(${pkgs.git}/bin/git status --porcelain)" ]; then
               echo "Repository ${repo.path} has uncommitted changes, skipping update"
             else
-              ${pkgs.git}/bin/git fetch
-              ${pkgs.git}/bin/git checkout ${repo.branch}
-              ${pkgs.git}/bin/git pull
+              # Use hub sync to update all branches while staying on the current branch
+              ${pkgs.gitAndTools.hub}/bin/hub sync
               ${optionalString repo.recursive "${pkgs.git}/bin/git submodule update --init --recursive"}
             fi
           fi
