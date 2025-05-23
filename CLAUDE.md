@@ -30,6 +30,9 @@
 - Group related settings in modules
 - Use descriptive names for options
 - Document non-obvious settings with comments
+- When creating new files for Nix flakes, ensure they are tracked by git before testing with nix commands
+  - Untracked files can cause errors like "path '/nix/store/hash-source/path/to/file' does not exist"
+  - Solution: Track files without staging using `git add --intent-to-add path/to/file` or `git add -N path/to/file`
 
 ## Neovim Style Guidelines
 - Use Lua for all configuration

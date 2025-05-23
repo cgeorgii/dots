@@ -14,7 +14,11 @@
     flake-parts.lib.mkFlake { inherit inputs; } {
       systems = [ "x86_64-linux" ];
 
-      perSystem = { system, config, pkgs, ... }: {
+      perSystem = { system, config, pkgs, lib, ... }: {
+        imports = [
+          ./apps/repomix-to-clipboard/flake-module.nix
+        ];
+
         # Checks for pre-commit hooks
         checks.pre-commit-check = inputs.pre-commit-hooks.lib.${system}.run {
           src = ./.;
@@ -23,21 +27,20 @@
             nixpkgs-fmt.enable = true;
             # Check for common issues
             deadnix.enable = true;
-            # Custom hook to ensure repomix is up-to-date
-            repomix-update = {
-              enable = true;
-              name = "Update repomix";
-              entry = "${pkgs.repomix}/bin/repomix";
-            };
           };
         };
 
         # Development shell with pre-commit hooks installed
         devShells.default = pkgs.mkShell {
           inherit (config.checks.pre-commit-check) shellHook;
+
           buildInputs = config.checks.pre-commit-check.enabledPackages ++ [
             pkgs.repomix
             pkgs.git-bug
+          ];
+
+          packages = [
+            config.packages.repomix-to-clipboard
           ];
         };
       };

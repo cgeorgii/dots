@@ -400,6 +400,7 @@
           cat = "bat";
           ls = "eza --git --icons -a --group-directories-first";
           z = "zenith";
+          rc = "repomix-to-clipboard";
         };
 
         plugins = with pkgs; [
