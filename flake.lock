@@ -158,13 +158,31 @@
         "type": "github"
       }
     },
+    "repomix-to-clipboard": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1,
+        "narHash": "sha256-H+uw0fG+F3/410o8KCYJAjqF90reuzJ9SOlIigSdX/I=",
+        "path": "./apps/repomix-to-clipboard",
+        "type": "path"
+      },
+      "original": {
+        "path": "./apps/repomix-to-clipboard",
+        "type": "path"
+      }
+    },
     "root": {
       "inputs": {
         "flake-parts": "flake-parts",
         "home-manager": "home-manager",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs",
-        "pre-commit-hooks": "pre-commit-hooks"
+        "pre-commit-hooks": "pre-commit-hooks",
+        "repomix-to-clipboard": "repomix-to-clipboard"
       }
     }
   },

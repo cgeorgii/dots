@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }:
+{ pkgs, lib, config, ... }:
 
 {
   # Import modules
@@ -10,19 +10,15 @@
   environment.systemPackages = with pkgs; [
     bat
     dconf
-    file
     firefox
-    gamemode
     gitAndTools.gitFull
     git-lfs
-    file-roller
     libsecret
     pass
     git-credential-manager
     pinentry
     readline
     swaylock
-    nil
     silver-searcher
     tmux
     wget
@@ -30,8 +26,9 @@
     xclip
     # zenith
     gcc # Required for neovim-treesitter
-    easyeffects # Required for shitty sounding speakers to be somewhat useful
     udiskie
+    # Tool to package repositories into AI-friendly files and copy to clipboard.
+    repomix-to-clipboard
   ];
 
   programs.zsh = {
@@ -89,14 +86,7 @@
     nerd-fonts.iosevka-term
   ];
 
-  # Add fingerprint with `fprintd-enroll`
-  # Disabled because of me new moonlander.
-  # services.fprintd.enable = true;
-
-  virtualisation.docker = {
-    enable = true;
-    # dockerCompat = true;
-  };
+  virtualisation.docker.enable = true;
 
   services.fwupd.enable = true;
 
@@ -135,13 +125,6 @@
   networking.firewall.allowedTCPPorts = [ ];
   networking.firewall.allowedUDPPorts = [ ];
 
-  # # enable antivirus clamav and
-  # # keep the signatures' database updated
-  # services.clamav.daemon.enable = true;
-  # services.clamav.updater.enable = true;
-
-  services.pcscd.enable = true;
-
   # Run `captive-browser` from the terminal
   programs.captive-browser = {
     enable = true;
@@ -150,21 +133,14 @@
     # To find out the interface name, run `ip a`
     interface = "wlp0s20f3";
 
-    #     # Browser to use for the captive portal
-    #     browser = "${pkgs.firefox}/bin/firefox";
-
-    #     # Use DHCP-provided DNS servers rather than system ones
-    #     dhcp-dns = true;
-
-    #     # Optional: specify additional args to the browser
-    #     # browserArgs = [ "--private-window" ];
+    # Browser to use for the captive portal
+    browser = lib.getExe pkgs.firefox;
   };
 
   programs.light.enable = true;
   programs.gnupg.agent = {
     enable = true;
     enableSSHSupport = true;
-    # pinentryFlavor = "gnome3";
   };
 
   environment.variables.EDITOR = "nvim";
