@@ -59,6 +59,7 @@
         spotify
         starship
         sway-contrib.grimshot # Screenshot tool
+        tree
         whatsapp-for-linux
         wl-clipboard
         xfce.thunar
@@ -345,7 +346,7 @@
         enableCompletion = true;
         autocd = true;
 
-        initExtra = "
+        initContent = "
         # Autosuggestion with async mode interferes with the history search functions
         # See https://github.com/zsh-users/zsh-autosuggestions/issues/619
         ZSH_AUTOSUGGEST_CLEAR_WIDGETS+=(history-beginning-search-backward-end history-beginning-search-forward-end)

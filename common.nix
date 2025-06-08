@@ -133,8 +133,8 @@
     # To find out the interface name, run `ip a`
     interface = "wlp0s20f3";
 
-    # Browser to use for the captive portal
-    browser = lib.getExe pkgs.firefox;
+    # # Browser to use for the captive portal
+    # browser = lib.getExe pkgs.firefox;
   };
 
   programs.light.enable = true;
@@ -170,6 +170,9 @@
       "claude-code"
       "discord"
       "dropbox"
+      "firefox-bin"
+      "firefox-unwrapped"
+      "firefox-release-bin-unwrapped"
       "slack"
       "spotify"
     ];
