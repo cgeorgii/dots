@@ -342,7 +342,14 @@ require("lazy").setup({
               globals = { 'vim' },
             },
             workspace = {
-              library = vim.api.nvim_get_runtime_file("", true),
+              library = {
+                vim.env.RUNTIME
+              },
+              ignoreDir = {
+                ".git",
+                ".github",
+                ".direnv",
+              },
             },
             telemetry = {
               enable = false,
@@ -471,6 +478,7 @@ require("lazy").setup({
       "nvim-tree/nvim-web-devicons",
     },
     config = function()
+      require('fzf-lua').register_ui_select()
       require("fzf-lua").setup({
         winopts = {
           height = 0.85,

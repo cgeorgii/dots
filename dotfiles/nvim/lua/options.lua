@@ -20,5 +20,5 @@ vim.opt.shiftwidth = 2              -- Sensible defaults for indentation
 vim.opt.expandtab = true            -- Use spaces for tabs
 vim.opt.undofile = true             -- Persistent undo between vim sessions
 vim.opt.undodir =
-    vim.fn.expand('~/.vim/undodir') -- Persistent undo directory
+vim.fn.expand('~/.vim/undodir')     -- Persistent undo directory
 vim.opt.timeoutlen = 500            -- For which-key
