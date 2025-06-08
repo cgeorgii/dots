@@ -35,3 +35,6 @@ ssh/master/*
 subversion/README.txt
 subversion/auth/*
 task/task/*.data
+
+# Claude Code settings
+.claude/
