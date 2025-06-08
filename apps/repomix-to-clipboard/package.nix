@@ -7,7 +7,7 @@ pkgs.writeScriptBin "repomix-to-clipboard" ''
   echo "Running repomix and copying output to clipboard..."
 
   # Run repomix in the current directory
-  ${pkgs.repomix}/bin/repomix
+  ${pkgs.repomix}/bin/repomix --style xml --output repomix-output.xml
 
   # Copy the output to clipboard
   if [ -f "repomix-output.xml" ]; then
