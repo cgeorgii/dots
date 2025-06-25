@@ -59,6 +59,36 @@ For networks that require browser login (captive portals):
 - VPNs can interfere with initial network authentication and captive portal access
 - Re-enable VPN after successfully connecting to the network
 
+ZSA Keyboard Firmware Flashing
+------------------------------
+
+This system includes support for ZSA keyboards (Ergodox EZ, Moonlander, etc.) with the Wally CLI tool for firmware updates.
+
+### Flashing Firmware
+1. Download your firmware file (.bin) from [ZSA Oryx](https://configure.zsa.io/)
+2. Connect your keyboard via USB
+3. Put the keyboard in flash mode:
+   - **Moonlander**: Press and hold the small button on the left side while plugging in
+4. Flash the firmware:
+   ```
+   $ wally-cli path/to/your/firmware.bin
+   ```
+
+### Example Usage
+```bash
+# Download firmware from Oryx and flash it
+$ cd ~/Downloads
+$ wally-cli moonlander_layout_v2.bin
+Flashing ZSA keyboard...
+Device found: Moonlander
+Flashing firmware... done!
+```
+
+### Troubleshooting
+- If the device isn't detected, ensure it's in flash mode (small button pressed during connection)
+- USB permissions are automatically configured through the ZSA udev rules
+- The keyboard will restart automatically after successful flashing
+
 Configuring fingerprint reader
 ------------------------------
   1. Run `fprintd-enroll`
