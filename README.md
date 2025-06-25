@@ -32,6 +32,33 @@ The dotfiles include configuration for secure credential storage using git-crede
    };
    ```
 
+Connecting to Wi-Fi
+------------------
+
+### Using NetworkManager TUI
+1. Open the network manager interface:
+   ```
+   $ nmtui-connect
+   ```
+
+2. Select your Wi-Fi network from the list
+3. Enter the network password when prompted
+
+### Handling Captive Portals (Hotel/Airport Wi-Fi)
+For networks that require browser login (captive portals):
+
+1. Connect to the network using nmtui-connect first
+2. Open the captive portal browser:
+   ```
+   $ captive-browser
+   ```
+3. Complete the login process in the browser window that opens
+
+### Troubleshooting Connection Issues
+- If experiencing connection problems, try disabling any active VPN connections first
+- VPNs can interfere with initial network authentication and captive portal access
+- Re-enable VPN after successfully connecting to the network
+
 Configuring fingerprint reader
 ------------------------------
   1. Run `fprintd-enroll`
