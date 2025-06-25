@@ -192,7 +192,7 @@
       "discord"
       "dropbox"
       "firefox-bin"
-      "firefox-unwrapped"
+      "firefox-bin-unwrapped"
       "firefox-release-bin-unwrapped"
       "slack"
       "spotify"
