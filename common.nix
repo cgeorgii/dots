@@ -188,7 +188,6 @@
 
   nixpkgs.config = {
     allowUnfreePredicate = pkg: builtins.elem (pkgs.lib.getName pkg) [
-      "claude-code"
       "discord"
       "dropbox"
       "firefox-bin"

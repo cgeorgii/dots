@@ -1,4 +1,4 @@
-{ ... }:
+{ nixpkgs-for-claude, ... }:
 
 {
   home-manager.users.cgeorgii = { lib, config, pkgs, ... }:
@@ -11,6 +11,13 @@
           "${config.home.homeDirectory}/dots/dotfiles/${file}";
 
       colorScheme = import ./colors.nix;
+
+      claude-pkgs = import nixpkgs-for-claude {
+        system = pkgs.system;
+        config.allowUnfreePredicate = pkg: builtins.elem (pkgs.lib.getName pkg) [
+          "claude-code"
+        ];
+      };
     in
     {
       home.file.".gitignore".source = link-dotfile "gitignore";
@@ -34,7 +41,7 @@
         autojump
         bemenu
         chromium
-        claude-code
+        claude-pkgs.claude-code
         digikam
         discord
         dropbox

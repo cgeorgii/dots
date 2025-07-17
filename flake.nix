@@ -1,7 +1,7 @@
 {
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    # nixpkgs-for-claude.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs-for-claude.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -55,6 +55,10 @@
         nixosConfigurations = {
           coco = inputs.nixpkgs.lib.nixosSystem {
             system = "x86_64-linux";
+            specialArgs = {
+              inherit inputs;
+              nixpkgs-for-claude = inputs.nixpkgs-for-claude;
+            };
             modules = [
               # Apply our overlay module
               inputs.self.nixosModules.default
