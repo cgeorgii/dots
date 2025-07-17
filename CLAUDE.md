@@ -106,3 +106,6 @@ Uses `config.lib.file.mkOutOfStoreSymlink` to create symlinks instead of copying
 - Edit an issue: `git bug edit <id>`
 - Change issue status: `git bug status <id> <new-status>`
 - Pull/push issues: `git bug pull` and `git bug push`
+
+## Commit Message Guidelines
+- IMPORTANT: Never add mentions of Claude to commit messages

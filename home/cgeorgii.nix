@@ -337,6 +337,12 @@
         enable = true;
         nix-direnv.enable = true;
         enableZshIntegration = true;
+
+        config = {
+          global = {
+            hide_env_diff = true;
+          };
+        };
       };
 
       programs.zsh = {
@@ -374,9 +380,6 @@
         export KEYTIMEOUT=1
 
         export BAT_THEME=gruvbox-dark
-
-        # Make direnv shutup when entering a shell
-        export DIRENV_LOG_FORMAT=
       ";
 
         shellAliases = {
