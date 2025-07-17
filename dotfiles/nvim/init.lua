@@ -171,79 +171,82 @@ require("lazy").setup({
     config = function()
       local wk = require("which-key")
       wk.add({
-        { "<leader>a",  "<cmd>ArgWrap<cr>",                                   desc = "Toggle argument wrapping (single/multi-line)" },
+        { "<leader>a",  "<cmd>ArgWrap<cr>",                                                               desc = "Toggle argument wrapping (single/multi-line)" },
 
         { "<leader>b",  group = "Buffers" },
 
-        { "<leader>bb", "<cmd>Buffers<cr>",                                   desc = "Open buffer selector" },
-        { "<leader>bc", "<cmd>w ! wl-copy<cr><cr>",                           desc = "Copy entire buffer to system clipboard" },
-        { "<leader>bs", "<cmd>BLines<cr>",                                    desc = "Search within current buffer" },
+        { "<leader>bb", "<cmd>Buffers<cr>",                                                               desc = "Open buffer selector" },
+        { "<leader>bc", "<cmd>w ! wl-copy<cr><cr>",                                                       desc = "Copy entire buffer to system clipboard" },
+        { "<leader>bs", "<cmd>BLines<cr>",                                                                desc = "Search within current buffer" },
 
         { "<leader>c",  group = "Clipboard" },
-        { "<leader>cc", "<cmd>ToggleClipboard<cr>",                           desc = "Toggle between vim and system clipboard" },
+        { "<leader>cc", "<cmd>ToggleClipboard<cr>",                                                       desc = "Toggle between vim and system clipboard" },
 
         { "<leader>r",  group = "Reload/Rename" },
-        { "<leader>rr", "<cmd>e!<cr>",                                        desc = "Reload current buffer from disk" },
-        { "<leader>rn", "<cmd>lua vim.lsp.buf.rename()<cr>",                  desc = "Rename symbol under cursor" },
+        { "<leader>rr", "<cmd>e!<cr>",                                                                    desc = "Reload current buffer from disk" },
+        { "<leader>rn", "<cmd>lua vim.lsp.buf.rename()<cr>",                                              desc = "Rename symbol under cursor" },
 
         { "<leader>C",  group = "Config" },
-        { "<leader>CE", "<cmd>VimConfig<cr>",                                 desc = "Edit vim configuration file" },
-        { "<leader>CR", "<cmd>Lazy sync<cr>",                                 desc = "Reload plugins and configuration" },
+        { "<leader>CE", "<cmd>VimConfig<cr>",                                                             desc = "Edit vim configuration file" },
+        { "<leader>CR", "<cmd>Lazy sync<cr>",                                                             desc = "Reload plugins and configuration" },
 
         { "<leader>f",  group = "Formatting" },
-        { "<leader>ff", "<cmd>lua vim.lsp.buf.format({ async = true })<cr>",  desc = "Format entire file" },
-        { "<leader>f",  "<cmd>lua vim.lsp.buf.format({ async = true })<cr>",  desc = "Format visual selection",                            mode = "v" },
+        { "<leader>ff", "<cmd>lua vim.lsp.buf.format({ async = true })<cr>",                              desc = "Format entire file" },
+        { "<leader>f",  "<cmd>lua vim.lsp.buf.format({ async = true })<cr>",                              desc = "Format visual selection",                            mode = "v" },
         { "<leader>f1", hidden = true },
 
         { "<leader>L",  group = "LSP" },
-        { "<leader>LR", "<cmd>LspRestart<cr>",                                desc = "Restart language server" },
-        { "<leader>Li", "<cmd>LspInfo<cr>",                                   desc = "Show language server info" },
-        { "<leader>LL", "<cmd>LspLog<cr>",                                    desc = "Open LSP log" },
+        { "<leader>LR", function()
+          vim.lsp.stop_client(vim.lsp.get_clients())
+          vim.cmd("edit")
+        end,                                                                                              desc = "Restart all language servers" },
+        { "<leader>Li", "<cmd>LspInfo<cr>",                                                               desc = "Show language server info" },
+        { "<leader>LL", "<cmd>LspLog<cr>",                                                                desc = "Open LSP log" },
 
         -- FZF integration for searching
         { "<leader>s",  group = "Search" },
-        { "<leader>sf", "<cmd>Files<cr>",                                     desc = "Search files" },
-        { "<leader>sg", "<cmd>Rg<cr>",                                        desc = "Search with ripgrep" },
-        { "<leader>sb", "<cmd>Buffers<cr>",                                   desc = "Search buffers" },
-        { "<leader>sh", "<cmd>Helptags<cr>",                                  desc = "Search help tags" },
-        { "<leader>sd", "<cmd>BLines<cr>",                                    desc = "Search in current buffer" },
+        { "<leader>sf", "<cmd>Files<cr>",                                                                 desc = "Search files" },
+        { "<leader>sg", "<cmd>Rg<cr>",                                                                    desc = "Search with ripgrep" },
+        { "<leader>sb", "<cmd>Buffers<cr>",                                                               desc = "Search buffers" },
+        { "<leader>sh", "<cmd>Helptags<cr>",                                                              desc = "Search help tags" },
+        { "<leader>sd", "<cmd>BLines<cr>",                                                                desc = "Search in current buffer" },
 
         -- Tab management
-        { "<leader>t",  "<cmd>tabnew<cr>",                                    desc = "Create new tab" },
-        { "<leader>h",  "<cmd>tabprevious<cr>",                               desc = "Go to previous tab" },
-        { "<leader>l",  "<cmd>tabnext<cr>",                                   desc = "Go to next tab" },
-        { "<leader>q",  "<cmd>tabclose<cr>",                                  desc = "Close current tab" },
+        { "<leader>t",  "<cmd>tabnew<cr>",                                                                desc = "Create new tab" },
+        { "<leader>h",  "<cmd>tabprevious<cr>",                                                           desc = "Go to previous tab" },
+        { "<leader>l",  "<cmd>tabnext<cr>",                                                               desc = "Go to next tab" },
+        { "<leader>q",  "<cmd>tabclose<cr>",                                                              desc = "Close current tab" },
 
         -- Diagnostics navigation
-        { "<leader>n",  "<cmd>lua vim.diagnostic.goto_next()<cr>",            desc = "Jump to next diagnostic" },
-        { "<leader>N",  "<cmd>lua vim.diagnostic.goto_prev()<cr>",            desc = "Jump to previous diagnostic" },
-        { "<leader>p",  "<cmd>lua vim.diagnostic.goto_prev()<cr>",            desc = "Jump to previous diagnostic (alternative)" },
+        { "<leader>n",  "<cmd>lua vim.diagnostic.goto_next()<cr>",                                        desc = "Jump to next diagnostic" },
+        { "<leader>N",  "<cmd>lua vim.diagnostic.goto_prev()<cr>",                                        desc = "Jump to previous diagnostic" },
+        { "<leader>p",  "<cmd>lua vim.diagnostic.goto_prev()<cr>",                                        desc = "Jump to previous diagnostic (alternative)" },
 
         -- Code actions
-        { "<leader>qq", "<cmd>lua require('fzf-lua').lsp_code_actions()<cr>", desc = "Show code actions at cursor" },
+        { "<leader>qq", "<cmd>lua require('fzf-lua').lsp_code_actions()<cr>",                             desc = "Show code actions at cursor" },
 
         -- Documentation
-        { "<leader>k",  "<cmd>lua vim.lsp.buf.hover()<cr>",                   desc = "Display hover documentation" },
+        { "<leader>k",  "<cmd>lua vim.lsp.buf.hover()<cr>",                                               desc = "Display hover documentation" },
 
         -- Trouble (diagnostics viewer)
-        { "<leader>xx", "<cmd>TroubleToggle<cr>",                             desc = "Toggle trouble diagnostics" },
-        { "<leader>xw", "<cmd>TroubleToggle workspace_diagnostics<cr>",       desc = "Show workspace diagnostics" },
-        { "<leader>xd", "<cmd>TroubleToggle document_diagnostics<cr>",        desc = "Show document diagnostics" },
-        { "<leader>xl", "<cmd>TroubleToggle loclist<cr>",                     desc = "Show location list" },
-        { "<leader>xq", "<cmd>TroubleToggle quickfix<cr>",                    desc = "Show quickfix list" },
-        { "<leader>xr", "<cmd>TroubleToggle lsp_references<cr>",              desc = "Show references" },
+        { "<leader>xx", "<cmd>TroubleToggle<cr>",                                                         desc = "Toggle trouble diagnostics" },
+        { "<leader>xw", "<cmd>TroubleToggle workspace_diagnostics<cr>",                                   desc = "Show workspace diagnostics" },
+        { "<leader>xd", "<cmd>TroubleToggle document_diagnostics<cr>",                                    desc = "Show document diagnostics" },
+        { "<leader>xl", "<cmd>TroubleToggle loclist<cr>",                                                 desc = "Show location list" },
+        { "<leader>xq", "<cmd>TroubleToggle quickfix<cr>",                                                desc = "Show quickfix list" },
+        { "<leader>xr", "<cmd>TroubleToggle lsp_references<cr>",                                          desc = "Show references" },
 
         -- Tmux integration
-        { "<C-h>",      "<cmd>TmuxNavigateLeft<cr>",                          desc = "Navigate to left pane" },
-        { "<C-j>",      "<cmd>TmuxNavigateDown<cr>",                          desc = "Navigate to pane below" },
-        { "<C-k>",      "<cmd>TmuxNavigateUp<cr>",                            desc = "Navigate to pane above" },
-        { "<C-l>",      "<cmd>TmuxNavigateRight<cr>",                         desc = "Navigate to right pane" },
+        { "<C-h>",      "<cmd>TmuxNavigateLeft<cr>",                                                      desc = "Navigate to left pane" },
+        { "<C-j>",      "<cmd>TmuxNavigateDown<cr>",                                                      desc = "Navigate to pane below" },
+        { "<C-k>",      "<cmd>TmuxNavigateUp<cr>",                                                        desc = "Navigate to pane above" },
+        { "<C-l>",      "<cmd>TmuxNavigateRight<cr>",                                                     desc = "Navigate to right pane" },
 
         -- Search and navigation
-        { "gk",         search_word_under_cursor_with_ripgrep,                desc = "Search word under cursor with ripgrep (to quickfix)" },
-        { "gk",         search_visual_selection_with_ripgrep,                 desc = "Search visual selection with ripgrep (to quickfix)", mode = "v", noremap = true },
-        { "<C-P>",      "<cmd>GFiles<cr>",                                    desc = "Search Git tracked files" },
-        { "<C-\\>",     "<cmd>Files<cr>",                                     desc = "Search all files" },
+        { "gk",         search_word_under_cursor_with_ripgrep,                                            desc = "Search word under cursor with ripgrep (to quickfix)" },
+        { "gk",         search_visual_selection_with_ripgrep,                                             desc = "Search visual selection with ripgrep (to quickfix)", mode = "v", noremap = true },
+        { "<C-P>",      "<cmd>GFiles<cr>",                                                                desc = "Search Git tracked files" },
+        { "<C-\\>",     "<cmd>Files<cr>",                                                                 desc = "Search all files" },
         {
           "\\",
           function()

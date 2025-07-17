@@ -124,6 +124,7 @@
             };
 
             "type:touchpad" = {
+              drag_lock = "enabled"; # This is necessary due to a bug: https://github.com/greshake/i3status-rust/issues/2171. Otherwise the keyboard variant in the swaybar will not be displayed correctly.
               natural_scroll = "enabled";
               tap = "enabled";
             };
@@ -250,7 +251,7 @@
                 block = "backlight";
                 device = "intel_backlight";
                 step_width = 5;
-                format = "☀ {$brightness}";
+                format = " ☀ {$brightness} ";
                 invert_icons = false;
                 theme_overrides = {
                   idle_bg = "#3c3836"; # Gruvbox light background
