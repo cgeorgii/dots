@@ -22,6 +22,8 @@ This is a NixOS dotfiles repository with flake-based configuration that manages:
 ### Dotfile Management Strategy
 Uses `config.lib.file.mkOutOfStoreSymlink` to create symlinks instead of copying files, enabling hot-reloading without rebuilds. All dotfiles live in `dotfiles/` and are symlinked to appropriate locations.
 
+Configuration files for the user's home directory are symlinked in `home/cgeorgii.nix`. When adding new configuration files, follow this pattern by placing them in `dotfiles/` and creating symlinks through home-manager rather than copying files.
+
 ## Assistant Guidelines
 - Never run sudo commands directly; always ask the user to run them
 - User will run sudo commands in a separate terminal and paste the results
