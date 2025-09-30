@@ -1,4 +1,4 @@
-{ nixpkgs-for-claude, ... }:
+{ inputs, ... }:
 
 {
   home-manager.users.cgeorgii = { lib, config, pkgs, ... }:
@@ -12,11 +12,15 @@
 
       colorScheme = import ./colors.nix;
 
-      claude-pkgs = import nixpkgs-for-claude {
+      claude-pkgs = import inputs.nixpkgs-for-claude {
         system = pkgs.system;
         config.allowUnfreePredicate = pkg: builtins.elem (pkgs.lib.getName pkg) [
           "claude-code"
         ];
+      };
+
+      signal-pkgs = import inputs.nixpkgs-for-signal {
+        system = pkgs.system;
       };
     in
     {
@@ -62,7 +66,7 @@
         nixpkgs-fmt
         pavucontrol
         ripgrep
-        signal-desktop
+        signal-pkgs.signal-desktop
         slack
         spotify
         starship
@@ -225,6 +229,9 @@
         };
         extraConfig = ''
           include ~/.config/sway/extra
+
+          # Logseq Electron scaling fix
+          for_window [app_id="logseq"] exec env GDK_SCALE=1 GDK_DPI_SCALE=1 ELECTRON_FORCE_IS_PACKAGED=true
         '';
       };
 
@@ -413,7 +420,6 @@
           cat = "bat";
           ls = "eza --git --icons -a --group-directories-first";
           z = "zenith";
-          rc = "repomix-to-clipboard";
         };
 
         plugins = with pkgs; [

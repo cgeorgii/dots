@@ -2,12 +2,14 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Commit Message Guidelines
+- **IMPORTANT**: When asked to commit changes to a git repository, **never** add mentions of Claude or AI assistants to commit messages.
+
 ## Repository Architecture
 
 This is a NixOS dotfiles repository with flake-based configuration that manages:
 - NixOS system configuration for "coco" machine (ThinkPad X1 9th gen)
 - Home-Manager user configurations with dotfile symlinks
-- Custom applications (repomix-to-clipboard) as flake modules
 - Automated git repository synchronization via systemd services
 - Development environment with pre-commit hooks
 
@@ -15,7 +17,6 @@ This is a NixOS dotfiles repository with flake-based configuration that manages:
 - `flake.nix`: Main flake with nixos-hardware, home-manager, and custom app integration
 - `common.nix`: System-wide packages and configuration shared across machines
 - `home/cgeorgii.nix`: User-specific configuration with dotfile symlinks and sway/i3status-rust setup
-- `apps/repomix-to-clipboard/`: Custom flake module for AI-friendly repository packaging
 - `nix/git-repos.nix`: Custom NixOS module for automatic git repository management
 - `dotfiles/`: Configuration files symlinked via home-manager
 
@@ -47,7 +48,7 @@ Configuration files for the user's home directory are symlinked in `home/cgeorgi
 - Enabled hooks:
   - nixpkgs-fmt: Auto-formats Nix files
   - deadnix: Finds unused variables in Nix files
-- Development shell includes: nil (Nix LSP), git-bug (issue tracker), repomix-to-clipboard
+- Development shell includes: nil (Nix LSP), git-bug (issue tracker)
 
 ## NixOS/Home-Manager Style Guidelines
 - Use 2-space indentation in all files
@@ -83,21 +84,11 @@ Configuration files for the user's home directory are symlinked in `home/cgeorgi
 
 ## Custom Applications
 
-### repomix-to-clipboard
-- Located in `apps/repomix-to-clipboard/` as a flake module
-- Packages repositories for AI analysis and copies to clipboard
-- Available as `rc` alias in shell
-- Configuration in `repomix.config.json`
-
 ## Automated Repository Management
 - `nix/git-repos.nix` provides systemd service for automatic git repository syncing
 - Configured repositories are cloned and kept up-to-date automatically
 - Service runs on boot and every 30 minutes
 - Skips updates if repositories have uncommitted changes
-
-## Repomix Integration
-- Always check repomix-output.xml when making repository changes
-- Consider the metadata in repomix-output.xml for compatibility decisions
 
 ## Git-Bug Issue Tracker
 - Use `git bug` to manage issues directly in the repository
@@ -108,6 +99,3 @@ Configuration files for the user's home directory are symlinked in `home/cgeorgi
 - Edit an issue: `git bug edit <id>`
 - Change issue status: `git bug status <id> <new-status>`
 - Pull/push issues: `git bug pull` and `git bug push`
-
-## Commit Message Guidelines
-- IMPORTANT: Never add mentions of Claude to commit messages

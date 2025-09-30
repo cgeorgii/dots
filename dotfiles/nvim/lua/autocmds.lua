@@ -21,11 +21,11 @@ vim.api.nvim_create_autocmd("BufEnter", {
   command = "highlight OverLength cterm=underline guibg=#111111"
 })
 
-vim.api.nvim_create_autocmd("BufWrite", {
-  group = vimrc_autocmds,
-  pattern = "*.*",
-  command = "StripWhitespace"
-})
+-- vim.api.nvim_create_autocmd("BufWrite", {
+--   group = vimrc_autocmds,
+--   pattern = "*.*",
+--   command = "StripWhitespace"
+-- })
 
 vim.api.nvim_create_autocmd("BufWritePost", {
   group = vimrc_autocmds,

@@ -381,6 +381,7 @@ require("lazy").setup({
       -- Haskell (using haskell-language-server)
       lspconfig.hls.setup {
         capabilities = capabilities,
+        cmd = { "haskell-language-server", "--lsp" },
       }
 
       -- Setup nvim-cmp for completion

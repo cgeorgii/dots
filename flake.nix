@@ -1,7 +1,10 @@
 {
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    nixpkgs-for-claude.url = "github:NixOS/nixpkgs/nixos-unstable";
+    # Revert this after claude 2.0 is out on nixos-unstable
+    # nixpkgs-for-claude.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs-for-claude.url = "github:NixOS/nixpkgs/17aa85c";
+    nixpkgs-for-signal.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -9,10 +12,6 @@
     };
     pre-commit-hooks.url = "github:cachix/git-hooks.nix";
     flake-parts.url = "github:hercules-ci/flake-parts";
-    repomix-to-clipboard = {
-      url = "path:./apps/repomix-to-clipboard";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
   outputs = inputs@{ flake-parts, ... }:
@@ -23,7 +22,7 @@
 
       systems = [ "x86_64-linux" ];
 
-      perSystem = { system, config, pkgs, final, ... }: {
+      perSystem = { system, config, final, ... }: {
         checks.pre-commit-check = inputs.pre-commit-hooks.lib.${system}.run {
           src = ./.;
           hooks = {
@@ -37,13 +36,10 @@
           packages = [
             final.nil
             final.git-bug
-            final.repomix-to-clipboard
           ];
         };
 
         overlayAttrs = {
-          inherit (inputs.repomix-to-clipboard.overlays.default final pkgs)
-            repomix-to-clipboard;
           # Add any other custom packages here
         };
 
@@ -57,7 +53,6 @@
             system = "x86_64-linux";
             specialArgs = {
               inherit inputs;
-              nixpkgs-for-claude = inputs.nixpkgs-for-claude;
             };
             modules = [
               # Apply our overlay module

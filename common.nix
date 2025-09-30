@@ -5,6 +5,7 @@
   imports = [
     ./nix/mullvad.nix
     ./nix/git-repos.nix
+    ./nix/logseq.nix
   ];
 
   environment.systemPackages = with pkgs; [
@@ -27,8 +28,6 @@
     # zenith
     gcc # Required for neovim-treesitter
     udiskie
-    # Tool to package repositories into AI-friendly files and copy to clipboard.
-    repomix-to-clipboard
   ];
 
   programs.zsh = {
@@ -65,7 +64,7 @@
     extraOptions = ''
       keep-outputs = true
       keep-derivations = true
-      experimental-features = nix-command flakes
+      experimental-features = nix-command flakes fetch-closure
     '';
 
     gc = {
