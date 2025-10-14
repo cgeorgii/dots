@@ -22,6 +22,13 @@
       signal-pkgs = import inputs.nixpkgs-for-signal {
         system = pkgs.system;
       };
+
+      spotify-pkgs = import inputs.nixpkgs-for-spotify {
+        system = pkgs.system;
+        config.allowUnfreePredicate = pkg: builtins.elem (pkgs.lib.getName pkg) [
+          "spotify"
+        ];
+      };
     in
     {
       home.file.".gitignore".source = link-dotfile "gitignore";
@@ -68,7 +75,7 @@
         ripgrep
         signal-pkgs.signal-desktop
         slack
-        spotify
+        spotify-pkgs.spotify
         starship
         sway-contrib.grimshot # Screenshot tool
         tree
@@ -92,6 +99,8 @@
       # For sharing the screen on firefox.
       home.sessionVariables = {
         XDG_CURRENT_DESKTOP = "sway";
+        XCURSOR_THEME = "Adwaita";
+        XCURSOR_SIZE = "24";
       };
       programs.swaylock.enable = true;
 
@@ -104,6 +113,10 @@
         iconTheme = {
           name = "Mint-Y-Sand";
           package = pkgs.mint-y-icons;
+        };
+        cursorTheme = {
+          name = "Adwaita";
+          package = pkgs.adwaita-icon-theme;
         };
       };
 

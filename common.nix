@@ -142,7 +142,7 @@
 
   # enable firewall and block all ports
   networking.firewall.enable = true;
-  networking.firewall.allowedTCPPorts = [ ];
+  networking.firewall.allowedTCPPorts = [ 3000 ];
   networking.firewall.allowedUDPPorts = [ ];
 
   # Run `captive-browser` from the terminal

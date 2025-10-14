@@ -109,16 +109,16 @@
     },
     "nixpkgs-for-claude": {
       "locked": {
-        "lastModified": 1759226052,
-        "narHash": "sha256-ddDtY8iOLBMQ0AwH9wxuboORYV4Z1B3dC5FWIHfqjBA=",
+        "lastModified": 1759831965,
+        "narHash": "sha256-vgPm2xjOmKdZ0xKA6yLXPJpjOtQPHfaZDRtH+47XEBo=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "17aa85c27e8a700de4f3645e0afce383ceabcdf2",
+        "rev": "c9b6fb798541223bbb396d287d16f43520250518",
         "type": "github"
       },
       "original": {
         "owner": "NixOS",
-        "ref": "17aa85c",
+        "ref": "nixos-unstable",
         "repo": "nixpkgs",
         "type": "github"
       }
@@ -130,6 +130,22 @@
         "owner": "NixOS",
         "repo": "nixpkgs",
         "rev": "e9f00bd893984bc8ce46c895c3bf7cac95331127",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs-for-spotify": {
+      "locked": {
+        "lastModified": 1760284886,
+        "narHash": "sha256-TK9Kr0BYBQ/1P5kAsnNQhmWWKgmZXwUQr4ZMjCzWf2c=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "cf3f5c4def3c7b5f1fc012b3d839575dbe552d43",
         "type": "github"
       },
       "original": {
@@ -198,6 +214,7 @@
         "nixpkgs": "nixpkgs",
         "nixpkgs-for-claude": "nixpkgs-for-claude",
         "nixpkgs-for-signal": "nixpkgs-for-signal",
+        "nixpkgs-for-spotify": "nixpkgs-for-spotify",
         "pre-commit-hooks": "pre-commit-hooks"
       }
     }

@@ -3,8 +3,9 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     # Revert this after claude 2.0 is out on nixos-unstable
     # nixpkgs-for-claude.url = "github:NixOS/nixpkgs/nixos-unstable";
-    nixpkgs-for-claude.url = "github:NixOS/nixpkgs/17aa85c";
+    nixpkgs-for-claude.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs-for-signal.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs-for-spotify.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     home-manager = {
       url = "github:nix-community/home-manager";
