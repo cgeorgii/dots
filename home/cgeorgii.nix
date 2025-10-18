@@ -35,7 +35,9 @@
       home.file.".tmux.conf".source = link-dotfile "tmux.conf";
       home.file.".emacs".source = link-dotfile "emacs";
       home.file."./code/tweag/.gitconfig".source = link-dotfile "gitconfig-work";
-      home.file.".claude/CLAUDE.md".source = link-dotfile "CLAUDE.md";
+      home.file.".claude/CLAUDE.md".source = link-dotfile "claude/CLAUDE.md";
+      home.file.".claude/settings.json".source = link-dotfile "claude/settings.json";
+      home.file.".claude/commands".source = link-dotfile "claude/commands";
 
       # # Export colors.yaml to be used by other applications like Alacritty
       # home.file."dots/colors.yaml".source = ./../dotfiles/colors.yaml;
