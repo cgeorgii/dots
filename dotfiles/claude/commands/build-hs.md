@@ -10,17 +10,17 @@ First, check `package.yaml` to identify the components:
 Then run ghcid with all components using the Bash tool with `run_in_background: true`:
 
 ```
-nix develop -c ghcid -c 'cabal repl --enable-multi-repl <library-name> <executable-name> <test-name>' --outputfile=build.log --clear > /dev/null 2>&1
+nix develop -c ghcid -c 'cabal repl --enable-multi-repl <library-name> <executable-name> <test-name>' --outputfile=build.log --clear
 ```
 
 For this project:
 ```
-nix develop -c ghcid -c 'cabal repl --enable-multi-repl dota-sage dota-sage-exe dota-sage-test' --outputfile=build.log --clear > /dev/null 2>&1
+nix develop -c ghcid -c 'cabal repl --enable-multi-repl dota-sage dota-sage-exe dota-sage-test' --outputfile=build.log --clear
 ```
 
-**IMPORTANT**: Use `run_in_background: true` parameter in the Bash tool (without `&` at the end) so ghcid appears in Claude Code's background processes UI.
+**IMPORTANT**: Use `run_in_background: true` parameter in the Bash tool (without `&` at the end of the command) so ghcid appears in Claude Code's background processes UI.
 
-To keep context usage reasonable, the output is redirected to /dev/null and only the file build.log is used to monitor the build status, ideally reading only the first few lines and then more if needed using the Read tool.
+To keep context usage reasonable, only the file build.log should be used to monitor the build status, ideally reading only the first few lines and then more if needed using the Read tool.
 
 **Monitoring build status**:
 - Check for errors: Use Read tool with `file_path: "build.log"` and `limit: 20`

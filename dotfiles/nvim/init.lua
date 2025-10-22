@@ -191,8 +191,8 @@ require("lazy").setup({
         { "<leader>CR", "<cmd>Lazy sync<cr>",                                                             desc = "Reload plugins and configuration" },
 
         { "<leader>f",  group = "Formatting" },
-        { "<leader>ff", "<cmd>lua vim.lsp.buf.format({ async = true })<cr>",                              desc = "Format entire file" },
-        { "<leader>f",  "<cmd>lua vim.lsp.buf.format({ async = true })<cr>",                              desc = "Format visual selection",                            mode = "v" },
+        { "<leader>ff", function() require("conform").format({ async = true, lsp_format = "fallback" }) end, desc = "Format entire file" },
+        { "<leader>f",  function() require("conform").format({ async = true, lsp_format = "fallback" }) end, desc = "Format visual selection", mode = "v" },
         { "<leader>f1", hidden = true },
 
         { "<leader>L",  group = "LSP" },
@@ -269,10 +269,10 @@ require("lazy").setup({
         { "gd",        "<cmd>lua vim.lsp.buf.definition()<cr>",             desc = "Go to definition" },
         { "gy",        "<cmd>lua vim.lsp.buf.type_definition()<cr>",        desc = "Go to type definition" },
         { "gi",        "<cmd>lua vim.lsp.buf.implementation()<cr>",         desc = "Go to implementation" },
-        { "gr",        "<cmd>lua vim.lsp.buf.references()<cr>",             desc = "Go to references" },
-        { "<space>rn", "<cmd>lua vim.lsp.buf.rename()<cr>",                 desc = "Rename symbol" },
-        { "<space>ca", "<cmd>lua vim.lsp.buf.code_action()<cr>",            desc = "Show code actions" },
-        { "<space>f",  "<cmd>lua vim.lsp.buf.format({ async = true })<cr>", desc = "Format code" },
+        { "gr",        "<cmd>lua vim.lsp.buf.references()<cr>",                                                    desc = "Go to references" },
+        { "<space>rn", "<cmd>lua vim.lsp.buf.rename()<cr>",                                                    desc = "Rename symbol" },
+        { "<space>ca", "<cmd>lua vim.lsp.buf.code_action()<cr>",                                               desc = "Show code actions" },
+        { "<space>f",  function() require("conform").format({ async = true, lsp_format = "fallback" }) end, desc = "Format code" },
       })
     end,
   },
@@ -299,6 +299,22 @@ require("lazy").setup({
     end,
   },
 
+  -- Conform for formatting
+  {
+    "stevearc/conform.nvim",
+    event = { "BufWritePre" },
+    config = function()
+      require("conform").setup({
+        formatters_by_ft = {
+          haskell = { "fourmolu" },
+          lua = { "stylua" },
+          nix = { "nixpkgs-fmt" },
+        },
+        format_on_save = false, -- Disable auto-format on save
+      })
+    end,
+  },
+
   -- LSP and completion
   {
     "neovim/nvim-lspconfig",
@@ -311,8 +327,8 @@ require("lazy").setup({
     },
 
     config = function()
-      local lspconfig = require('lspconfig')
       local capabilities = require('cmp_nvim_lsp').default_capabilities()
+
       -- Configure hover window border
       vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(
         vim.lsp.handlers.hover, {
@@ -320,69 +336,92 @@ require("lazy").setup({
         }
       )
 
-      -- In your LSP config section
+      -- Configure code action window border
       vim.lsp.handlers["textDocument/codeAction"] = vim.lsp.with(
         vim.lsp.handlers.codeAction, {
           border = "rounded"
         }
       )
 
-      -- Configure language servers
       -- TypeScript, JavaScript
-      lspconfig.ts_ls.setup {
-        capabilities = capabilities,
+      vim.lsp.config.ts_ls = {
+        default_config = {
+          capabilities = capabilities,
+        }
       }
+      vim.lsp.enable('ts_ls')
 
       -- Lua
-      lspconfig.lua_ls.setup {
-        capabilities = capabilities,
-        settings = {
-          Lua = {
-            runtime = {
-              version = 'LuaJIT',
-            },
-            diagnostics = {
-              globals = { 'vim' },
-            },
-            workspace = {
-              library = {
-                vim.env.RUNTIME
+      vim.lsp.config.lua_ls = {
+        default_config = {
+          capabilities = capabilities,
+          settings = {
+            Lua = {
+              runtime = {
+                version = 'LuaJIT',
               },
-              ignoreDir = {
-                ".git",
-                ".github",
-                ".direnv",
+              diagnostics = {
+                globals = { 'vim' },
               },
-            },
-            telemetry = {
-              enable = false,
-            },
-            format = {
-              enable = true,
-              -- Disable alignment of tables, keys, etc.
-              defaultConfig = {
-                align_table_field = false,
-                align_assignment = false,
-                align_array_table = false,
-                align_continuous_assign_statement = false,
-                align_continuous_rect_table_field = false,
-                align_if_branch = false,
-              }
+              workspace = {
+                library = {
+                  vim.env.RUNTIME
+                },
+                ignoreDir = {
+                  ".git",
+                  ".github",
+                  ".direnv",
+                },
+              },
+              telemetry = {
+                enable = false,
+              },
+              format = {
+                enable = true,
+                -- Disable alignment of tables, keys, etc.
+                defaultConfig = {
+                  align_table_field = false,
+                  align_assignment = false,
+                  align_array_table = false,
+                  align_continuous_assign_statement = false,
+                  align_continuous_rect_table_field = false,
+                  align_if_branch = false,
+                }
+              },
             },
           },
-        },
+        }
       }
+      vim.lsp.enable('lua_ls')
 
       -- Elm
-      lspconfig.elmls.setup {
-        capabilities = capabilities,
+      vim.lsp.config.elmls = {
+        default_config = {
+          capabilities = capabilities,
+        }
       }
+      vim.lsp.enable('elmls')
 
       -- Haskell (using haskell-language-server)
-      lspconfig.hls.setup {
-        capabilities = capabilities,
-        cmd = { "haskell-language-server", "--lsp" },
+      vim.lsp.config.hls = {
+        default_config = {
+          capabilities = capabilities,
+          cmd = { "haskell-language-server", "--lsp" },
+          settings = {
+            haskell = {
+              formattingProvider = "fourmolu",
+              plugin = {
+                fourmolu = {
+                  config = {
+                    external = true
+                  }
+                }
+              }
+            }
+          }
+        }
       }
+      vim.lsp.enable('hls')
 
       -- Setup nvim-cmp for completion
       local cmp = require 'cmp'
