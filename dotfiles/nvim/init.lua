@@ -182,26 +182,17 @@ require("lazy").setup({
         { "<leader>c",  group = "Clipboard" },
         { "<leader>cc", "<cmd>ToggleClipboard<cr>",                                                       desc = "Toggle between vim and system clipboard" },
 
-        { "<leader>r",  group = "Reload/Rename" },
+        { "<leader>r",  group = "Reload" },
         { "<leader>rr", "<cmd>e!<cr>",                                                                    desc = "Reload current buffer from disk" },
-        { "<leader>rn", "<cmd>lua vim.lsp.buf.rename()<cr>",                                              desc = "Rename symbol under cursor" },
 
         { "<leader>C",  group = "Config" },
         { "<leader>CE", "<cmd>VimConfig<cr>",                                                             desc = "Edit vim configuration file" },
         { "<leader>CR", "<cmd>Lazy sync<cr>",                                                             desc = "Reload plugins and configuration" },
 
         { "<leader>f",  group = "Formatting" },
-        { "<leader>ff", function() require("conform").format({ async = true, lsp_format = "fallback" }) end, desc = "Format entire file" },
-        { "<leader>f",  function() require("conform").format({ async = true, lsp_format = "fallback" }) end, desc = "Format visual selection", mode = "v" },
+        { "<leader>ff", function() require("conform").format({ async = true }) end, desc = "Format entire file" },
+        { "<leader>f",  function() require("conform").format({ async = true }) end, desc = "Format visual selection", mode = "v" },
         { "<leader>f1", hidden = true },
-
-        { "<leader>L",  group = "LSP" },
-        { "<leader>LR", function()
-          vim.lsp.stop_client(vim.lsp.get_clients())
-          vim.cmd("edit")
-        end,                                                                                              desc = "Restart all language servers" },
-        { "<leader>Li", "<cmd>LspInfo<cr>",                                                               desc = "Show language server info" },
-        { "<leader>LL", "<cmd>LspLog<cr>",                                                                desc = "Open LSP log" },
 
         -- FZF integration for searching
         { "<leader>s",  group = "Search" },
@@ -222,19 +213,12 @@ require("lazy").setup({
         { "<leader>N",  "<cmd>lua vim.diagnostic.goto_prev()<cr>",                                        desc = "Jump to previous diagnostic" },
         { "<leader>p",  "<cmd>lua vim.diagnostic.goto_prev()<cr>",                                        desc = "Jump to previous diagnostic (alternative)" },
 
-        -- Code actions
-        { "<leader>qq", "<cmd>lua require('fzf-lua').lsp_code_actions()<cr>",                             desc = "Show code actions at cursor" },
-
-        -- Documentation
-        { "<leader>k",  "<cmd>lua vim.lsp.buf.hover()<cr>",                                               desc = "Display hover documentation" },
-
         -- Trouble (diagnostics viewer)
         { "<leader>xx", "<cmd>TroubleToggle<cr>",                                                         desc = "Toggle trouble diagnostics" },
         { "<leader>xw", "<cmd>TroubleToggle workspace_diagnostics<cr>",                                   desc = "Show workspace diagnostics" },
         { "<leader>xd", "<cmd>TroubleToggle document_diagnostics<cr>",                                    desc = "Show document diagnostics" },
         { "<leader>xl", "<cmd>TroubleToggle loclist<cr>",                                                 desc = "Show location list" },
         { "<leader>xq", "<cmd>TroubleToggle quickfix<cr>",                                                desc = "Show quickfix list" },
-        { "<leader>xr", "<cmd>TroubleToggle lsp_references<cr>",                                          desc = "Show references" },
 
         -- Tmux integration
         { "<C-h>",      "<cmd>TmuxNavigateLeft<cr>",                                                      desc = "Navigate to left pane" },
@@ -264,15 +248,6 @@ require("lazy").setup({
         -- File explorer
         { "<C-n>",     "<cmd>NvimTreeToggle<cr>",                           desc = "Toggle file explorer" },
         { "<C-f>",     "<cmd>NvimTreeFindFile<cr>",                         desc = "Locate current file in explorer" },
-
-        -- LSP keymaps (converted from standard keymaps)
-        { "gd",        "<cmd>lua vim.lsp.buf.definition()<cr>",             desc = "Go to definition" },
-        { "gy",        "<cmd>lua vim.lsp.buf.type_definition()<cr>",        desc = "Go to type definition" },
-        { "gi",        "<cmd>lua vim.lsp.buf.implementation()<cr>",         desc = "Go to implementation" },
-        { "gr",        "<cmd>lua vim.lsp.buf.references()<cr>",                                                    desc = "Go to references" },
-        { "<space>rn", "<cmd>lua vim.lsp.buf.rename()<cr>",                                                    desc = "Rename symbol" },
-        { "<space>ca", "<cmd>lua vim.lsp.buf.code_action()<cr>",                                               desc = "Show code actions" },
-        { "<space>f",  function() require("conform").format({ async = true, lsp_format = "fallback" }) end, desc = "Format code" },
       })
     end,
   },
@@ -315,173 +290,13 @@ require("lazy").setup({
     end,
   },
 
-  -- LSP and completion
+  -- Haskell tools
   {
-    "neovim/nvim-lspconfig",
-    dependencies = {
-      "hrsh7th/nvim-cmp",
-      "hrsh7th/cmp-nvim-lsp",
-      "hrsh7th/cmp-buffer",
-      "hrsh7th/cmp-path",
-      "onsails/lspkind.nvim",
-    },
-
-    config = function()
-      local capabilities = require('cmp_nvim_lsp').default_capabilities()
-
-      -- Configure hover window border
-      vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(
-        vim.lsp.handlers.hover, {
-          border = "rounded"
-        }
-      )
-
-      -- Configure code action window border
-      vim.lsp.handlers["textDocument/codeAction"] = vim.lsp.with(
-        vim.lsp.handlers.codeAction, {
-          border = "rounded"
-        }
-      )
-
-      -- TypeScript, JavaScript
-      vim.lsp.config.ts_ls = {
-        default_config = {
-          capabilities = capabilities,
-        }
-      }
-      vim.lsp.enable('ts_ls')
-
-      -- Lua
-      vim.lsp.config.lua_ls = {
-        default_config = {
-          capabilities = capabilities,
-          settings = {
-            Lua = {
-              runtime = {
-                version = 'LuaJIT',
-              },
-              diagnostics = {
-                globals = { 'vim' },
-              },
-              workspace = {
-                library = {
-                  vim.env.RUNTIME
-                },
-                ignoreDir = {
-                  ".git",
-                  ".github",
-                  ".direnv",
-                },
-              },
-              telemetry = {
-                enable = false,
-              },
-              format = {
-                enable = true,
-                -- Disable alignment of tables, keys, etc.
-                defaultConfig = {
-                  align_table_field = false,
-                  align_assignment = false,
-                  align_array_table = false,
-                  align_continuous_assign_statement = false,
-                  align_continuous_rect_table_field = false,
-                  align_if_branch = false,
-                }
-              },
-            },
-          },
-        }
-      }
-      vim.lsp.enable('lua_ls')
-
-      -- Elm
-      vim.lsp.config.elmls = {
-        default_config = {
-          capabilities = capabilities,
-        }
-      }
-      vim.lsp.enable('elmls')
-
-      -- Haskell (using haskell-language-server)
-      vim.lsp.config.hls = {
-        default_config = {
-          capabilities = capabilities,
-          cmd = { "haskell-language-server", "--lsp" },
-          settings = {
-            haskell = {
-              formattingProvider = "fourmolu",
-              plugin = {
-                fourmolu = {
-                  config = {
-                    external = true
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-      vim.lsp.enable('hls')
-
-      -- Setup nvim-cmp for completion
-      local cmp = require 'cmp'
-      local lspkind = require 'lspkind'
-
-      cmp.setup({
-        preselect = cmp.PreselectMode.Item,
-        mapping = cmp.mapping.preset.insert({
-          ['<C-d>'] = cmp.mapping.scroll_docs(-4),
-          ['<C-f>'] = cmp.mapping.scroll_docs(4),
-          ['<C-Space>'] = cmp.mapping.complete(),
-          ['<CR>'] = cmp.mapping.confirm({
-            behavior = cmp.ConfirmBehavior.Replace,
-            select = true
-          }),
-        }),
-        sources = cmp.config.sources({
-          { name = 'nvim_lsp' },
-          { name = 'buffer' },
-          { name = 'path' }
-        }),
-        formatting = {
-          format = function(entry, vim_item)
-            -- Get the icon and kind from lspkind
-            local kind_icons = lspkind.cmp_format({
-              mode = "symbol_text",
-              maxwidth = 50,
-            })
-
-            -- Add the kind and icon
-            vim_item = kind_icons(entry, vim_item)
-
-            -- Add the source name
-            vim_item.menu = ({
-              nvim_lsp = "[LSP]",
-              buffer = "[Buffer]",
-              path = "[Path]",
-            })[entry.source.name]
-
-            -- For LSP items, add the module/server name
-            if entry.source.name == "nvim_lsp" then
-              local client_name = entry.source.source.client.name or "LSP"
-              vim_item.menu = string.format("%s [%s]", vim_item.menu, client_name)
-            end
-
-            -- Add details about the completion item
-            if entry.completion_item.detail and entry.completion_item.detail ~= "" then
-              vim_item.menu = string.format("%s • %s", vim_item.menu or "", entry.completion_item.detail)
-            end
-
-            return vim_item
-          end
-        },
-        window = {
-          completion = cmp.config.window.bordered(),
-          documentation = cmp.config.window.bordered(),
-        }
-      })
-    end,
+    "mrcjkb/haskell-tools.nvim",
+    version = "^6",
+    lazy = false, -- This plugin is already lazy (filetype plugin)
   },
+
   {
     "junegunn/fzf.vim",
     dependencies = { "junegunn/fzf" },
