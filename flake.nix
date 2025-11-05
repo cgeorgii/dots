@@ -15,7 +15,8 @@
     flake-parts.url = "github:hercules-ci/flake-parts";
   };
 
-  outputs = inputs@{ flake-parts, ... }:
+  outputs =
+    inputs@{ flake-parts, ... }:
     flake-parts.lib.mkFlake { inherit inputs; } {
       imports = [
         inputs.flake-parts.flakeModules.easyOverlay
@@ -23,28 +24,34 @@
 
       systems = [ "x86_64-linux" ];
 
-      perSystem = { system, config, final, ... }: {
-        checks.pre-commit-check = inputs.pre-commit-hooks.lib.${system}.run {
-          src = ./.;
-          hooks = {
-            nixpkgs-fmt.enable = true;
-            deadnix.enable = true;
+      perSystem =
+        { system
+        , config
+        , final
+        , ...
+        }:
+        {
+          checks.pre-commit-check = inputs.pre-commit-hooks.lib.${system}.run {
+            src = ./.;
+            hooks = {
+              nixfmt-rfc-style.enable = true;
+              deadnix.enable = true;
+            };
           };
-        };
 
-        devShells.default = final.mkShell {
-          inherit (config.checks.pre-commit-check) shellHook;
-          packages = [
-            final.nil
-            final.git-bug
-          ];
-        };
+          devShells.default = final.mkShell {
+            inherit (config.checks.pre-commit-check) shellHook;
+            packages = [
+              final.nil
+              final.git-bug
+            ];
+          };
 
-        overlayAttrs = {
-          # Add any other custom packages here
-        };
+          overlayAttrs = {
+            # Add any other custom packages here
+          };
 
-      };
+        };
 
       flake = {
         # A common module to apply overlays

@@ -283,7 +283,7 @@ require("lazy").setup({
         formatters_by_ft = {
           haskell = { "fourmolu" },
           lua = { "stylua" },
-          nix = { "nixpkgs-fmt" },
+          nix = { "nixfmt" },
         },
         format_on_save = false, -- Disable auto-format on save
       })
@@ -295,6 +295,56 @@ require("lazy").setup({
     "mrcjkb/haskell-tools.nvim",
     version = "^6",
     lazy = false, -- This plugin is already lazy (filetype plugin)
+  },
+
+  -- LSP and completion
+  {
+    "hrsh7th/nvim-cmp",
+    dependencies = {
+      "hrsh7th/cmp-nvim-lsp",
+      "hrsh7th/cmp-buffer",
+      "hrsh7th/cmp-path",
+    },
+    config = function()
+      local cmp = require('cmp')
+      cmp.setup({
+        mapping = cmp.mapping.preset.insert({
+          ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+          ['<C-f>'] = cmp.mapping.scroll_docs(4),
+          ['<C-Space>'] = cmp.mapping.complete(),
+          ['<C-e>'] = cmp.mapping.abort(),
+          ['<CR>'] = cmp.mapping.confirm({ select = true }),
+        }),
+        sources = cmp.config.sources({
+          { name = 'nvim_lsp' },
+          { name = 'buffer' },
+          { name = 'path' },
+        }),
+        window = {
+          completion = cmp.config.window.bordered(),
+          documentation = cmp.config.window.bordered(),
+        },
+      })
+    end,
+  },
+
+  {
+    "neovim/nvim-lspconfig",
+    dependencies = {
+      "hrsh7th/nvim-cmp",
+      "hrsh7th/cmp-nvim-lsp",
+    },
+    config = function()
+      local capabilities = require('cmp_nvim_lsp').default_capabilities()
+
+      -- Nix
+      vim.lsp.config.nil_ls = {
+        default_config = {
+          capabilities = capabilities,
+        }
+      }
+      vim.lsp.enable('nil_ls')
+    end,
   },
 
   {

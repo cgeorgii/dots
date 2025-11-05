@@ -8,8 +8,10 @@
 
   # Allow unfree license for logseq
   nixpkgs.config = {
-    allowUnfreePredicate = pkg: builtins.elem (pkgs.lib.getName pkg) [
-      "logseq"
-    ];
+    allowUnfreePredicate =
+      pkg:
+      builtins.elem (pkgs.lib.getName pkg) [
+        "logseq"
+      ];
   };
 }

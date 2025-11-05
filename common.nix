@@ -1,4 +1,8 @@
-{ pkgs, lib, config, ... }:
+{ pkgs
+, lib
+, config
+, ...
+}:
 
 {
   # Import modules
@@ -40,14 +44,22 @@
     isNormalUser = true;
     shell = pkgs.zsh;
     home = "/home/cgeorgii";
-    extraGroups = [ "audio" "wheel" "networkmanager" "docker" ];
+    extraGroups = [
+      "audio"
+      "wheel"
+      "networkmanager"
+      "docker"
+    ];
   };
 
   nix = {
     package = pkgs.nixVersions.stable;
 
     settings = {
-      trusted-users = [ "root" "cgeorgii" ];
+      trusted-users = [
+        "root"
+        "cgeorgii"
+      ];
       auto-optimise-store = true;
       trusted-public-keys = [
         "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
@@ -74,11 +86,10 @@
     };
   };
 
-  networking.extraHosts =
-    ''
-      127.0.0.1       zeus-bucket.localhost
-      127.0.0.1       dev.zeuslogics.com
-    '';
+  networking.extraHosts = ''
+    127.0.0.1       zeus-bucket.localhost
+    127.0.0.1       dev.zeuslogics.com
+  '';
 
   # fonts.packages = with pkgs; [
   #   nerd-fonts.iosevka
@@ -99,9 +110,18 @@
     fontconfig = {
       enable = true;
       defaultFonts = {
-        serif = [ "Liberation Serif" "DejaVu Serif" ];
-        sansSerif = [ "Liberation Sans" "DejaVu Sans" ];
-        monospace = [ "IosevkaTerm Nerd Font Mono" "Iosevka Nerd Font Mono" ];
+        serif = [
+          "Liberation Serif"
+          "DejaVu Serif"
+        ];
+        sansSerif = [
+          "Liberation Sans"
+          "DejaVu Sans"
+        ];
+        monospace = [
+          "IosevkaTerm Nerd Font Mono"
+          "Iosevka Nerd Font Mono"
+        ];
       };
     };
   };
@@ -186,14 +206,16 @@
   };
 
   nixpkgs.config = {
-    allowUnfreePredicate = pkg: builtins.elem (pkgs.lib.getName pkg) [
-      "discord"
-      "dropbox"
-      "firefox-bin"
-      "firefox-bin-unwrapped"
-      "firefox-release-bin-unwrapped"
-      "slack"
-      "spotify"
-    ];
+    allowUnfreePredicate =
+      pkg:
+      builtins.elem (pkgs.lib.getName pkg) [
+        "discord"
+        "dropbox"
+        "firefox-bin"
+        "firefox-bin-unwrapped"
+        "firefox-release-bin-unwrapped"
+        "slack"
+        "spotify"
+      ];
   };
 }

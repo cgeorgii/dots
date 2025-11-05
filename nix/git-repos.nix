@@ -1,37 +1,43 @@
-{ config, lib, pkgs, ... }:
+{ config
+, lib
+, pkgs
+, ...
+}:
 
 with lib;
 
 let
   cfg = config.services.gitRepos;
 
-  repoOpts = { ... }: {
-    options = {
-      url = mkOption {
-        type = types.str;
-        description = "Git repository URL";
-        example = "https://github.com/username/repo.git";
-      };
+  repoOpts =
+    { ... }:
+    {
+      options = {
+        url = mkOption {
+          type = types.str;
+          description = "Git repository URL";
+          example = "https://github.com/username/repo.git";
+        };
 
-      path = mkOption {
-        type = types.path;
-        description = "Local path for the repository";
-        example = "/home/user/repos/my-repo";
-      };
+        path = mkOption {
+          type = types.path;
+          description = "Local path for the repository";
+          example = "/home/user/repos/my-repo";
+        };
 
-      branch = mkOption {
-        type = types.str;
-        default = "main";
-        description = "Branch to checkout";
-      };
+        branch = mkOption {
+          type = types.str;
+          default = "main";
+          description = "Branch to checkout";
+        };
 
-      recursive = mkOption {
-        type = types.bool;
-        default = true;
-        description = "Clone submodules recursively";
+        recursive = mkOption {
+          type = types.bool;
+          default = true;
+          description = "Clone submodules recursively";
+        };
       };
     };
-  };
 in
 {
   options.services.gitRepos = {
@@ -56,27 +62,33 @@ in
         User = "cgeorgii";
       };
 
-      path = [ pkgs.git pkgs.openssh pkgs.gitAndTools.hub ];
+      path = [
+        pkgs.git
+        pkgs.openssh
+        pkgs.gitAndTools.hub
+      ];
 
       script = ''
-        ${concatStringsSep "\n" (mapAttrsToList (_name: repo: ''
-          if [ ! -d "${repo.path}" ]; then
-            ${pkgs.git}/bin/git clone \
-              ${optionalString repo.recursive "--recursive"} \
-              -b ${repo.branch} \
-              "${repo.url}" "${repo.path}"
-          else
-            cd "${repo.path}"
-            # Check if repository is dirty
-            if [ -n "$(${pkgs.git}/bin/git status --porcelain)" ]; then
-              echo "Repository ${repo.path} has uncommitted changes, skipping update"
+        ${concatStringsSep "\n" (
+          mapAttrsToList (_name: repo: ''
+            if [ ! -d "${repo.path}" ]; then
+              ${pkgs.git}/bin/git clone \
+                ${optionalString repo.recursive "--recursive"} \
+                -b ${repo.branch} \
+                "${repo.url}" "${repo.path}"
             else
-              # Use hub sync to update all branches while staying on the current branch
-              ${pkgs.gitAndTools.hub}/bin/hub sync
-              ${optionalString repo.recursive "${pkgs.git}/bin/git submodule update --init --recursive"}
+              cd "${repo.path}"
+              # Check if repository is dirty
+              if [ -n "$(${pkgs.git}/bin/git status --porcelain)" ]; then
+                echo "Repository ${repo.path} has uncommitted changes, skipping update"
+              else
+                # Use hub sync to update all branches while staying on the current branch
+                ${pkgs.gitAndTools.hub}/bin/hub sync
+                ${optionalString repo.recursive "${pkgs.git}/bin/git submodule update --init --recursive"}
+              fi
             fi
-          fi
-        '') cfg.repositories)}
+          '') cfg.repositories
+        )}
       '';
     };
 

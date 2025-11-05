@@ -1,22 +1,28 @@
 { inputs, ... }:
 
 {
-  home-manager.users.cgeorgii = { lib, config, pkgs, ... }:
+  home-manager.users.cgeorgii =
+    { lib
+    , config
+    , pkgs
+    , ...
+    }:
     # Using a string here instead of the direct path because otherwise a config with
     # flakes will not symlink but copy the files, making hot-reloading the config
     # impossible without a rebuild.
     let
-      link-dotfile = file:
-        config.lib.file.mkOutOfStoreSymlink
-          "${config.home.homeDirectory}/dots/dotfiles/${file}";
+      link-dotfile =
+        file: config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dots/dotfiles/${file}";
 
       colorScheme = import ./colors.nix;
 
       claude-pkgs = import inputs.nixpkgs-for-claude {
         system = pkgs.system;
-        config.allowUnfreePredicate = pkg: builtins.elem (pkgs.lib.getName pkg) [
-          "claude-code"
-        ];
+        config.allowUnfreePredicate =
+          pkg:
+          builtins.elem (pkgs.lib.getName pkg) [
+            "claude-code"
+          ];
       };
 
       signal-pkgs = import inputs.nixpkgs-for-signal {
@@ -25,9 +31,11 @@
 
       spotify-pkgs = import inputs.nixpkgs-for-spotify {
         system = pkgs.system;
-        config.allowUnfreePredicate = pkg: builtins.elem (pkgs.lib.getName pkg) [
-          "spotify"
-        ];
+        config.allowUnfreePredicate =
+          pkg:
+          builtins.elem (pkgs.lib.getName pkg) [
+            "spotify"
+          ];
       };
     in
     {
@@ -72,6 +80,7 @@
         lua-language-server
         nemo
         neofetch
+        nixfmt-rfc-style
         nixpkgs-fmt
         pavucontrol
         ripgrep
@@ -133,7 +142,10 @@
         config = rec {
           modifier = "Mod4";
           terminal = "alacritty";
-          fonts = { names = [ "IosevkaTerm Nerd Font Mono" ]; size = 11.0; };
+          fonts = {
+            names = [ "IosevkaTerm Nerd Font Mono" ];
+            size = 11.0;
+          };
           menu = "bemenu-run";
           startup = [
             # Ensure that the environment variables are correctly set for the user
@@ -212,7 +224,10 @@
             {
               statusCommand = "${pkgs.i3status-rust}/bin/i3status-rs ~/.config/i3status-rust/config-default.toml";
               trayOutput = "*";
-              fonts = { names = [ "Iosevka" ]; size = 11.0; };
+              fonts = {
+                names = [ "Iosevka" ];
+                size = 11.0;
+              };
               position = "bottom";
               colors = {
                 background = colorScheme.black;
