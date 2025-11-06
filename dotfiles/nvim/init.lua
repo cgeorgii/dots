@@ -248,7 +248,7 @@ require("lazy").setup({
         -- Search and navigation
         { "gk",         search_word_under_cursor_with_ripgrep,                                            desc = "Search word under cursor with ripgrep (to quickfix)" },
         { "gk",         search_visual_selection_with_ripgrep,                                             desc = "Search visual selection with ripgrep (to quickfix)", mode = "v", noremap = true },
-        { "<C-P>",      "<cmd>GFiles<cr>",                                                                desc = "Search Git tracked files" },
+        { "<C-P>",      desc = "Search Git tracked files" }, -- Actual keymap registered via VimEnter autocmd
         { "<C-\\>",     "<cmd>Files<cr>",                                                                 desc = "Search all files" },
         {
           "\\",
@@ -369,6 +369,9 @@ require("lazy").setup({
     end,
   },
 
+  {
+    "junegunn/fzf",
+  },
   {
     "junegunn/fzf.vim",
     dependencies = { "junegunn/fzf" },
@@ -499,4 +502,15 @@ require("lazy").setup({
     enabled = true,
     notify = true,
   },
+})
+
+-- Register critical keymaps after all plugins are fully initialized
+-- Using VimEnter ensures plugins have completed their initialization before keymaps are registered.
+-- This prevents the issue where pressing C-p immediately after startup wouldn't work because fzf-lua hadn't finished loading yet. The first keypress would trigger lazy-loading, and only subsequent presses would work. VimEnter fires after all startup processes complete, guaranteeing the plugin is ready when the keymap is registered.
+vim.api.nvim_create_autocmd("VimEnter", {
+  callback = function()
+    vim.keymap.set('n', '<C-p>', function()
+      require('fzf-lua').git_files()
+    end, { desc = 'Search Git tracked files', noremap = true, silent = true })
+  end,
 })
