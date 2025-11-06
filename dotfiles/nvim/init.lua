@@ -33,6 +33,25 @@ local function search_visual_selection_with_ripgrep()
   vim.fn.setreg('"', old_reg, old_regtype)
 end
 
+-- Insert filename from git repo using FZF
+local function insert_filename_with_fzf()
+  vim.fn['fzf#run'](vim.fn['fzf#wrap']({
+    source = 'git ls-files',
+    sink = function(selected)
+      -- Insert the selected filename at cursor position
+      local pos = vim.api.nvim_win_get_cursor(0)
+      local line = vim.api.nvim_get_current_line()
+      local before = string.sub(line, 1, pos[2])
+      local after = string.sub(line, pos[2] + 1)
+      local new_line = before .. selected .. after
+      vim.api.nvim_set_current_line(new_line)
+      -- Move cursor to end of inserted text
+      vim.api.nvim_win_set_cursor(0, {pos[1], pos[2] + #selected})
+    end,
+    options = '--prompt="Insert file: "'
+  }))
+end
+
 -- Plugin specifications
 require("lazy").setup({
   -- Theme
@@ -248,6 +267,9 @@ require("lazy").setup({
         -- File explorer
         { "<C-n>",     "<cmd>NvimTreeToggle<cr>",                           desc = "Toggle file explorer" },
         { "<C-f>",     "<cmd>NvimTreeFindFile<cr>",                         desc = "Locate current file in explorer" },
+
+        -- Insert mode mappings
+        { "<C-t>",     insert_filename_with_fzf,                            desc = "Insert filename from git repo", mode = "i" },
       })
     end,
   },
