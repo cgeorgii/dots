@@ -56,6 +56,7 @@
         "sway/extra".source = link-dotfile "sway";
         # Link the entire nvim directory structure
         "nvim".source = link-dotfile "nvim";
+        "zellij/config.kdl".source = link-dotfile "config/zellij/config.kdl";
       };
 
       home.packages = with pkgs; [
@@ -96,6 +97,7 @@
         whatsapp-for-linux
         wl-clipboard
         xfce.thunar
+        zellij
       ];
 
       programs.lazygit = {
@@ -439,6 +441,13 @@
           tkill = "tmux kill-server";
           there = "tmux new-session -d -s $(basename \"$PWD\" | tr . -); tmux switch-client -t $(basename \"$PWD\" | tr . -) || tmux attach -t $(basename \"$PWD\" | tr . -);";
 
+          # [[ ZELLIJ ]]
+          zj = "zellij";
+          zja = "zellij attach";
+          zjl = "zellij list-sessions";
+          zjk = "zellij kill-session";
+          zjhere = "zellij attach -c $(basename \"$PWD\" | tr . -)";
+
           # [[ GIT ]]
           git = "hub";
           g = "git";
@@ -564,7 +573,7 @@
           nix_shell = {
             format = "[$symbol$name]($style) ";
             impure_msg = "";
-            symbol = "❄️";
+            symbol = "❄️ ";
           };
 
           # Language/environment modules - all use consistent format

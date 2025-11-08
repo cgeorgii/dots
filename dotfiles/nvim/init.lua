@@ -239,11 +239,11 @@ require("lazy").setup({
         { "<leader>xl", "<cmd>TroubleToggle loclist<cr>",                                                 desc = "Show location list" },
         { "<leader>xq", "<cmd>TroubleToggle quickfix<cr>",                                                desc = "Show quickfix list" },
 
-        -- Tmux integration
-        { "<C-h>",      "<cmd>TmuxNavigateLeft<cr>",                                                      desc = "Navigate to left pane" },
-        { "<C-j>",      "<cmd>TmuxNavigateDown<cr>",                                                      desc = "Navigate to pane below" },
-        { "<C-k>",      "<cmd>TmuxNavigateUp<cr>",                                                        desc = "Navigate to pane above" },
-        { "<C-l>",      "<cmd>TmuxNavigateRight<cr>",                                                     desc = "Navigate to right pane" },
+        -- Tmux/Zellij integration
+        { "<C-h>",      "<cmd>TmuxNavigateLeft<cr>",                                                      desc = "Navigate to left pane (tmux/zellij)" },
+        { "<C-j>",      "<cmd>TmuxNavigateDown<cr>",                                                      desc = "Navigate to pane below (tmux/zellij)" },
+        { "<C-k>",      "<cmd>TmuxNavigateUp<cr>",                                                        desc = "Navigate to pane above (tmux/zellij)" },
+        { "<C-l>",      "<cmd>TmuxNavigateRight<cr>",                                                     desc = "Navigate to right pane (tmux/zellij)" },
 
         -- Search and navigation
         { "gk",         search_word_under_cursor_with_ripgrep,                                            desc = "Search word under cursor with ripgrep (to quickfix)" },
@@ -431,6 +431,10 @@ require("lazy").setup({
     config = function()
       vim.g.tmux_navigator_no_mappings = 1
     end,
+  },
+  {
+    "fresh2dev/zellij.vim",
+    lazy = false,
   },
   { "LnL7/vim-nix" },
   {
