@@ -8,14 +8,24 @@ First, check `package.yaml` to identify the test components:
 Then run ghcid with the `all` target (which includes all libraries and executables, including internal libraries) PLUS all test components using the Bash tool with `run_in_background: true`:
 
 ```
-nix develop -c ghcid -c 'cabal repl --enable-multi-repl all <test-name>' --restart=<project>.cabal --outputfile=build.log --clear
+nix develop -c ghcid \
+  -c 'cabal repl --enable-multi-repl all <test-name>' \
+  --restart=<project>.cabal \
+  --test ':!nix develop -c cabal test' \
+  --outputfile=build.log \
+  --clear
 ```
 
-**Note**: The `all` target ensures internal libraries are included in the build. Tests must be specified explicitly since `all` doesn't include them. The `--restart` flag causes ghcid to automatically restart when the cabal file changes (e.g., after hpack regeneration).
+**Note**: The `all` target ensures internal libraries are included in the build. Tests must be specified explicitly since `all` doesn't include them. The `--restart` flag causes ghcid to automatically restart when the cabal file changes (e.g., after hpack regeneration). The `--test` flag runs the test suite automatically after a successful build.
 
 For this project:
 ```
-nix develop -c ghcid -c 'cabal repl --enable-multi-repl all dota-sage-test' --restart=dota-sage.cabal --outputfile=build.log --clear
+nix develop -c ghcid \
+  -c 'cabal repl --enable-multi-repl all dota-sage-test' \
+  --restart=dota-sage.cabal \
+  --test ':!nix develop -c cabal test' \
+  --outputfile=build.log \
+  --clear
 ```
 
 **IMPORTANT**: Use `run_in_background: true` parameter in the Bash tool (without `&` at the end of the command) so ghcid appears in Claude Code's background processes UI.

@@ -25,10 +25,11 @@
       systems = [ "x86_64-linux" ];
 
       perSystem =
-        { system
-        , config
-        , final
-        , ...
+        {
+          system,
+          config,
+          final,
+          ...
         }:
         {
           checks.pre-commit-check = inputs.pre-commit-hooks.lib.${system}.run {
@@ -41,6 +42,7 @@
 
           devShells.default = final.mkShell {
             inherit (config.checks.pre-commit-check) shellHook;
+            name = "coco-dev";
             packages = [
               final.nil
               final.git-bug

@@ -2,10 +2,11 @@
 
 {
   home-manager.users.cgeorgii =
-    { lib
-    , config
-    , pkgs
-    , ...
+    {
+      lib,
+      config,
+      pkgs,
+      ...
     }:
     # Using a string here instead of the direct path because otherwise a config with
     # flakes will not symlink but copy the files, making hot-reloading the config
@@ -74,6 +75,8 @@
         home-manager
         hub
         imagemagick
+        jjui
+        jujutsu
         keepassxc
         libreoffice
         libsForQt5.dolphin
@@ -552,6 +555,20 @@
 
           battery.disabled = true;
           package.disabled = true;
+          gcloud.disabled = true;
+
+          git_branch = {
+            format = "[$symbol$branch(:$remote_branch)]($style) ";
+          };
+
+          nix_shell = {
+            format = "[$symbol$name]($style) ";
+            impure_msg = "";
+            symbol = "❄️";
+          };
+
+          # Language/environment modules - all use consistent format
+          haskell.format = "[λ $version]($style) ";
         };
       };
 
