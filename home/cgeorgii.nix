@@ -120,7 +120,14 @@
         XCURSOR_THEME = "Adwaita";
         XCURSOR_SIZE = "24";
       };
-      programs.swaylock.enable = true;
+      programs.swaylock = {
+        enable = true;
+        settings = {
+          image = "${config.home.homeDirectory}/dots/wallpapers/02108_navajoland_1920x1080.jpg";
+          scaling = "fill";
+          show-failed-attempts = true;
+        };
+      };
 
       gtk = {
         enable = true;
@@ -184,8 +191,8 @@
           window.border = 1;
 
           keybindings = lib.mkOptionDefault {
-            "F9" = "exec swaylock -f -c 000000";
-            "F10" = "exec swaylock -f -c 000000 && systemctl suspend";
+            "F9" = "exec swaylock -f";
+            "F10" = "exec swaylock -f && systemctl suspend";
             "${modifier}+Shift+s" = "exec grimshot copy area";
           };
 
