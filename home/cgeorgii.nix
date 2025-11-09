@@ -76,6 +76,7 @@
         home-manager
         hub
         imagemagick
+        imv
         jjui
         jujutsu
         keepassxc
@@ -97,6 +98,7 @@
         whatsapp-for-linux
         wl-clipboard
         xfce.thunar
+        xfce.tumbler # Thumbnail service for Thunar
         zellij
       ];
 
