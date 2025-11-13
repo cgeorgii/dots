@@ -239,12 +239,6 @@ require("lazy").setup({
         { "<leader>xl", "<cmd>TroubleToggle loclist<cr>",                                                 desc = "Show location list" },
         { "<leader>xq", "<cmd>TroubleToggle quickfix<cr>",                                                desc = "Show quickfix list" },
 
-        -- Tmux/Zellij integration
-        { "<C-h>",      "<cmd>TmuxNavigateLeft<cr>",                                                      desc = "Navigate to left pane (tmux/zellij)" },
-        { "<C-j>",      "<cmd>TmuxNavigateDown<cr>",                                                      desc = "Navigate to pane below (tmux/zellij)" },
-        { "<C-k>",      "<cmd>TmuxNavigateUp<cr>",                                                        desc = "Navigate to pane above (tmux/zellij)" },
-        { "<C-l>",      "<cmd>TmuxNavigateRight<cr>",                                                     desc = "Navigate to right pane (tmux/zellij)" },
-
         -- Search and navigation
         { "gk",         search_word_under_cursor_with_ripgrep,                                            desc = "Search word under cursor with ripgrep (to quickfix)" },
         { "gk",         search_visual_selection_with_ripgrep,                                             desc = "Search visual selection with ripgrep (to quickfix)", mode = "v", noremap = true },
@@ -427,14 +421,16 @@ require("lazy").setup({
     end,
   },
   {
-    "christoomey/vim-tmux-navigator",
-    config = function()
-      vim.g.tmux_navigator_no_mappings = 1
-    end,
-  },
-  {
-    "fresh2dev/zellij.vim",
-    lazy = false,
+    "swaits/zellij-nav.nvim",
+    lazy = true,
+    event = "VeryLazy",
+    keys = {
+      { "<c-h>", "<cmd>ZellijNavigateLeft<cr>", { silent = true, desc = "navigate left" } },
+      { "<c-j>", "<cmd>ZellijNavigateDown<cr>", { silent = true, desc = "navigate down" } },
+      { "<c-k>", "<cmd>ZellijNavigateUp<cr>", { silent = true, desc = "navigate up" } },
+      { "<c-l>", "<cmd>ZellijNavigateRight<cr>", { silent = true, desc = "navigate right" } },
+    },
+    opts = {},
   },
   { "LnL7/vim-nix" },
   {
@@ -517,4 +513,10 @@ vim.api.nvim_create_autocmd("VimEnter", {
       require('fzf-lua').git_files()
     end, { desc = 'Search Git tracked files', noremap = true, silent = true })
   end,
+})
+
+-- Ensure that when exiting Neovim, Zellij returns to normal mode
+vim.api.nvim_create_autocmd("VimLeave", {
+  pattern = "*",
+  command = "silent !zellij action switch-mode normal"
 })

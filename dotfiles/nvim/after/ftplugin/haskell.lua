@@ -14,6 +14,7 @@ wk.add({
   { "<leader>rn", vim.lsp.buf.rename, desc = "Rename symbol", buffer = bufnr },
 
   -- Code actions
+  { "<leader>qq", vim.lsp.buf.code_action, desc = "Show code actions menu", buffer = bufnr },
   { "<space>ca", vim.lsp.buf.code_action, desc = "Show code actions", buffer = bufnr },
   { "<space>cl", vim.lsp.codelens.run, desc = "Run code lens", buffer = bufnr },
 

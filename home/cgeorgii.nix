@@ -38,6 +38,11 @@
             "spotify"
           ];
       };
+
+      zellij-autolock = pkgs.fetchurl {
+        url = "https://github.com/fresh2dev/zellij-autolock/releases/download/0.2.2/zellij-autolock.wasm";
+        sha256 = "sha256-aclWB7/ZfgddZ2KkT9vHA6gqPEkJ27vkOVLwIEh7jqQ=";
+      };
     in
     {
       home.file.".gitignore".source = link-dotfile "gitignore";
@@ -57,14 +62,17 @@
         # Link the entire nvim directory structure
         "nvim".source = link-dotfile "nvim";
         "zellij/config.kdl".source = link-dotfile "config/zellij/config.kdl";
+        "zellij/plugins/zellij-autolock.wasm".source = zellij-autolock;
       };
 
       home.packages = with pkgs; [
         alacritty
         autojump
         bemenu
+        cachix
         chromium
         claude-pkgs.claude-code
+        devenv
         digikam
         discord
         dropbox
@@ -273,6 +281,9 @@
         };
         extraConfig = ''
           include ~/.config/sway/extra
+
+          # Allow F10 to suspend even when screen is locked
+          bindsym --locked F10 exec systemctl suspend
 
           # Logseq Electron scaling fix
           for_window [app_id="logseq"] exec env GDK_SCALE=1 GDK_DPI_SCALE=1 ELECTRON_FORCE_IS_PACKAGED=true

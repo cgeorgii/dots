@@ -1,6 +1,8 @@
 // Zellij Configuration
 // Matching tmux workflow with C-s prefix
 
+default_layout "compact"
+
 // Theme
 theme "gruvbox-dark"
 
@@ -19,6 +21,9 @@ simplified_ui false
 
 // Pane frames
 pane_frames true
+
+// Startup tips
+show_startup_tips false
 
 // Layout directory
 // layout_dir "/home/cgeorgii/.config/zellij/layouts"
@@ -94,13 +99,25 @@ keybinds clear-defaults=true {
         bind "Esc" { SwitchToMode "normal"; }
     }
 
-    // Global keybinds (work in any mode)
-    shared_except "tmux" {
-        // Tab navigation: Alt-h/l (matching tmux)
+    // Locked mode (when nvim/vim is focused)
+    locked {
+        // Allow Ctrl-s to access tmux mode even when locked
+        bind "Ctrl s" { SwitchToMode "tmux"; }
+
+        // Tab navigation still works in locked mode
         bind "Alt h" { GoToPreviousTab; }
         bind "Alt l" { GoToNextTab; }
+        bind "Alt c" { NewTab; }
+    }
 
-        // Pane navigation: Ctrl-hjkl (seamless with nvim)
+    // Global keybinds (work in any mode except tmux and locked)
+    shared_except "tmux" "locked" {
+        // Tab navigation and management
+        bind "Alt h" { GoToPreviousTab; }
+        bind "Alt l" { GoToNextTab; }
+        bind "Alt c" { NewTab; }
+
+        // Pane navigation: Ctrl-hjkl (disabled in locked mode for nvim)
         bind "Ctrl h" { MoveFocus "Left"; }
         bind "Ctrl j" { MoveFocus "Down"; }
         bind "Ctrl k" { MoveFocus "Up"; }
@@ -160,6 +177,19 @@ keybinds clear-defaults=true {
 // UI configuration
 ui {
     pane_frames {
-        rounded_corners true
+        rounded_corners false
     }
+}
+
+// Plugins
+plugins {
+    autolock location="file:~/.config/zellij/plugins/zellij-autolock.wasm" {
+        triggers "nvim|vim"
+        watch_triggers "fzf|zoxide|atuin"
+        watch_interval "1.0"
+    }
+}
+
+load_plugins {
+    autolock
 }
