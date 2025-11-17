@@ -1,0 +1,227 @@
+// Niri configuration file
+//
+// Configuration Summary:
+// - Dual monitor: Dell S2722QC (4K@2.0x) left, ASUS VX279 (1080p) right
+// - Laptop display (eDP-1) disabled
+// - Focus-follows-mouse enabled
+// - Gruvbox Dark color scheme
+// - Keyboard: US/US-intl, Caps->Escape, Ctrl+Space to switch layouts
+// - Natural scrolling on touchpad and mouse
+// - Waybar status bar (top, auto-start)
+// - Fuzzel app launcher (Super+D)
+// - Alacritty spawns at startup
+//
+// Key bindings:
+// - Super+H/L: Move window between monitors
+// - Super+Ctrl+H/L: Focus monitor left/right
+// - Super+J/K: Switch workspace down/up
+// - Super+Shift+S: Screenshot
+// - F9: Lock, F10: Lock+suspend
+
+input {
+    keyboard {
+        xkb {
+            layout "us,us(intl)"
+            options "caps:escape,grp:ctrl_space_toggle,lv3:ralt_switch"
+        }
+    }
+
+    touchpad {
+        tap
+        natural-scroll
+        dwt
+        dwtp
+    }
+
+    mouse {
+        natural-scroll
+    }
+
+    focus-follows-mouse
+}
+
+// Laptop display (disabled when closed)
+output "eDP-1" {
+    off
+}
+
+// Dell S2722QC - Left monitor (4K at 2.0x scale)
+output "DP-3" {
+    mode "3840x2160@59.997"
+    scale 2.0
+    position x=0 y=0
+}
+
+// ASUS VX279 - Right monitor (1080p)
+output "HDMI-A-1" {
+    mode "1920x1080@60.000"
+    position x=1920 y=0
+}
+
+layout {
+    gaps 8
+    center-focused-column "never"
+
+    preset-column-widths {
+        proportion 0.33333
+        proportion 0.5
+        proportion 0.66667
+    }
+
+    default-column-width { proportion 0.5; }
+
+    focus-ring {
+        width 2
+        active-color "#fabd2f"
+        inactive-color "#928374"
+    }
+
+    border {
+        off
+    }
+}
+
+spawn-at-startup "alacritty"
+spawn-at-startup "waybar"
+
+prefer-no-csd
+
+screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
+
+hotkey-overlay {
+    skip-at-startup
+}
+
+// Keybindings
+binds {
+    // Window management
+    Mod+Return { spawn "alacritty"; }
+    Mod+D { spawn "fuzzel"; }
+
+    // Close window
+    Mod+Shift+Q { close-window; }
+
+    // ==============================================================
+    // LAYER 1: AltGr (Mod5) - Workspaces & Monitors
+    // ==============================================================
+
+    // AltGr+H/L: Focus monitor left/right
+    Mod5+H { focus-monitor-left; }
+    Mod5+L { focus-monitor-right; }
+
+    // AltGr+J/K: Switch workspace
+    Mod5+J { focus-workspace-down; }
+    Mod5+K { focus-workspace-up; }
+
+    // AltGr+Shift+H/L: Move window between monitors
+    Mod5+Shift+H { move-column-to-monitor-left; }
+    Mod5+Shift+L { move-column-to-monitor-right; }
+
+    // AltGr+Shift+J/K: Move window to workspace up/down
+    Mod5+Shift+J { move-column-to-workspace-down; }
+    Mod5+Shift+K { move-column-to-workspace-up; }
+
+    // ==============================================================
+    // LAYER 2: Meta (Mod) - Windows within Workspace
+    // ==============================================================
+
+    // Meta+H/L: Focus window left/right
+    Mod+H { focus-column-left; }
+    Mod+L { focus-column-right; }
+    Mod+Left { focus-column-left; }
+    Mod+Right { focus-column-right; }
+
+    // Meta+J/K: Focus window up/down
+    Mod+J { focus-window-down; }
+    Mod+K { focus-window-up; }
+    Mod+Down { focus-window-down; }
+    Mod+Up { focus-window-up; }
+
+    // Meta+Shift+H/L: Swap with window left/right
+    Mod+Shift+H { move-column-left; }
+    Mod+Shift+L { move-column-right; }
+    Mod+Shift+Left { move-column-left; }
+    Mod+Shift+Right { move-column-right; }
+
+    // Meta+Shift+J/K: Swap with window up/down
+    Mod+Shift+J { move-window-down; }
+    Mod+Shift+K { move-window-up; }
+    Mod+Shift+Down { move-window-down; }
+    Mod+Shift+Up { move-window-up; }
+
+    // AltGr+1-9: Switch to specific workspace
+    Mod5+1 { focus-workspace 1; }
+    Mod5+2 { focus-workspace 2; }
+    Mod5+3 { focus-workspace 3; }
+    Mod5+4 { focus-workspace 4; }
+    Mod5+5 { focus-workspace 5; }
+    Mod5+6 { focus-workspace 6; }
+    Mod5+7 { focus-workspace 7; }
+    Mod5+8 { focus-workspace 8; }
+    Mod5+9 { focus-workspace 9; }
+
+    // AltGr+Shift+1-9: Move window to specific workspace
+    Mod5+Shift+1 { move-column-to-workspace 1; }
+    Mod5+Shift+2 { move-column-to-workspace 2; }
+    Mod5+Shift+3 { move-column-to-workspace 3; }
+    Mod5+Shift+4 { move-column-to-workspace 4; }
+    Mod5+Shift+5 { move-column-to-workspace 5; }
+    Mod5+Shift+6 { move-column-to-workspace 6; }
+    Mod5+Shift+7 { move-column-to-workspace 7; }
+    Mod5+Shift+8 { move-column-to-workspace 8; }
+    Mod5+Shift+9 { move-column-to-workspace 9; }
+
+    // Column width adjustments
+    Mod+R { switch-preset-column-width; }
+    Mod+Minus { set-column-width "-10%"; }
+    Mod+Equal { set-column-width "+10%"; }
+
+    // Window height adjustments
+    Mod+Shift+Minus { set-window-height "-10%"; }
+    Mod+Shift+Equal { set-window-height "+10%"; }
+
+    // Fullscreen
+    Mod+F { maximize-column; }
+    Mod+Shift+F { fullscreen-window; }
+
+    // Screenshots
+    Mod+Shift+S { screenshot; }
+    Print { screenshot-screen; }
+    Ctrl+Print { screenshot-window; }
+
+    // Screen lock and system control
+    F9 { spawn "swaylock" "-f"; }
+    F10 { spawn "sh" "-c" "swaylock -f && systemctl suspend"; }
+
+    // Brightness and volume (adjust keys as needed for your laptop)
+    XF86MonBrightnessUp   { spawn "light" "-A" "5"; }
+    XF86MonBrightnessDown { spawn "light" "-U" "5"; }
+    XF86AudioRaiseVolume  { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.05+"; }
+    XF86AudioLowerVolume  { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.05-"; }
+    XF86AudioMute         { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SINK@" "toggle"; }
+
+    // Exit Niri
+    Mod+Shift+E { quit; }
+
+    // Toggle floating
+    Mod+Shift+Space { toggle-window-floating; }
+}
+
+// Window rules
+window-rule {
+    // Example: Make Firefox picture-in-picture windows float
+    match app-id="firefox" title="Picture-in-Picture"
+    default-column-width {}
+    open-floating true
+}
+
+cursor {
+    xcursor-theme "Adwaita"
+    xcursor-size 24
+}
+
+// Environment variables for Wayland/Niri
+environment {
+    QT_QPA_PLATFORM "wayland"
+    DISPLAY null
+}

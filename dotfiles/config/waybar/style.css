@@ -1,0 +1,148 @@
+/* Waybar Style - Gruvbox Dark with Rounded Pills
+ *
+ * Design: Rounded pill modules
+ * Colors: Gruvbox Dark (#282828 bg, #ebdbb2 fg, #fabd2f accent)
+ * Font: IosevkaTerm Nerd Font Mono 13px
+ * Background: Transparent window, semi-transparent modules (rgba 60,56,54,0.8)
+ * Modules: 99px border-radius for pill shape
+ * Taskbar: Grouped pills, darker on hover, active state highlighted
+ */
+
+* {
+  font-family: "IosevkaTerm Nerd Font Mono", "Font Awesome 6 Free Solid", "Font Awesome 6 Brands", monospace;
+  font-size: 13px;
+  font-feature-settings: "tnum";
+  font-weight: 400;
+}
+
+window#waybar {
+  background: transparent;
+  color: #ebdbb2;
+}
+
+button {
+  box-shadow: none;
+  border: none;
+  border-radius: 0;
+  transition-property: none;
+}
+
+button:hover {
+  background: none;
+  box-shadow: none;
+  text-shadow: none;
+  border: none;
+  -gtk-icon-effect: none;
+  -gtk-icon-shadow: none;
+}
+
+#clock,
+#battery,
+#cpu,
+#memory,
+#network,
+#tray {
+  padding: 0 10px;
+  color: #ebdbb2;
+  background-color: rgba(60, 56, 54, 0.8);
+  border-radius: 99px;
+}
+
+#window,
+#workspaces {
+  margin: 0 4px;
+}
+
+/* Clock */
+#clock {
+  font-weight: bold;
+}
+
+/* CPU and Memory - rounded ends */
+#cpu {
+  border-radius: 99px 0px 0px 99px;
+  padding: 0 0 0 10px;
+  margin-left: 4px;
+}
+
+#memory {
+  border-radius: 0px 99px 99px 0px;
+}
+
+/* Battery */
+#battery {
+  margin-left: 4px;
+}
+
+#battery.charging {
+  color: #fabd2f;
+}
+
+#battery.warning:not(.charging) {
+  color: #fe8019;
+}
+
+#battery.critical:not(.charging) {
+  color: #fb4934;
+  animation: blink 0.5s linear infinite alternate;
+}
+
+@keyframes blink {
+  to {
+    background-color: #fb4934;
+    color: #282828;
+  }
+}
+
+/* Network */
+#network {
+  color: #83a598;
+}
+
+#network.disconnected {
+  color: #fb4934;
+}
+
+/* Taskbar */
+#taskbar {
+  margin-left: 4px;
+}
+
+#taskbar button {
+  color: #ebdbb2;
+  background-color: rgba(60, 56, 54, 0.8);
+}
+
+#taskbar button:first-child {
+  border-radius: 99px 0 0 99px;
+}
+
+#taskbar button:last-child {
+  border-radius: 0 99px 99px 0;
+}
+
+#taskbar button:first-child:last-child {
+  border-radius: 99px;
+}
+
+#taskbar button:hover {
+  background-color: rgba(80, 73, 69, 0.8);
+}
+
+#taskbar button.active {
+  background-color: rgba(124, 111, 100, 0.8);
+}
+
+#taskbar button.active:hover {
+  background-color: rgba(146, 131, 116, 0.8);
+}
+
+/* System Tray */
+#tray > .passive {
+  -gtk-icon-effect: dim;
+}
+
+#tray > .needs-attention {
+  -gtk-icon-effect: highlight;
+  background-color: #fb4934;
+}

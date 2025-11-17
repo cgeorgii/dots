@@ -6,8 +6,7 @@
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  boot.initrd.luks.devices."luks-d80ba783-00e7-4805-b96f-bb0205ee56aa".device =
-    "/dev/disk/by-uuid/d80ba783-00e7-4805-b96f-bb0205ee56aa";
+  boot.initrd.luks.devices."luks-d80ba783-00e7-4805-b96f-bb0205ee56aa".device = "/dev/disk/by-uuid/d80ba783-00e7-4805-b96f-bb0205ee56aa";
 
   # Enable networking
   networking.networkmanager.enable = true;
@@ -49,12 +48,16 @@
       extraPortals = with pkgs; [
         xdg-desktop-portal-wlr
         xdg-desktop-portal-gtk
+        xdg-desktop-portal-gnome # For Niri
       ];
     };
   };
 
   # Required for sway
   security.polkit.enable = true;
+
+  # Enable Niri window manager
+  programs.niri.enable = true;
 
   # Start sway on boot
   environment.loginShellInit = ''

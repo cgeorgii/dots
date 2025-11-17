@@ -1,12 +1,14 @@
-{ pkgs
-, lib
-, config
-, ...
+{
+  pkgs,
+  lib,
+  config,
+  ...
 }:
 
 {
   # Import modules
   imports = [
+    ./nix/network.nix
     ./nix/mullvad.nix
     ./nix/git-repos.nix
     ./nix/logseq.nix
@@ -61,6 +63,12 @@
         "cgeorgii"
       ];
       auto-optimise-store = true;
+
+      # Performance: parallel downloads from binary cache
+      max-jobs = "auto";
+      http-connections = 128;
+      max-substitution-jobs = 16;
+
       trusted-public-keys = [
         "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
         "zeuslogics-nix-cache-github:RpfcOgIp6w2cvPyhTfErGcWkR9QSHc1gpp4UwyH3ovU="
@@ -156,7 +164,7 @@
     exportConfiguration = true;
     xkb = {
       layout = "us, us(intl)";
-      options = "grp:alts_toggle, caps:escape";
+      options = "grp:alts_toggle, caps:escape, lv3:ralt_switch";
     };
   };
 

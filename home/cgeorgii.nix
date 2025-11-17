@@ -63,6 +63,10 @@
         "nvim".source = link-dotfile "nvim";
         "zellij/config.kdl".source = link-dotfile "config/zellij/config.kdl";
         "zellij/plugins/zellij-autolock.wasm".source = zellij-autolock;
+        "niri/config.kdl".source = link-dotfile "config/niri/config.kdl";
+        "fuzzel/fuzzel.ini".source = link-dotfile "config/fuzzel/fuzzel.ini";
+        "waybar/config".source = link-dotfile "config/waybar/config.json";
+        "waybar/style.css".source = link-dotfile "config/waybar/style.css";
       };
 
       home.packages = with pkgs; [
@@ -78,7 +82,9 @@
         dropbox
         entr
         eza
+        font-awesome # For waybar icons
         fd
+        fuzzel # App launcher for Niri
         fzf
         gh
         home-manager
@@ -103,6 +109,7 @@
         starship
         sway-contrib.grimshot # Screenshot tool
         tree
+        waybar # Status bar for Niri
         whatsapp-for-linux
         wl-clipboard
         xfce.thunar
