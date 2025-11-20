@@ -50,6 +50,7 @@ output "DP-3" {
     mode "3840x2160@59.997"
     scale 2.0
     position x=0 y=0
+    focus-at-startup
 }
 
 // ASUS VX279 - Right monitor (1080p)
@@ -81,7 +82,7 @@ layout {
     }
 }
 
-spawn-at-startup "alacritty"
+spawn-at-startup "alacritty" "--working-directory" "/home/cgeorgii/dots" "-e" "zellij" "attach" "-c" "dots"
 spawn-at-startup "waybar"
 
 prefer-no-csd
@@ -97,6 +98,7 @@ binds {
     // Window management
     Mod+Return { spawn "alacritty"; }
     Mod+D { spawn "fuzzel"; }
+    Mod5+D { spawn "fuzzel"; }
 
     // Close window
     Mod+Shift+Q { close-window; }
@@ -209,7 +211,14 @@ binds {
 
 // Window rules
 window-rule {
-    // Example: Make Firefox picture-in-picture windows float
+    // Startup terminal on Dell monitor, full width
+    match at-startup=true app-id="Alacritty"
+    open-on-output "DP-3"
+    open-maximized true
+}
+
+window-rule {
+    // Make Firefox picture-in-picture windows float
     match app-id="firefox" title="Picture-in-Picture"
     default-column-width {}
     open-floating true
@@ -221,7 +230,9 @@ cursor {
 }
 
 // Environment variables for Wayland/Niri
+// Prefer Wayland for Qt/Electron apps, but allow XWayland fallback
 environment {
     QT_QPA_PLATFORM "wayland"
-    DISPLAY null
+    ELECTRON_OZONE_PLATFORM_HINT "wayland"
+    XDG_CURRENT_DESKTOP "niri"
 }

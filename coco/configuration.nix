@@ -44,31 +44,32 @@
   xdg = {
     portal = {
       enable = true;
-      config.common.default = "*";
       extraPortals = with pkgs; [
-        xdg-desktop-portal-wlr
-        xdg-desktop-portal-gtk
-        xdg-desktop-portal-gnome # For Niri
+        xdg-desktop-portal-gnome
       ];
+      config = {
+        niri = {
+          default = [ "gnome" ];
+        };
+      };
     };
   };
 
-  # Required for sway
+  # Required for Wayland compositors
   security.polkit.enable = true;
 
   # Enable Niri window manager
   programs.niri.enable = true;
 
-  # Start sway on boot
-  environment.loginShellInit = ''
-    [[ "$(tty)" == /dev/tty1 ]] && sway
-  '';
-
-  # Figure out if this is still needed after the migration to sway
-  security.pam.services.sddm.enableGnomeKeyring = true;
+  # Enable GNOME Keyring for credential storage
+  security.pam.services.login.enableGnomeKeyring = true;
 
   # Autologin
   services.getty.autologinUser = "cgeorgii";
+
+  # Don't suspend when lid is closed (using external monitors)
+  services.logind.lidSwitch = "ignore";
+  services.logind.lidSwitchExternalPower = "ignore";
 
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true;

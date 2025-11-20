@@ -15,8 +15,6 @@
       link-dotfile =
         file: config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dots/dotfiles/${file}";
 
-      colorScheme = import ./colors.nix;
-
       claude-pkgs = import inputs.nixpkgs-for-claude {
         system = pkgs.system;
         config.allowUnfreePredicate =
@@ -58,7 +56,6 @@
 
       xdg.configFile = {
         "alacritty/alacritty.toml".source = link-dotfile "alacritty.toml";
-        "sway/extra".source = link-dotfile "sway";
         # Link the entire nvim directory structure
         "nvim".source = link-dotfile "nvim";
         "zellij/config.kdl".source = link-dotfile "config/zellij/config.kdl";
@@ -72,7 +69,6 @@
       home.packages = with pkgs; [
         alacritty
         autojump
-        bemenu
         cachix
         chromium
         claude-pkgs.claude-code
@@ -95,25 +91,20 @@
         jujutsu
         keepassxc
         libreoffice
-        libsForQt5.dolphin
         lua-language-server
-        nemo
+        nemo # File manager
         neofetch
         nixfmt-rfc-style
-        nixpkgs-fmt
         pavucontrol
         ripgrep
         signal-pkgs.signal-desktop
-        slack
         spotify-pkgs.spotify
         starship
-        sway-contrib.grimshot # Screenshot tool
         tree
         waybar # Status bar for Niri
         whatsapp-for-linux
         wl-clipboard
-        xfce.thunar
-        xfce.tumbler # Thumbnail service for Thunar
+        xwayland-satellite # XWayland support for Niri
         zellij
       ];
 
@@ -129,12 +120,40 @@
         };
       };
 
-      # For sharing the screen on firefox.
+      # Session variables (XDG_CURRENT_DESKTOP set by compositor)
       home.sessionVariables = {
-        XDG_CURRENT_DESKTOP = "sway";
         XCURSOR_THEME = "Adwaita";
         XCURSOR_SIZE = "24";
       };
+
+      # Default applications for file types
+      xdg.mimeApps = {
+        enable = true;
+        defaultApplications = {
+          # File manager
+          "inode/directory" = "nemo.desktop";
+
+          # Web browser
+          "x-scheme-handler/http" = "firefox.desktop";
+          "x-scheme-handler/https" = "firefox.desktop";
+          "x-scheme-handler/chrome" = "firefox.desktop";
+          "text/html" = "firefox.desktop";
+          "application/x-extension-htm" = "firefox.desktop";
+          "application/x-extension-html" = "firefox.desktop";
+          "application/x-extension-shtml" = "firefox.desktop";
+          "application/xhtml+xml" = "firefox.desktop";
+          "application/x-extension-xhtml" = "firefox.desktop";
+          "application/x-extension-xht" = "firefox.desktop";
+
+          # Other apps
+          "application/zip" = "org.gnome.FileRoller.desktop";
+          "x-scheme-handler/sgnl" = "signal.desktop";
+          "x-scheme-handler/signalcaptcha" = "signal.desktop";
+          "x-scheme-handler/logseq" = "Logseq.desktop";
+          "image/jpeg" = "userapp-imv-B518F3.desktop";
+        };
+      };
+
       programs.swaylock = {
         enable = true;
         settings = {
@@ -163,239 +182,6 @@
       qt = {
         enable = true;
         platformTheme.name = "gtk";
-      };
-
-      wayland.windowManager.sway = {
-        enable = true;
-        wrapperFeatures.gtk = true;
-        config = rec {
-          modifier = "Mod4";
-          terminal = "alacritty";
-          fonts = {
-            names = [ "IosevkaTerm Nerd Font Mono" ];
-            size = 11.0;
-          };
-          menu = "bemenu-run";
-          startup = [
-            # Ensure that the environment variables are correctly set for the user
-            # systemd units. This ensures all user units started after the command set the
-            # variables, so keep it at the top of this file.
-            { command = "exec systemctl --user import-environment "; }
-            # Launch Firefox on start
-            { command = "firefox"; }
-            { command = "exec udiskie --smart-tray"; }
-            { command = "dropbox start -i"; }
-          ];
-          input = {
-            "type:pointer" = {
-              natural_scroll = "enabled";
-            };
-
-            "type:touchpad" = {
-              drag_lock = "enabled"; # This is necessary due to a bug: https://github.com/greshake/i3status-rust/issues/2171. Otherwise the keyboard variant in the swaybar will not be displayed correctly.
-              natural_scroll = "enabled";
-              tap = "enabled";
-            };
-
-            "type:keyboard" = {
-              xkb_layout = "us,us(intl)";
-              xkb_options = "caps:escape,grp:ctrl_space_toggle";
-            };
-          };
-
-          window.border = 1;
-
-          keybindings = lib.mkOptionDefault {
-            "F9" = "exec swaylock -f";
-            "F10" = "exec swaylock -f && systemctl suspend";
-            "${modifier}+Shift+s" = "exec grimshot copy area";
-          };
-
-          colors = {
-            focused = {
-              background = colorScheme.black;
-              border = colorScheme.yellow;
-              childBorder = colorScheme.yellow;
-              indicator = colorScheme.bright_yellow;
-              text = colorScheme.white;
-            };
-            unfocused = {
-              background = colorScheme.black;
-              border = colorScheme.gray;
-              childBorder = colorScheme.gray;
-              indicator = colorScheme.gray;
-              text = colorScheme.gray;
-            };
-            focusedInactive = {
-              background = colorScheme.black;
-              border = colorScheme.white;
-              childBorder = colorScheme.black;
-              indicator = colorScheme.black;
-              text = colorScheme.gray;
-            };
-            urgent = {
-              background = colorScheme.red;
-              border = colorScheme.red;
-              childBorder = colorScheme.red;
-              indicator = colorScheme.red;
-              text = colorScheme.white;
-            };
-            placeholder = {
-              background = "#000000";
-              border = "#000000";
-              childBorder = "#000000";
-              indicator = "#000000";
-              text = colorScheme.white;
-            };
-          };
-
-          bars = [
-            {
-              statusCommand = "${pkgs.i3status-rust}/bin/i3status-rs ~/.config/i3status-rust/config-default.toml";
-              trayOutput = "*";
-              fonts = {
-                names = [ "Iosevka" ];
-                size = 11.0;
-              };
-              position = "bottom";
-              colors = {
-                background = colorScheme.black;
-                separator = "#666666";
-                statusline = colorScheme.white;
-                activeWorkspace = {
-                  border = colorScheme.gray;
-                  background = colorScheme.gray;
-                  text = colorScheme.black;
-                };
-                focusedWorkspace = {
-                  border = colorScheme.black;
-                  background = colorScheme.yellow;
-                  text = colorScheme.black;
-                };
-                inactiveWorkspace = {
-                  border = colorScheme.black;
-                  background = colorScheme.black;
-                  text = colorScheme.white;
-                };
-                urgentWorkspace = {
-                  border = colorScheme.red;
-                  background = colorScheme.red;
-                  text = colorScheme.white;
-                };
-              };
-            }
-          ];
-        };
-        extraConfig = ''
-          include ~/.config/sway/extra
-
-          # Allow F10 to suspend even when screen is locked
-          bindsym --locked F10 exec systemctl suspend
-
-          # Logseq Electron scaling fix
-          for_window [app_id="logseq"] exec env GDK_SCALE=1 GDK_DPI_SCALE=1 ELECTRON_FORCE_IS_PACKAGED=true
-        '';
-      };
-
-      programs.i3status-rust = {
-        enable = true;
-        bars = {
-          default = {
-            icons = "awesome6";
-            settings = {
-              theme = {
-                theme = "gruvbox-dark";
-                overrides = {
-                  # separator = " | ";
-                  # Optionally customize separator colors
-                  # separator_bg = "${colorScheme.black}"; # Match gruvbox-dark background
-                  # separator_fg = "${colorScheme.white}"; # Match gruvbox-dark foreground
-                };
-              };
-            };
-            blocks = [
-              # Keyboard layout
-              {
-                block = "keyboard_layout";
-                driver = "sway";
-                format = " $layout $variant ";
-                theme_overrides = {
-                  idle_bg = colorScheme.black; # Gruvbox dark background
-                };
-              }
-              # Backlight/brightness control block
-              {
-                block = "backlight";
-                device = "intel_backlight";
-                step_width = 5;
-                format = " ☀ {$brightness} ";
-                invert_icons = false;
-                theme_overrides = {
-                  idle_bg = "#3c3836"; # Gruvbox light background
-                };
-              }
-              # Wireless connection
-              {
-                block = "net";
-                format = " $icon  {$ssid $frequency $signal_strength|Disconnected} ";
-                format_alt = " $icon  {$ip/$ipv6|Disconnected} ";
-                interval = 5;
-              }
-              # Disk space
-              {
-                block = "disk_space";
-                path = "/";
-                info_type = "available";
-                alert_unit = "GB";
-                interval = 60;
-                warning = 20.0;
-                alert = 10.0;
-                format = " $icon  $used/$total ";
-                theme_overrides = {
-                  idle_bg = "#3c3836"; # Gruvbox light background
-                };
-              }
-              # Memory usage
-              {
-                block = "memory";
-                format = " $icon  $mem_used/$mem_total ";
-                format_alt = " $icon  $mem_used_percents ";
-              }
-              # CPU usage
-              {
-                block = "cpu";
-                interval = 1;
-                format = " CPU $utilization ";
-                theme_overrides = {
-                  idle_bg = "#3c3836"; # Gruvbox light background
-                  good_bg = "#3c3836"; # Gruvbox light background
-                  info_bg = "#3c3836"; # Gruvbox light background
-                };
-              }
-              # Battery
-              {
-                block = "battery";
-                format = " $icon  $percentage {$time }";
-                device = "BAT0";
-                interval = 10;
-                theme_overrides = {
-                  idle_bg = colorScheme.black; # Gruvbox dark background
-                  good_bg = colorScheme.black; # Gruvbox dark background
-                  info_bg = colorScheme.black; # Gruvbox dark background
-                };
-              }
-              # Time and date
-              {
-                block = "time";
-                interval = 60;
-                format = " $icon   $timestamp.datetime(f:'%a %d/%m %R')  ";
-                theme_overrides = {
-                  idle_bg = "#3c3836"; # Gruvbox light background
-                };
-              }
-            ];
-          };
-        };
       };
 
       programs.neovim = {
