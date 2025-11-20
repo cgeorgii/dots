@@ -63,9 +63,18 @@
 
   # Enable GNOME Keyring for credential storage
   security.pam.services.login.enableGnomeKeyring = true;
+  security.pam.services.greetd.enableGnomeKeyring = true;
 
-  # Autologin
-  services.getty.autologinUser = "cgeorgii";
+  # Autologin with greetd
+  services.greetd = {
+    enable = true;
+    settings = {
+      default_session = {
+        command = "${pkgs.niri}/bin/niri-session";
+        user = "cgeorgii";
+      };
+    };
+  };
 
   # Don't suspend when lid is closed (using external monitors)
   services.logind.lidSwitch = "ignore";

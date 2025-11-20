@@ -87,7 +87,7 @@ spawn-at-startup "waybar"
 
 prefer-no-csd
 
-screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
+screenshot-path "~/Pictures/Screenshots/screenshot_%Y-%m-%d %H-%M-%S.png"
 
 hotkey-overlay {
     skip-at-startup
@@ -97,8 +97,8 @@ hotkey-overlay {
 binds {
     // Window management
     Mod+Return { spawn "alacritty"; }
-    Mod+D { spawn "fuzzel"; }
-    Mod5+D { spawn "fuzzel"; }
+    Mod+Space { spawn "fuzzel"; }
+    Mod5+Space { spawn "fuzzel"; }
 
     // Close window
     Mod+Shift+Q { close-window; }
@@ -207,6 +207,10 @@ binds {
 
     // Toggle floating
     Mod+Shift+Space { toggle-window-floating; }
+
+    // Overview mode - show all workspaces and windows
+    Mod+Tab { toggle-overview; }
+    Mod+Backspace { toggle-overview; }
 }
 
 // Window rules
