@@ -379,6 +379,9 @@
       programs.fzf = {
         enable = true;
         enableZshIntegration = true;
+        defaultCommand = "fd --type f --hidden --exclude .git";
+        fileWidgetCommand = "fd --type f --hidden --exclude .git";
+        changeDirWidgetCommand = "fd --type d --hidden --exclude .git";
       };
 
       programs.starship = {

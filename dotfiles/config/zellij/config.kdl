@@ -83,6 +83,9 @@ keybinds clear-defaults=true {
         // Switch to last tab
         bind "Space" { GoToPreviousTab; SwitchToMode "normal"; }
 
+        // Edit scrollback in nvim
+        bind "e" { EditScrollback; SwitchToMode "normal"; }
+
         // Tab navigation by number
         bind "1" { GoToTab 1; SwitchToMode "normal"; }
         bind "2" { GoToTab 2; SwitchToMode "normal"; }
@@ -150,6 +153,9 @@ keybinds clear-defaults=true {
         bind "/" { SwitchToMode "entersearch"; SearchInput 0; }
         bind "n" { Search "down"; }
         bind "N" { Search "up"; }
+
+        // Edit scrollback in nvim
+        bind "e" { EditScrollback; SwitchToMode "normal"; }
     }
 
     // Rename tab mode
