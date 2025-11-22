@@ -9,7 +9,7 @@
 // - Natural scrolling on touchpad and mouse
 // - Waybar status bar (top, auto-start)
 // - Fuzzel app launcher (Super+D)
-// - Alacritty spawns at startup
+// - Kitty spawns at startup
 //
 // Key bindings:
 // - Super+H/L: Move window between monitors
@@ -82,7 +82,7 @@ layout {
     }
 }
 
-spawn-at-startup "alacritty" "--working-directory" "/home/cgeorgii/dots" "-e" "zellij" "attach" "-c" "dots"
+spawn-at-startup "kitty" "-d" "/home/cgeorgii/dots" "-e" "zellij" "attach" "-c" "dots"
 spawn-at-startup "waybar"
 
 prefer-no-csd
@@ -96,7 +96,7 @@ hotkey-overlay {
 // Keybindings
 binds {
     // Window management
-    Mod+Return { spawn "alacritty"; }
+    Mod+Return { spawn "kitty"; }
     Mod+Space { spawn "fuzzel"; }
     Mod5+Space { spawn "fuzzel"; }
 
@@ -216,7 +216,7 @@ binds {
 // Window rules
 window-rule {
     // Startup terminal on Dell monitor, full width
-    match at-startup=true app-id="Alacritty"
+    match at-startup=true app-id="kitty"
     open-on-output "DP-3"
     open-maximized true
 }

@@ -51,11 +51,7 @@
       home.file.".claude/settings.json".source = link-dotfile "claude/settings.json";
       home.file.".claude/commands".source = link-dotfile "claude/commands";
 
-      # # Export colors.yaml to be used by other applications like Alacritty
-      # home.file."dots/colors.yaml".source = ./../dotfiles/colors.yaml;
-
       xdg.configFile = {
-        "alacritty/alacritty.toml".source = link-dotfile "alacritty.toml";
         # Link the entire nvim directory structure
         "nvim".source = link-dotfile "nvim";
         "zellij/config.kdl".source = link-dotfile "config/zellij/config.kdl";
@@ -67,7 +63,6 @@
       };
 
       home.packages = with pkgs; [
-        alacritty
         autojump
         cachix
         chromium
@@ -166,8 +161,8 @@
       gtk = {
         enable = true;
         theme = {
-          name = "Adwaita-dark";
-          package = pkgs.gnome-themes-extra;
+          name = "Gruvbox-Dark";
+          package = pkgs.gruvbox-dark-gtk;
         };
         iconTheme = {
           name = "Mint-Y-Sand";
@@ -182,6 +177,29 @@
       qt = {
         enable = true;
         platformTheme.name = "gtk";
+      };
+
+      programs.kitty = {
+        enable = true;
+        themeFile = "gruvbox-dark";
+        font = {
+          name = "IosevkaTerm Nerd Font Mono";
+          size = 14;
+        };
+        settings = {
+          # Match alacritty's minimal look
+          window_padding_width = 0;
+          hide_window_decorations = true;
+          # Cursor
+          cursor_shape = "block";
+          cursor_blink_interval = 0;
+          # Scrollback
+          scrollback_lines = 10000;
+          # No audio bell
+          enable_audio_bell = false;
+          # Environment
+          env = "EDITOR=nvim";
+        };
       };
 
       programs.neovim = {

@@ -84,6 +84,9 @@
   hardware.bluetooth.powerOnBoot = true;
   services.blueman.enable = true;
 
+  # Enable GVfs for virtual filesystem support (USB, MTP, network mounts)
+  services.gvfs.enable = true;
+
   # Steam stuff
   hardware.graphics = {
     enable = true;
