@@ -44,7 +44,6 @@
     in
     {
       home.file.".gitignore".source = link-dotfile "gitignore";
-      home.file.".tmux.conf".source = link-dotfile "tmux.conf";
       home.file.".emacs".source = link-dotfile "emacs";
       home.file."./code/tweag/.gitconfig".source = link-dotfile "gitconfig-work";
       home.file.".claude/CLAUDE.md".source = link-dotfile "claude/CLAUDE.md";
@@ -207,8 +206,6 @@
         withNodeJs = true;
       };
 
-      programs.tmux.newSession = true;
-
       programs.autojump = {
         enable = true;
         enableZshIntegration = true;
@@ -267,10 +264,6 @@
           # [[ NIX ]]
           nixos-update = "sudo nixos-rebuild switch";
           nixos-link = "sudo ln -s /home/cgeorgii/dots/* /etc/nixos";
-
-          # [[ TMUX ]]
-          tkill = "tmux kill-server";
-          there = "tmux new-session -d -s $(basename \"$PWD\" | tr . -); tmux switch-client -t $(basename \"$PWD\" | tr . -) || tmux attach -t $(basename \"$PWD\" | tr . -);";
 
           # [[ ZELLIJ ]]
           zj = "zellij";

@@ -27,7 +27,6 @@
     readline
     swaylock
     silver-searcher
-    tmux
     wget
     wally-cli
     xclip

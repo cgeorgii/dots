@@ -16,9 +16,16 @@ This is a NixOS dotfiles repository with flake-based configuration that manages:
 ### Key Components
 - `flake.nix`: Main flake with nixos-hardware, home-manager, and custom app integration
 - `common.nix`: System-wide packages and configuration shared across machines
-- `home/cgeorgii.nix`: User-specific configuration with dotfile symlinks and sway/i3status-rust setup
+- `home/cgeorgii.nix`: User-specific configuration with dotfile symlinks and Niri/Waybar setup
 - `nix/git-repos.nix`: Custom NixOS module for automatic git repository management
 - `dotfiles/`: Configuration files symlinked via home-manager
+
+### Desktop Environment
+- Niri (Wayland compositor)
+- Waybar (status bar)
+- Fuzzel (application launcher)
+- Kitty (terminal emulator)
+- Zellij (terminal multiplexer)
 
 ### Dotfile Management Strategy
 Uses `config.lib.file.mkOutOfStoreSymlink` to create symlinks instead of copying files, enabling hot-reloading without rebuilds. All dotfiles live in `dotfiles/` and are symlinked to appropriate locations.
@@ -36,7 +43,7 @@ Configuration files for the user's home directory are symlinked in `home/cgeorgi
 - NixOS rebuild: `sudo nixos-rebuild switch`
 - Link dotfiles: `sudo ln -s /home/cgeorgii/dots/* /etc/nixos`
 - Check config: `nixos-rebuild dry-build`
-- Format Nix files: `nixpkgs-fmt file.nix`
+- Format Nix files: `nixfmt file.nix`
 - Setup development environment: `nix develop` (enables pre-commit hooks and development tools)
 - Build specific configurations: `nix build .#nixosConfigurations.coco.config.system.build.toplevel`
 - Check flake: `nix flake check`
@@ -46,13 +53,13 @@ Configuration files for the user's home directory are symlinked in `home/cgeorgi
 - Pre-commit hooks are enabled via github:cachix/git-hooks.nix
 - Run `nix develop` to activate hooks in your local environment
 - Enabled hooks:
-  - nixpkgs-fmt: Auto-formats Nix files
+  - nixfmt: Auto-formats Nix files
   - deadnix: Finds unused variables in Nix files
 - Development shell includes: nil (Nix LSP), git-bug (issue tracker)
 
 ## NixOS/Home-Manager Style Guidelines
 - Use 2-space indentation in all files
-- Format Nix files with `nixpkgs-fmt`
+- Format Nix files with `nixfmt`
 - Follow functional programming patterns
 - Group related settings in modules
 - Use descriptive names for options
@@ -76,13 +83,9 @@ Configuration files for the user's home directory are symlinked in `home/cgeorgi
 - Prefer rebase over merge for linear history
 - Do not include co-authored by Claude information in commits
 - Git config location: `~/.config/git/config`
-- Use libsecret credential helper for HTTPS credentials
-- For credential storage:
+- Credential storage: git-credential-manager with GPG backend
   - Initialize pass: `pass init YOUR_GPG_KEY_ID`
-  - Uses pass-secret-service to bridge between libsecret and pass
   - Credentials stored securely with GPG encryption
-
-## Custom Applications
 
 ## Automated Repository Management
 - `nix/git-repos.nix` provides systemd service for automatic git repository syncing
