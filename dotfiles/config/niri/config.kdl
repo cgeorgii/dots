@@ -228,6 +228,12 @@ window-rule {
     open-floating true
 }
 
+window-rule {
+    // Make whispering float
+    match app-id="whispering"
+    open-floating true
+}
+
 cursor {
     xcursor-theme "Adwaita"
     xcursor-size 24

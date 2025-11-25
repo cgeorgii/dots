@@ -97,6 +97,7 @@
         tree
         waybar # Status bar for Niri
         whatsapp-for-linux
+        whispering
         wl-clipboard
         xwayland-satellite # XWayland support for Niri
         zellij
@@ -416,5 +417,6 @@
         storePath = "${config.home.homeDirectory}/.password-store";
       };
       programs.password-store.enable = true;
+
     };
 }

@@ -50,7 +50,7 @@
           };
 
           overlayAttrs = {
-            # Add any other custom packages here
+            whispering = final.callPackage ./pkgs/whispering.nix { };
           };
 
         };
