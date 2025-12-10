@@ -47,6 +47,13 @@ To keep context usage reasonable, only the file build.log should be used to moni
 
 **Note**: Avoid building the project directly with cabal or stack. Let ghcid monitor compilation continuously.
 
+## Common Build Issues
+
+**HasField instance errors with OverloadedRecordDot**:
+- These errors are almost always due to missing imports of the data constructor
+- Fix: Import the data constructor explicitly using `import Module (Type(..))` rather than just `import Module (Type)`
+- Example: If you see `No instance for (GHC.Records.HasField "field" Type ...)`, check that you're importing `Type(..)` not just `Type`
+
 ## Documentation Search with Hoogle
 
 Use hoogle CLI to search for documentation of project dependencies within the nix develop shell.
