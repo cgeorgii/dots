@@ -47,6 +47,13 @@ To keep context usage reasonable, only the file build.log should be used to moni
 
 **Note**: Avoid building the project directly with cabal or stack. Let ghcid monitor compilation continuously.
 
+**Incremental Compilation Performance**:
+- The initial ghcid build takes a few seconds to compile all modules
+- After that, incremental recompilation is essentially instant (typically <1 second)
+- **IMPORTANT**: Do not add `sleep` delays between making code changes and checking build.log
+- ghcid detects file changes and recompiles immediately, so you can check build.log right after making edits
+- If you need to verify compilation completed, just read build.log directly - if ghcid is still compiling, you'll see the status
+
 ## Common Build Issues
 
 **HasField instance errors with OverloadedRecordDot**:

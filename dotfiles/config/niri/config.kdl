@@ -2,7 +2,6 @@
 //
 // Configuration Summary:
 // - Dual monitor: Dell S2722QC (4K@2.0x) left, ASUS VX279 (1080p) right
-// - Laptop display (eDP-1) disabled
 // - Focus-follows-mouse enabled
 // - Gruvbox Dark color scheme
 // - Keyboard: US/US-intl, Caps->Escape, Ctrl+Space to switch layouts
@@ -37,12 +36,7 @@ input {
         natural-scroll
     }
 
-    focus-follows-mouse
-}
-
-// Laptop display (disabled when closed)
-output "eDP-1" {
-    off
+    // focus-follows-mouse
 }
 
 // Dell S2722QC - Left monitor (4K at 2.0x scale)
@@ -82,6 +76,9 @@ layout {
     }
 }
 
+spawn-at-startup "systemctl" "--user" "import-environment" "WAYLAND_DISPLAY" "XDG_CURRENT_DESKTOP"
+spawn-at-startup "systemctl" "--user" "set-environment" "DISPLAY=:0"
+spawn-at-startup "sh" "-c" "while ! systemctl --user is-active xwayland-satellite.service; do sleep 0.5; done && maestral_qt"
 spawn-at-startup "kitty" "-d" "/home/cgeorgii/dots" "-e" "zellij" "attach" "-c" "dots"
 spawn-at-startup "waybar"
 
@@ -231,6 +228,11 @@ window-rule {
 window-rule {
     // Make whispering float
     match app-id="whispering"
+    open-floating true
+}
+
+window-rule {
+    match app-id="dota-sage-overlay"
     open-floating true
 }
 

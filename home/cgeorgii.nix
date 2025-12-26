@@ -69,7 +69,8 @@
         devenv
         digikam
         discord
-        dropbox
+        maestral
+        maestral-gui
         entr
         eza
         font-awesome # For waybar icons
@@ -172,6 +173,12 @@
           name = "Adwaita";
           package = pkgs.adwaita-icon-theme;
         };
+        gtk3.extraConfig = {
+          gtk-application-prefer-dark-theme = true;
+        };
+        gtk4.extraConfig = {
+          gtk-application-prefer-dark-theme = true;
+        };
       };
 
       qt = {
@@ -233,6 +240,9 @@
         autocd = true;
 
         initContent = "
+        # Import systemd user environment variables (DISPLAY for XWayland)
+        eval $(systemctl --user show-environment | grep -E '^(DISPLAY|WAYLAND_DISPLAY)=' | sed 's/^/export /')
+
         # Autosuggestion with async mode interferes with the history search functions
         # See https://github.com/zsh-users/zsh-autosuggestions/issues/619
         ZSH_AUTOSUGGEST_CLEAR_WIDGETS+=(history-beginning-search-backward-end history-beginning-search-forward-end)
@@ -417,6 +427,24 @@
         storePath = "${config.home.homeDirectory}/.password-store";
       };
       programs.password-store.enable = true;
+
+      # Enable xwayland-satellite for X11 app compatibility
+      systemd.user.services.xwayland-satellite = {
+        Unit = {
+          Description = "Xwayland outside your Wayland";
+          BindsTo = "graphical-session.target";
+          PartOf = "graphical-session.target";
+          After = "graphical-session.target";
+          Requisite = "graphical-session.target";
+        };
+        Service = {
+          Type = "notify";
+          NotifyAccess = "all";
+          ExecStart = "${pkgs.xwayland-satellite}/bin/xwayland-satellite";
+          StandardOutput = "journal";
+        };
+        Install.WantedBy = [ "graphical-session.target" ];
+      };
 
     };
 }

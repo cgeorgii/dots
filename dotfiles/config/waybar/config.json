@@ -29,7 +29,6 @@
     "on-click": "activate",
     "on-click-middle": "close",
     "on-click-right": "fullscreen",
-    "sort-by-app-id": false,
     "all-outputs": false
   },
 
