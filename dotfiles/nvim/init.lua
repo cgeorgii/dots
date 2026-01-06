@@ -472,7 +472,6 @@ require("lazy").setup({
   { "isobit/vim-caddyfile" },
   { "vmchale/dhall-vim" },
   { "hashivim/vim-terraform" },
-  { "github/copilot.vim" },
   {
     "dhruvasagar/vim-table-mode",
     config = function()

@@ -16,12 +16,12 @@
     bat
     dconf
     firefox
-    gitAndTools.gitFull
+    gitFull
     git-lfs
     libsecret
     pass
     git-credential-manager
-    pinentry
+    pinentry-gnome3
     readline
     swaylock
     silver-searcher
@@ -109,7 +109,7 @@
       liberation_ttf
       dejavu_fonts
       noto-fonts
-      noto-fonts-emoji
+      noto-fonts-color-emoji
     ];
 
     fontconfig = {

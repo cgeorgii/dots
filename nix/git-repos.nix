@@ -66,7 +66,7 @@ in
       path = [
         pkgs.git
         pkgs.openssh
-        pkgs.gitAndTools.hub
+        pkgs.hub
       ];
 
       script = ''
@@ -84,7 +84,7 @@ in
                 echo "Repository ${repo.path} has uncommitted changes, skipping update"
               else
                 # Use hub sync to update all branches while staying on the current branch
-                ${pkgs.gitAndTools.hub}/bin/hub sync
+                ${pkgs.hub}/bin/hub sync
                 ${optionalString repo.recursive "${pkgs.git}/bin/git submodule update --init --recursive"}
               fi
             fi

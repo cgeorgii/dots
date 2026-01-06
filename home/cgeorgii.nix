@@ -16,7 +16,7 @@
         file: config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dots/dotfiles/${file}";
 
       claude-pkgs = import inputs.nixpkgs-for-claude {
-        system = pkgs.system;
+        system = pkgs.stdenv.hostPlatform.system;
         config.allowUnfreePredicate =
           pkg:
           builtins.elem (pkgs.lib.getName pkg) [
@@ -25,11 +25,11 @@
       };
 
       signal-pkgs = import inputs.nixpkgs-for-signal {
-        system = pkgs.system;
+        system = pkgs.stdenv.hostPlatform.system;
       };
 
       spotify-pkgs = import inputs.nixpkgs-for-spotify {
-        system = pkgs.system;
+        system = pkgs.stdenv.hostPlatform.system;
         config.allowUnfreePredicate =
           pkg:
           builtins.elem (pkgs.lib.getName pkg) [
@@ -97,7 +97,7 @@
         starship
         tree
         waybar # Status bar for Niri
-        whatsapp-for-linux
+        wasistlos
         whispering
         wl-clipboard
         xwayland-satellite # XWayland support for Niri
@@ -333,7 +333,7 @@
             condition = "gitdir:~/code/tweag/";
           }
         ];
-        extraConfig = {
+        settings = {
           user.name = "Christian Georgii";
           user.email = "cgeorgii@gmail.com";
           github.user = "cgeorgii";
@@ -348,31 +348,33 @@
             helper = "manager";
             credentialStore = "gpg";
           };
-        };
-        delta = {
-          enable = true;
-          options = {
-            navigate = true;
-            syntax-theme = "gruvbox-dark";
-            light = false;
+          alias = {
+            b = "branch";
+            cb = "checkout -b";
+            pp = "pull --prune";
+            co = "checkout";
+            cm = "commit";
+            cmm = "commit --allow-empty -m";
+            cma = "commit --amend --no-edit";
+            st = "status";
+            du = "diff @{upstream}";
+            di = "diff";
+            dc = "diff --cached";
+            dw = "diff --word-diff";
+            dwc = "diff --word-diff --cached";
+            lg = "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative";
+            review = "log master.. -p --reverse";
           };
         };
-        aliases = {
-          b = "branch";
-          cb = "checkout -b";
-          pp = "pull --prune";
-          co = "checkout";
-          cm = "commit";
-          cmm = "commit --allow-empty -m";
-          cma = "commit --amend --no-edit";
-          st = "status";
-          du = "diff @{upstream}";
-          di = "diff";
-          dc = "diff --cached";
-          dw = "diff --word-diff";
-          dwc = "diff --word-diff --cached";
-          lg = "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative";
-          review = "log master.. -p --reverse";
+      };
+
+      programs.delta = {
+        enable = true;
+        enableGitIntegration = true;
+        options = {
+          navigate = true;
+          syntax-theme = "gruvbox-dark";
+          light = false;
         };
       };
 
@@ -424,7 +426,7 @@
       # Enable pass-secret-service
       services.pass-secret-service = {
         enable = true;
-        storePath = "${config.home.homeDirectory}/.password-store";
+        storePath = lib.mkForce "${config.home.homeDirectory}/.password-store";
       };
       programs.password-store.enable = true;
 

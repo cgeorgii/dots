@@ -6,7 +6,8 @@
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  boot.initrd.luks.devices."luks-d80ba783-00e7-4805-b96f-bb0205ee56aa".device = "/dev/disk/by-uuid/d80ba783-00e7-4805-b96f-bb0205ee56aa";
+  boot.initrd.luks.devices."luks-d80ba783-00e7-4805-b96f-bb0205ee56aa".device =
+    "/dev/disk/by-uuid/d80ba783-00e7-4805-b96f-bb0205ee56aa";
 
   # Enable networking
   networking.networkmanager.enable = true;
@@ -47,11 +48,6 @@
       extraPortals = with pkgs; [
         xdg-desktop-portal-gnome
       ];
-      config = {
-        niri = {
-          default = [ "gnome" ];
-        };
-      };
     };
   };
 
@@ -77,8 +73,10 @@
   };
 
   # Don't suspend when lid is closed (using external monitors)
-  services.logind.lidSwitch = "ignore";
-  services.logind.lidSwitchExternalPower = "ignore";
+  services.logind.settings.Login = {
+    HandleLidSwitch = "ignore";
+    HandleLidSwitchExternalPower = "ignore";
+  };
 
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true;
