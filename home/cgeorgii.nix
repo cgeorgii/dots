@@ -37,13 +37,10 @@
           ];
       };
 
-      zellij-autolock = pkgs.fetchurl {
-        url = "https://github.com/fresh2dev/zellij-autolock/releases/download/0.2.2/zellij-autolock.wasm";
-        sha256 = "sha256-aclWB7/ZfgddZ2KkT9vHA6gqPEkJ27vkOVLwIEh7jqQ=";
-      };
     in
     {
       home.file.".gitignore".source = link-dotfile "gitignore";
+      home.file.".tmux.conf".source = link-dotfile "tmux.conf";
       home.file.".emacs".source = link-dotfile "emacs";
       home.file."./code/tweag/.gitconfig".source = link-dotfile "gitconfig-work";
       home.file.".claude/CLAUDE.md".source = link-dotfile "claude/CLAUDE.md";
@@ -53,8 +50,6 @@
       xdg.configFile = {
         # Link the entire nvim directory structure
         "nvim".source = link-dotfile "nvim";
-        "zellij/config.kdl".source = link-dotfile "config/zellij/config.kdl";
-        "zellij/plugins/zellij-autolock.wasm".source = zellij-autolock;
         "niri/config.kdl".source = link-dotfile "config/niri/config.kdl";
         "fuzzel/fuzzel.ini".source = link-dotfile "config/fuzzel/fuzzel.ini";
         "waybar/config".source = link-dotfile "config/waybar/config.json";
@@ -101,7 +96,6 @@
         whispering
         wl-clipboard
         xwayland-satellite # XWayland support for Niri
-        zellij
       ];
 
       programs.lazygit = {
@@ -115,6 +109,8 @@
           };
         };
       };
+
+      programs.tmux.newSession = true;
 
       # Session variables (XDG_CURRENT_DESKTOP set by compositor)
       home.sessionVariables = {
@@ -195,7 +191,7 @@
         };
         settings = {
           # Match alacritty's minimal look
-          window_padding_width = 0;
+          window_padding_width = 4;
           hide_window_decorations = true;
           # Cursor
           cursor_shape = "block";
@@ -276,12 +272,9 @@
           nixos-update = "sudo nixos-rebuild switch";
           nixos-link = "sudo ln -s /home/cgeorgii/dots/* /etc/nixos";
 
-          # [[ ZELLIJ ]]
-          zj = "zellij";
-          zja = "zellij attach";
-          zjl = "zellij list-sessions";
-          zjk = "zellij kill-session";
-          zjhere = "zellij attach -c $(basename \"$PWD\" | tr . -)";
+          # [[ TMUX ]]
+          tkill = "tmux kill-server";
+          there = "tmux new-session -d -s $(basename \"$PWD\" | tr . -); tmux switch-client -t $(basename \"$PWD\" | tr . -) || tmux attach -t $(basename \"$PWD\" | tr . -);";
 
           # [[ GIT ]]
           git = "hub";
