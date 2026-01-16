@@ -1,6 +1,21 @@
 { ... }:
 
 {
+  networking.hostName = "coco"; # The codependent computer
+
+  # Enable networking
+  networking.networkmanager.enable = true;
+
+  networking.extraHosts = ''
+    127.0.0.1       zeus-bucket.localhost
+    127.0.0.1       dev.zeuslogics.com
+  '';
+
+  # Firewall - block all ports by default
+  networking.firewall.enable = true;
+  networking.firewall.allowedTCPPorts = [ ];
+  networking.firewall.allowedUDPPorts = [ ];
+
   # DNS Configuration (router already uses 1.1.1.1)
   networking.nameservers = [
     "1.1.1.1#one.one.one.one"
