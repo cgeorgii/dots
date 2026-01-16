@@ -79,7 +79,7 @@ layout {
 spawn-at-startup "systemctl" "--user" "import-environment" "WAYLAND_DISPLAY" "XDG_CURRENT_DESKTOP"
 spawn-at-startup "systemctl" "--user" "set-environment" "DISPLAY=:0"
 spawn-at-startup "sh" "-c" "while ! systemctl --user is-active xwayland-satellite.service; do sleep 0.5; done && maestral_qt"
-spawn-at-startup "swaybg" "-i" "/home/cgeorgii/dots/wallpapers/02108_navajoland_1920x1080.jpg" "-m" "fill"
+spawn-at-startup "swaybg" "-i" "/home/cgeorgii/dots/coco/wallpapers/02108_navajoland_1920x1080.jpg" "-m" "fill"
 spawn-at-startup "kitty" "-d" "/home/cgeorgii/dots" "-e" "tmux" "new-session" "-A" "-s" "dots"
 spawn-at-startup "waybar"
 

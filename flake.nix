@@ -50,7 +50,7 @@
           };
 
           overlayAttrs = {
-            whispering = final.callPackage ./pkgs/whispering.nix { };
+            whispering = final.callPackage ./coco/pkgs/whispering.nix { };
           };
 
         };
@@ -72,12 +72,12 @@
               ./coco/hardware-configuration.nix
               inputs.nixos-hardware.nixosModules.lenovo-thinkpad-x1-9th-gen
               # Common config
-              ./common.nix
+              ./coco/common.nix
               # System-specific config
               ./coco/configuration.nix
               # Home-manager
               inputs.home-manager.nixosModules.home-manager
-              ./home/cgeorgii.nix
+              ./coco/home/cgeorgii.nix
             ];
           };
         };

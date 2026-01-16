@@ -13,7 +13,7 @@
     # impossible without a rebuild.
     let
       link-dotfile =
-        file: config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dots/dotfiles/${file}";
+        file: config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dots/coco/dotfiles/${file}";
 
       claude-pkgs = import inputs.nixpkgs-for-claude {
         system = pkgs.stdenv.hostPlatform.system;
@@ -150,7 +150,7 @@
       programs.swaylock = {
         enable = true;
         settings = {
-          image = "${config.home.homeDirectory}/dots/wallpapers/02108_navajoland_1920x1080.jpg";
+          image = "${config.home.homeDirectory}/dots/coco/wallpapers/02108_navajoland_1920x1080.jpg";
           scaling = "fill";
           show-failed-attempts = true;
         };
