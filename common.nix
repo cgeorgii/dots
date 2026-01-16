@@ -8,7 +8,6 @@
   imports = [
     ./nix/network.nix
     ./nix/mullvad.nix
-    ./nix/git-repos.nix
     ./nix/logseq.nix
   ];
 
@@ -193,23 +192,6 @@
 
   # Needed to install unfree packages within flake.
   home-manager.useGlobalPkgs = true;
-
-  # Configure git repositories to be automatically cloned and kept up-to-date
-  services.gitRepos = {
-    enable = true;
-    repositories = {
-      dots = {
-        url = "https://github.com/cgeorgii/dots.git";
-        path = "/home/cgeorgii/dots";
-        branch = "master";
-      };
-      servant-template = {
-        url = "https://github.com/tweag/servant-template.git";
-        path = "/home/cgeorgii/code/tweag/servant-template";
-        branch = "main";
-      };
-    };
-  };
 
   nixpkgs.config = {
     allowUnfreePredicate =
