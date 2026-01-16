@@ -50,7 +50,7 @@
           };
 
           overlayAttrs = {
-            whispering = final.callPackage ./coco/pkgs/whispering.nix { };
+            whispering = final.callPackage ./pkgs/whispering.nix { };
           };
 
         };
