@@ -56,28 +56,17 @@
         };
 
       flake = {
-        # A common module to apply overlays
         nixosModules.default.nixpkgs.overlays = [ inputs.self.overlays.default ];
         nixosConfigurations = {
           coco = inputs.nixpkgs.lib.nixosSystem {
             system = "x86_64-linux";
-            specialArgs = {
-              inherit inputs;
-            };
+            specialArgs = { inherit inputs; };
             modules = [
               # Apply our overlay module
               inputs.self.nixosModules.default
 
-              # Hardware config
-              ./coco/hardware-configuration.nix
-              inputs.nixos-hardware.nixosModules.lenovo-thinkpad-x1-9th-gen
-              # Common config
-              ./coco/common.nix
-              # System-specific config
-              ./coco/configuration.nix
-              # Home-manager
-              inputs.home-manager.nixosModules.home-manager
-              ./coco/home/cgeorgii.nix
+              # Consolidated coco configuration
+              ./coco
             ];
           };
         };
