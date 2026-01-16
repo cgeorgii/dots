@@ -247,9 +247,9 @@ require("lazy").setup({
         {
           "\\",
           function()
-            require("spectre").toggle(); vim.cmd("startinsert")
+            require("grug-far").open()
           end,
-          desc = "Toggle Spectre"
+          desc = "Open Grug Far"
         },
         { "H",         "^",                                                 desc = "Jump to first non-blank character" },
         { "L",         "g_",                                                desc = "Jump to last non-blank character" },
@@ -472,15 +472,14 @@ require("lazy").setup({
     end,
   },
   {
-    "nvim-pack/nvim-spectre",
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-    },
-    cmd = "Spectre",
+    "MagicDuck/grug-far.nvim",
+    config = function()
+      require('grug-far').setup({})
+    end,
     keys = {
-      { "<leader>srr", function() require("spectre").toggle() end,                            desc = "Toggle Spectre" },
-      { "<leader>srw", function() require("spectre").open_visual({ select_word = true }) end, desc = "Search current word" },
-      { "<leader>srf", function() require("spectre").open_file_search() end,                  desc = "Search in current file" },
+      { "<leader>srr", function() require("grug-far").open() end,                                                   desc = "Open Grug Far" },
+      { "<leader>srw", function() require("grug-far").open({ prefills = { search = vim.fn.expand("<cword>") } }) end, desc = "Search current word" },
+      { "<leader>srf", function() require("grug-far").open({ prefills = { paths = vim.fn.expand("%") } }) end,        desc = "Search in current file" },
     },
   }
 }, {

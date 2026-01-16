@@ -9,10 +9,9 @@
  */
 
 * {
-  font-family: "IosevkaTerm Nerd Font Mono", "Font Awesome 6 Free Solid", "Font Awesome 6 Brands", monospace;
-  font-size: 13px;
+  font-family: "IosevkaTerm Nerd Font Mono", "Font Awesome 6 Free", monospace;
+  font-size: 14px;
   font-feature-settings: "tnum";
-  font-weight: 400;
 }
 
 window#waybar {

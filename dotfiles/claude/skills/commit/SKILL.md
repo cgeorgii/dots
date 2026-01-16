@@ -1,3 +1,11 @@
+---
+name: commit
+description: Create a git commit using conventional commit format. Use when the user asks to create a commit, commit changes, or make a git commit.
+user-invocable: true
+---
+
+# Create Git Commit
+
 Create a git commit using conventional commit format.
 
 1. Run `git status` and `git diff --staged` to see staged changes

@@ -1,104 +1,20 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to Claude Code when working with code in this repository.
 
-## Commit Message Guidelines
-- **IMPORTANT**: When asked to commit changes to a git repository, **never** add mentions of Claude or AI assistants to commit messages.
+**This repository defines the currently running NixOS system configuration.**
 
-## Repository Architecture
+## Critical Rules
 
-This is a NixOS dotfiles repository with flake-based configuration that manages:
-- NixOS system configuration for "coco" machine (ThinkPad X1 9th gen)
-- Home-Manager user configurations with dotfile symlinks
-- Automated git repository synchronization via systemd services
-- Development environment with pre-commit hooks
+- **Never mention Claude or AI in commits**: When creating commits, never include references to Claude, AI assistants, or co-authorship mentions
+- **Never run sudo commands directly**: Always ask the user to run them in a separate terminal
+- **All changes via declarative Nix config**: Never modify system files directly; use NixOS/Home-Manager configuration files
+- **Don't edit systemd services directly**: Use the appropriate Nix modules instead
 
-### Key Components
-- `flake.nix`: Main flake with nixos-hardware, home-manager, and custom app integration
-- `common.nix`: System-wide packages and configuration shared across machines
-- `home/cgeorgii.nix`: User-specific configuration with dotfile symlinks and Niri/Waybar setup
-- `nix/git-repos.nix`: Custom NixOS module for automatic git repository management
-- `dotfiles/`: Configuration files symlinked via home-manager
+## Dotfile Management
 
-### Desktop Environment
-- Niri (Wayland compositor)
-- Waybar (status bar)
-- Fuzzel (application launcher)
-- Kitty (terminal emulator)
-- Zellij (terminal multiplexer)
-
-### Dotfile Management Strategy
 Uses `config.lib.file.mkOutOfStoreSymlink` to create symlinks instead of copying files, enabling hot-reloading without rebuilds. All dotfiles live in `dotfiles/` and are symlinked to appropriate locations.
 
-Configuration files for the user's home directory are symlinked in `home/cgeorgii.nix`. When adding new configuration files, follow this pattern by placing them in `dotfiles/` and creating symlinks through home-manager rather than copying files.
+**When adding new configuration files**: Place them in `dotfiles/` and create symlinks through home-manager in `home/cgeorgii.nix` rather than copying files.
 
-## Assistant Guidelines
-- Never run sudo commands directly; always ask the user to run them
-- User will run sudo commands in a separate terminal and paste the results
-- Never modify system files directly; always make changes through NixOS/Home-Manager configuration files
-- All configuration changes should be done declaratively through Nix configuration files
-- Don't edit systemd service files directly; use the appropriate Nix modules instead
-
-## Build/Test Commands
-- NixOS rebuild: `sudo nixos-rebuild switch`
-- Link dotfiles: `sudo ln -s /home/cgeorgii/dots/* /etc/nixos`
-- Check config: `nixos-rebuild dry-build`
-- Format Nix files: `nixfmt file.nix`
-- Setup development environment: `nix develop` (enables pre-commit hooks and development tools)
-- Build specific configurations: `nix build .#nixosConfigurations.coco.config.system.build.toplevel`
-- Check flake: `nix flake check`
-- Update flake inputs: `nix flake update`
-
-## Git Hooks
-- Pre-commit hooks are enabled via github:cachix/git-hooks.nix
-- Run `nix develop` to activate hooks in your local environment
-- Enabled hooks:
-  - nixfmt: Auto-formats Nix files
-  - deadnix: Finds unused variables in Nix files
-- Development shell includes: nil (Nix LSP), git-bug (issue tracker)
-
-## NixOS/Home-Manager Style Guidelines
-- Use 2-space indentation in all files
-- Format Nix files with `nixfmt`
-- Follow functional programming patterns
-- Group related settings in modules
-- Use descriptive names for options
-- Document non-obvious settings with comments
-- When creating new files for Nix flakes, ensure they are tracked by git before testing with nix commands
-  - Untracked files can cause errors like "path '/nix/store/hash-source/path/to/file' does not exist"
-  - Solution: Track files without staging using `git add --intent-to-add path/to/file` or `git add -N path/to/file`
-
-## Neovim Style Guidelines
-- Use Lua for all configuration
-- 2-space indentation, no tabs
-- Leader key is `;`
-- Format with proper whitespace and bracing style
-- Wrap related plugin configs in feature-based groups
-- Prefer native LSP functions over plugin equivalents
-
-## Git Workflow
-- Create focused, atomic commits
-- Use `hub` as git wrapper
-- Use `lazygit` for interactive Git operations
-- Prefer rebase over merge for linear history
-- Do not include co-authored by Claude information in commits
-- Git config location: `~/.config/git/config`
-- Credential storage: git-credential-manager with GPG backend
-  - Initialize pass: `pass init YOUR_GPG_KEY_ID`
-  - Credentials stored securely with GPG encryption
-
-## Automated Repository Management
-- `nix/git-repos.nix` provides systemd service for automatic git repository syncing
-- Configured repositories are cloned and kept up-to-date automatically
-- Service runs on boot and every 30 minutes
-- Skips updates if repositories have uncommitted changes
-
-## Git-Bug Issue Tracker
-- Use `git bug` to manage issues directly in the repository
-- List issues: `git bug ls`
-- Create a new issue: `git bug new`
-- Show issue details: `git bug show <id>`
-- Add a comment: `git bug comment <id>`
-- Edit an issue: `git bug edit <id>`
-- Change issue status: `git bug status <id> <new-status>`
-- Pull/push issues: `git bug pull` and `git bug push`
+**Important**: When creating new files for Nix flakes, ensure they are tracked by git before testing with nix commands. Use `git add -N path/to/file` to track without staging.

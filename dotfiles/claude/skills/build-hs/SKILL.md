@@ -1,3 +1,11 @@
+---
+name: build-hs
+description: Start a ghcid session to monitor the build. Use when working with Haskell projects, starting ghcid, checking build errors, or searching Haskell documentation with hoogle.
+user-invocable: true
+---
+
+# Haskell Build Monitoring with ghcid
+
 Start a ghcid session to monitor the build.
 
 **Before starting**: Verify which command is actually allowed in `.claude/settings.local.json` for ghcid and ensure you use it to avoid prompting for permission.
@@ -18,19 +26,7 @@ nix develop -c ghcid \
 
 **Note**: The `all` target ensures internal libraries are included in the build. Tests must be specified explicitly since `all` doesn't include them. The `--restart` flag causes ghcid to automatically restart when the cabal file changes (e.g., after hpack regeneration). The `--test` flag runs the test suite automatically after a successful build.
 
-For this project:
-```
-nix develop -c ghcid \
-  -c 'cabal repl --enable-multi-repl all dota-sage-test' \
-  --restart=dota-sage.cabal \
-  --test ':!nix develop -c cabal test' \
-  --outputfile=build.log \
-  --clear
-```
-
-**IMPORTANT**: Use `run_in_background: true` parameter in the Bash tool (without `&` at the end of the command) so ghcid appears in Claude Code's background processes UI.
-
-To keep context usage reasonable, only the file build.log should be used to monitor the build status, ideally reading only the first few lines and then more if needed using the Read tool.
+To keep context usage reasonable, only the output file `build.log` should be used to monitor the build status, ideally reading only the first few lines and then more if needed using the Read tool.
 
 **Monitoring build status**:
 - Check for errors: Use Read tool with `file_path: "build.log"` and `limit: 20`

@@ -45,7 +45,7 @@
       home.file."./code/tweag/.gitconfig".source = link-dotfile "gitconfig-work";
       home.file.".claude/CLAUDE.md".source = link-dotfile "claude/CLAUDE.md";
       home.file.".claude/settings.json".source = link-dotfile "claude/settings.json";
-      home.file.".claude/commands".source = link-dotfile "claude/commands";
+      home.file.".claude/skills".source = link-dotfile "claude/skills";
 
       xdg.configFile = {
         # Link the entire nvim directory structure
@@ -90,6 +90,7 @@
         signal-pkgs.signal-desktop
         spotify-pkgs.spotify
         starship
+        swaybg # Wallpaper manager for Niri
         tree
         waybar # Status bar for Niri
         wasistlos
