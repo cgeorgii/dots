@@ -363,6 +363,20 @@ require("lazy").setup({
     end,
   },
 
+  -- Lean theorem prover
+  {
+    "Julian/lean.nvim",
+    event = { "BufReadPre *.lean", "BufNewFile *.lean" },
+    dependencies = {
+      "neovim/nvim-lspconfig",
+      "nvim-lua/plenary.nvim",
+    },
+    opts = {
+      lsp = {},
+      mappings = true,
+    },
+  },
+
   {
     "junegunn/fzf",
   },
