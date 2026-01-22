@@ -8,12 +8,9 @@
       pkgs,
       ...
     }:
-    # Using a string here instead of the direct path because otherwise a config with
-    # flakes will not symlink but copy the files, making hot-reloading the config
-    # impossible without a rebuild.
     let
-      link-dotfile =
-        file: config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dots/coco/dotfiles/${file}";
+      cocoLib = import ../lib.nix { inherit config; };
+      inherit (cocoLib) link-dotfile;
 
       claude-pkgs = import inputs.nixpkgs-for-claude {
         system = pkgs.stdenv.hostPlatform.system;
@@ -39,13 +36,11 @@
 
     in
     {
-      home.file.".gitignore".source = link-dotfile "gitignore";
-      home.file.".tmux.conf".source = link-dotfile "tmux.conf";
-      home.file.".emacs".source = link-dotfile "emacs";
-      home.file."./code/tweag/.gitconfig".source = link-dotfile "gitconfig-work";
-      home.file.".claude/CLAUDE.md".source = link-dotfile "claude/CLAUDE.md";
-      home.file.".claude/settings.json".source = link-dotfile "claude/settings.json";
-      home.file.".claude/skills".source = link-dotfile "claude/skills";
+      imports = [
+        ./git.nix
+        ./tmux.nix
+        ./claude.nix
+      ];
 
       xdg.configFile = {
         # Link the entire nvim directory structure
@@ -110,8 +105,6 @@
           };
         };
       };
-
-      programs.tmux.newSession = true;
 
       # Session variables (XDG_CURRENT_DESKTOP set by compositor)
       home.sessionVariables = {
@@ -315,61 +308,6 @@
             file = "autopair.zsh";
           }
         ];
-      };
-
-      programs.git = {
-        enable = true;
-        lfs.enable = true;
-        includes = [
-          { path = "~/.gitconfig"; } # GH adds auth information to this file
-          {
-            path = "~/code/tweag/.gitconfig";
-            condition = "gitdir:~/code/tweag/";
-          }
-        ];
-        settings = {
-          user.name = "Christian Georgii";
-          user.email = "cgeorgii@gmail.com";
-          github.user = "cgeorgii";
-          push.default = "simple";
-          rerere.enable = true;
-          branch.autosetuprebase = "always";
-          core.excludefile = "~/.gitignore";
-          core.excludesfile = "~/.gitignore";
-          hub.protocol = "ssh";
-          push.autoSetupRemote = true;
-          credential = {
-            helper = "manager";
-            credentialStore = "gpg";
-          };
-          alias = {
-            b = "branch";
-            cb = "checkout -b";
-            pp = "pull --prune";
-            co = "checkout";
-            cm = "commit";
-            cmm = "commit --allow-empty -m";
-            cma = "commit --amend --no-edit";
-            st = "status";
-            du = "diff @{upstream}";
-            di = "diff";
-            dc = "diff --cached";
-            dw = "diff --word-diff";
-            dwc = "diff --word-diff --cached";
-            lg = "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative";
-            review = "log master.. -p --reverse";
-          };
-        };
-      };
-
-      programs.delta = {
-        enable = true;
-        enableGitIntegration = true;
-        options = {
-          navigate = true;
-          syntax-theme = "gruvbox-dark";
-          light = false;
-        };
       };
 
       programs.jq = {
