@@ -16,10 +16,10 @@ First, check `package.yaml` to identify the test components:
 Then run ghcid with the `all` target (which includes all libraries and executables, including internal libraries) PLUS all test components using the Bash tool with `run_in_background: true`:
 
 ```
-nix develop -c ghcid \
+ghcid \
   -c 'cabal repl --enable-multi-repl all <test-name>' \
   --restart=<project>.cabal \
-  --test ':!nix develop -c cabal test' \
+  --test ':!cabal test' \
   --outputfile=build.log \
   --clear
 ```
@@ -59,37 +59,37 @@ To keep context usage reasonable, only the output file `build.log` should be use
 
 ## Documentation Search with Hoogle
 
-Use hoogle CLI to search for documentation of project dependencies within the nix develop shell.
+Use hoogle CLI to search for documentation of project dependencies.
 
 **Basic search commands**:
 
 1. **Search for a function by name**:
    ```
-   nix develop -c hoogle search "mapMaybe"
+   hoogle search "mapMaybe"
    ```
    Example output: Shows functions from Data.Maybe and other modules
 
 2. **Search by type signature**:
    ```
-   nix develop -c hoogle search "(a -> Bool) -> [a] -> [a]"
+   hoogle search "(a -> Bool) -> [a] -> [a]"
    ```
    Finds functions like `filter`, `takeWhile`, etc.
 
 3. **Search for specific package documentation**:
    ```
-   nix develop -c hoogle search "aeson" --count=10
+   hoogle search "aeson" --count=10
    ```
    Lists top 10 results from the aeson package
 
 4. **Get detailed information about a function**:
    ```
-   nix develop -c hoogle search "traverse" --info
+   hoogle search "traverse" --info
    ```
    Shows full documentation with examples
 
 5. **Search in specific modules**:
    ```
-   nix develop -c hoogle search "module:Data.List take"
+   hoogle search "module:Data.List take"
    ```
    Searches only within Data.List module
 
@@ -102,10 +102,10 @@ Use hoogle CLI to search for documentation of project dependencies within the ni
 
 **Common search patterns**:
 
-- Find JSON parsing: `nix develop -c hoogle search "ByteString -> Maybe Value"`
-- Find list functions: `nix develop -c hoogle search "module:Data.List"`
-- Find monad operations: `nix develop -c hoogle search "Monad m =>"`
-- Find lens operations: `nix develop -c hoogle search "Lens'"`
+- Find JSON parsing: `hoogle search "ByteString -> Maybe Value"`
+- Find list functions: `hoogle search "module:Data.List"`
+- Find monad operations: `hoogle search "Monad m =>"`
+- Find lens operations: `hoogle search "Lens'"`
 
 **Integration with development**:
 - When encountering unfamiliar functions in build.log errors, use hoogle to understand their usage
