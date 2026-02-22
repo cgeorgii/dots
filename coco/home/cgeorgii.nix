@@ -79,7 +79,7 @@
         lua-language-server
         nemo # File manager
         neofetch
-        nixfmt-rfc-style
+        nixfmt
         pavucontrol
         ripgrep
         signal-pkgs.signal-desktop
