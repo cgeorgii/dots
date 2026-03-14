@@ -1,0 +1,7 @@
+# jjui configuration
+# Using Gruvbox Dark Hard theme from tinted-jjui
+
+auto_refresh_interval = 2  # Auto-refresh every 2 seconds
+
+[ui]
+theme = "base16-gruvbox-dark-hard"

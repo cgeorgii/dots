@@ -25,3 +25,4 @@ vim.opt.clipboard = 'unnamedplus'   -- Use system clipboard by default
 vim.opt.timeoutlen = 500            -- For which-key
 vim.opt.title = true                -- Set terminal title
 vim.opt.titlestring = 'nvim %t'     -- Title format: "nvim filename"
+vim.opt.autoread = true             -- Auto-reload files changed outside vim

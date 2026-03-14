@@ -479,6 +479,24 @@ require("lazy").setup({
   { "vmchale/dhall-vim" },
   { "hashivim/vim-terraform" },
   {
+    "MeanderingProgrammer/render-markdown.nvim",
+    dependencies = {
+      "nvim-treesitter/nvim-treesitter",
+      "nvim-tree/nvim-web-devicons",
+    },
+    ft = { "markdown" },
+    opts = { anti_conceal = { enabled = false } },
+    config = function(_, opts)
+      require("render-markdown").setup(opts)
+      vim.api.nvim_create_autocmd("FileType", {
+        pattern = "markdown",
+        callback = function()
+          vim.keymap.set("n", "m", "<cmd>RenderMarkdown toggle<cr>", { buffer = true, desc = "Toggle markdown rendering" })
+        end,
+      })
+    end,
+  },
+  {
     "dhruvasagar/vim-table-mode",
     config = function()
       vim.g.table_mode_corner_corner = '+'

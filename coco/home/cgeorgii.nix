@@ -49,6 +49,8 @@
         "fuzzel/fuzzel.ini".source = link-dotfile "config/fuzzel/fuzzel.ini";
         "waybar/config".source = link-dotfile "config/waybar/config.json";
         "waybar/style.css".source = link-dotfile "config/waybar/style.css";
+        "jjui/config.toml".source = link-dotfile "config/jjui/config.toml";
+        "jjui/themes".source = link-dotfile "config/jjui/themes";
       };
 
       home.packages = with pkgs; [
