@@ -1,0 +1,6 @@
+worktree_prefix: dots-
+
+files:
+  symlink:
+    - "<global>"
+    - .direnv

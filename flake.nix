@@ -12,6 +12,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     pre-commit-hooks.url = "github:cachix/git-hooks.nix";
+    workmux.url = "github:raine/workmux";
     flake-parts.url = "github:hercules-ci/flake-parts";
   };
 

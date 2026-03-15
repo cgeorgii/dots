@@ -1,0 +1,26 @@
+agent: claude
+mode: session
+nerdfont: true
+
+panes:
+  - command: <agent>
+  - command: nvim prompt.md
+    focus: true
+    split: horizontal
+    percentage: 50
+  - command: git log --oneline --decorate -10
+    split: vertical
+    percentage: 30
+
+files:
+  copy:
+    - .env.local
+  symlink:
+    - .workmux.yaml
+    - .claude/settings.local.json
+
+post_create:
+  - touch -d "$(git log -1 --format=@%ct -- .envrc)" .envrc
+  - touch -d "$(git log -1 --format=@%ct -- flake.nix)" flake.nix
+  - touch -d "$(git log -1 --format=@%ct -- flake.lock)" flake.lock
+  - direnv allow

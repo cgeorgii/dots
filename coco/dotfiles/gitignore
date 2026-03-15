@@ -36,5 +36,8 @@ subversion/README.txt
 subversion/auth/*
 task/task/*.data
 
+# workmux project config
+.workmux.yaml
+
 # Claude Code settings
 .claude/
