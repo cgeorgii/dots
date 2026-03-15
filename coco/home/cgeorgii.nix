@@ -3,7 +3,6 @@
 {
   home-manager.users.cgeorgii =
     {
-      lib,
       config,
       pkgs,
       ...
@@ -360,11 +359,6 @@
 
       home.stateVersion = "21.11";
 
-      # Enable pass-secret-service
-      services.pass-secret-service = {
-        enable = true;
-        storePath = lib.mkForce "${config.home.homeDirectory}/.password-store";
-      };
       programs.password-store.enable = true;
 
       # Enable xwayland-satellite for X11 app compatibility
