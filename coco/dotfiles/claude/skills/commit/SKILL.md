@@ -21,13 +21,10 @@ Create a git commit using conventional commit format, with an inline review step
    - Keep the subject line concise (≤50 chars preferred)
    - Add a blank line and body with more detail if needed
    - Write the body using GitHub-flavoured markdown: `- ` bullet lists, `**bold**`, backticks for code
-5. Use the AskUserQuestion tool to present the draft inline. Set the question text to the full
-   commit message so the user can read it, and offer these options:
-   `["Accept message above", "Edit (write to .git/COMMIT_EDITMSG)", "Cancel"]`
-6. Based on the answer:
-   - **"Accept message above"**: commit directly using the drafted message via heredoc (`git commit -m "$(cat <<'EOF' ... EOF)"`)
-   - **"Edit"**: write the draft to `.git/COMMIT_EDITMSG`, tell the user to run `ge` (or `g e`) to edit it, then use AskUserQuestion again with `["Commit", "Abort"]`; if "Commit" run `git commit -F .git/COMMIT_EDITMSG --cleanup=strip`
-   - **"Cancel"**: inform the user the commit was cancelled
+5. Write the draft to `.git/COMMIT_EDITMSG` using the Write tool (not Bash)
+6. Use AskUserQuestion with `["Commit", "Abort"]`
+   - **"Commit"**: run `git commit -F .git/COMMIT_EDITMSG --cleanup=strip`
+   - **"Abort"**: inform the user the commit was cancelled
 
 **IMPORTANT**:
 - Never include Claude, AI, or co-authorship mentions

@@ -1,3 +1,9 @@
 {
-  "alwaysThinkingEnabled": true
+  "alwaysThinkingEnabled": true,
+  "permissions": {
+    "allow": [
+      "Edit(/.git/COMMIT_EDITMSG)",
+      "Write(/.git/COMMIT_EDITMSG)"
+    ]
+  }
 }
