@@ -282,6 +282,7 @@
           gitconfig = "nvim ~/.gitconfig";
           lg = "lazygit";
           gb = "git bug";
+          ge = "nvim .git/COMMIT_EDITMSG";
 
           # [[ UTILS ]]
           cat = "bat";

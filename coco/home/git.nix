@@ -48,6 +48,7 @@ in
         dwc = "diff --word-diff --cached";
         lg = "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative";
         review = "log master.. -p --reverse";
+        e = "!nvim .git/COMMIT_EDITMSG";
       };
     };
   };
