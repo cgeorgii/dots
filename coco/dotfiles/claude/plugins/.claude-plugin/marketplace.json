@@ -1,0 +1,17 @@
+{
+  "name": "cgeorgii-plugins",
+  "owner": {
+    "name": "cgeorgii"
+  },
+  "metadata": {
+    "description": "Personal Claude Code plugins"
+  },
+  "plugins": [
+    {
+      "name": "haskell-lsp",
+      "source": "./haskell-lsp",
+      "description": "Haskell language server (HLS) for code intelligence",
+      "version": "1.0.0"
+    }
+  ]
+}

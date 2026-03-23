@@ -1,9 +1,23 @@
 {
-  "alwaysThinkingEnabled": true,
+  "env": {
+    "ENABLE_LSP_TOOL": "1"
+  },
   "permissions": {
     "allow": [
       "Edit(/.git/COMMIT_EDITMSG)",
       "Write(/.git/COMMIT_EDITMSG)"
     ]
-  }
+  },
+  "enabledPlugins": {
+    "haskell-lsp@cgeorgii-plugins": true
+  },
+  "extraKnownMarketplaces": {
+    "cgeorgii-plugins": {
+      "source": {
+        "source": "directory",
+        "path": "/home/cgeorgii/.claude/plugins/cgeorgii"
+      }
+    }
+  },
+  "alwaysThinkingEnabled": true
 }

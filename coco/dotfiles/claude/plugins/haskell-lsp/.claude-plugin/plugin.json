@@ -1,0 +1,16 @@
+{
+  "name": "haskell-lsp",
+  "description": "Haskell language server (HLS) for code intelligence",
+  "version": "1.0.0",
+  "strict": false,
+  "lspServers": {
+    "haskell-language-server": {
+      "command": "haskell-language-server",
+      "args": ["--lsp"],
+      "extensionToLanguage": {
+        ".hs": "haskell",
+        ".lhs": "haskell"
+      }
+    }
+  }
+}

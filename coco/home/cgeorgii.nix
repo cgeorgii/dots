@@ -262,6 +262,16 @@
         export KEYTIMEOUT=1
 
         export BAT_THEME=gruvbox-dark
+
+        gh-pr-comments() {
+          local PR REPO
+          PR=$(gh pr view --json number --jq .number)
+          REPO=$(gh repo view --json nameWithOwner --jq .nameWithOwner)
+          gh api --paginate \"repos/$REPO/pulls/$PR/comments\" > /tmp/pr-inline.json
+          gh api --paginate \"repos/$REPO/issues/$PR/comments\" > /tmp/pr-issue.json
+          gh api --paginate \"repos/$REPO/pulls/$PR/reviews\" > /tmp/pr-reviews.json
+          jq -s '([.[0][], .[1][]] | map({path, start_line, line, body})) + [.[2][] | select(.body != \"\") | {body}]' /tmp/pr-inline.json /tmp/pr-issue.json /tmp/pr-reviews.json > pr-comments.json
+        }
       ";
 
         shellAliases = {

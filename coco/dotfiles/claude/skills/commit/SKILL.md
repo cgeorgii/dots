@@ -15,16 +15,14 @@ Create a git commit using conventional commit format, with an inline review step
    unrelated, offering: `["Continue anyway", "Unstage some files", "Cancel"]`
    - **"Unstage some files"**: ask which files to unstage, run `git restore --staged <files>`, then re-check
    - **"Cancel"**: stop
-3. Stage files with `git add` if needed
+3. Check whether the user has forgotten related changes unstaged and stage with `git add` if needed
 4. Draft a conventional commit message:
    - Use prefixes: `feat:`, `fix:`, `refactor:`, `docs:`, `chore:`, `style:`, `test:`
    - Keep the subject line concise (≤50 chars preferred)
    - Add a blank line and body with more detail if needed
    - Write the body using GitHub-flavoured markdown: `- ` bullet lists, `**bold**`, backticks for code
-5. Write the draft to `.git/COMMIT_EDITMSG` using the Write tool (not Bash)
-6. Use AskUserQuestion with `["Commit", "Abort"]`
-   - **"Commit"**: run `git commit -F .git/COMMIT_EDITMSG --cleanup=strip`
-   - **"Abort"**: inform the user the commit was cancelled
+5. Run `pre-commit run`. If the repo has no git hooks, ignore the error and continue.
+6. Commit the changes
 
 **IMPORTANT**:
 - Never include Claude, AI, or co-authorship mentions

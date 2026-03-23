@@ -26,12 +26,7 @@ ghcid \
 
 **Note**: The `all` target ensures internal libraries are included in the build. Tests must be specified explicitly since `all` doesn't include them. The `--restart` flag causes ghcid to automatically restart when the cabal file changes (e.g., after hpack regeneration). The `--test` flag runs the test suite automatically after a successful build.
 
-To keep context usage reasonable, only the output file `build.log` should be used to monitor the build status, ideally reading only the first few lines and then more if needed using the Read tool.
-
-**Monitoring build status**:
-- Check for errors: Use Read tool with `file_path: "build.log"` and `limit: 20`
-- Check if ghcid is running: View background processes in Claude Code UI, or `ps aux | grep ghcid`
-- Kill ghcid: Use KillShell tool with the shell ID, or `pkill ghcid`
+Once running, use `/ghcid` to monitor `build.log` and wait for a clean build.
 
 **When to restart ghcid**:
 - If ghcid appears stuck or unresponsive
@@ -42,13 +37,6 @@ To keep context usage reasonable, only the output file `build.log` should be use
 **Important**: If you add a new component (library, executable, or test suite) to `package.yaml`, you must also remind me to update the permission in `.claude/settings.local.json` to include the new component name in the ghcid command.
 
 **Note**: Avoid building the project directly with cabal or stack. Let ghcid monitor compilation continuously.
-
-**Incremental Compilation Performance**:
-- The initial ghcid build takes a few seconds to compile all modules
-- After that, incremental recompilation is essentially instant (typically <1 second)
-- **IMPORTANT**: Do not add `sleep` delays between making code changes and checking build.log
-- ghcid detects file changes and recompiles immediately, so you can check build.log right after making edits
-- If you need to verify compilation completed, just read build.log directly - if ghcid is still compiling, you'll see the status
 
 ## Common Build Issues
 
