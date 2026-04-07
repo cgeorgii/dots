@@ -1,16 +1,10 @@
 {
-  "env": {
-    "ENABLE_LSP_TOOL": "1"
-  },
   "permissions": {
     "allow": [
-      "Edit(/.git/COMMIT_EDITMSG)",
-      "Write(/.git/COMMIT_EDITMSG)"
     ]
   },
-  "enabledPlugins": {
-    "haskell-lsp@cgeorgii-plugins": true
-  },
+  "model": "sonnet",
+  "enabledPlugins": {},
   "extraKnownMarketplaces": {
     "cgeorgii-plugins": {
       "source": {
@@ -19,5 +13,7 @@
       }
     }
   },
-  "alwaysThinkingEnabled": true
+  "alwaysThinkingEnabled": true,
+  "showThinkingSummaries": true,
+  "effortLevel": "high"
 }

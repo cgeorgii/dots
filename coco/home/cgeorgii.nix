@@ -294,6 +294,9 @@
           gb = "git bug";
           ge = "nvim .git/COMMIT_EDITMSG";
 
+          # [[ GHCIB ]]
+          ghcib = "~/.local/bin/ghcib-exe";
+
           # [[ UTILS ]]
           cat = "bat";
           ls = "eza --git --icons -a --group-directories-first";

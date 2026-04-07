@@ -311,6 +311,25 @@ require("lazy").setup({
     "mrcjkb/haskell-tools.nvim",
     version = "^6",
     lazy = false, -- This plugin is already lazy (filetype plugin)
+    init = function()
+      vim.g.haskell_tools = {
+        hls = {
+          default_settings = {
+            haskell = {
+              plugin = {
+                ['ghcide-type-lenses'] = {
+                  globalOn = true,
+                  config = {
+                    -- 'always' | 'exported' | 'diagnostics'
+                    mode = 'diagnostics',
+                  },
+                },
+              },
+            },
+          },
+        },
+      }
+    end,
   },
 
   -- LSP and completion
