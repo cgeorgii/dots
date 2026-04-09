@@ -52,6 +52,7 @@
 
           overlayAttrs = {
             whispering = final.callPackage ./pkgs/whispering.nix { };
+            niri-taskbar = final.callPackage ./pkgs/niri-taskbar.nix { };
           };
 
         };

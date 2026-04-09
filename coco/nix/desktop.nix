@@ -27,6 +27,8 @@
     };
   };
 
+  services.upower.enable = true;
+
   # Don't suspend when lid is closed (using external monitors)
   services.logind.settings.Login = {
     HandleLidSwitch = "ignore";

@@ -53,6 +53,8 @@
         "workmux/config.yaml".source = link-dotfile "config/workmux/config.yaml";
       };
 
+      home.file.".local/lib/libniri_taskbar.so".source = "${pkgs.niri-taskbar}/lib/libniri_taskbar.so";
+
       home.packages = with pkgs; [
         autojump
         cachix
@@ -65,7 +67,6 @@
         maestral-gui
         entr
         eza
-        font-awesome # For waybar icons
         fd
         fuzzel # App launcher for Niri
         fzf
@@ -89,7 +90,8 @@
         starship
         swaybg # Wallpaper manager for Niri
         tree
-        waybar # Status bar for Niri
+        niri-taskbar
+        waybar
         inputs.workmux.packages.${pkgs.stdenv.hostPlatform.system}.default
         wasistlos
         whispering

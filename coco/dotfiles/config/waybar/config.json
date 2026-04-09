@@ -12,24 +12,18 @@
 
   "layer": "top",
   "position": "top",
-  // "height": 32,
+  "height": 28,
   "margin-top": 4,
   "margin-left": 4,
   "margin-right": 4,
   "spacing": 0,
 
-  "modules-left": ["network", "wlr/taskbar"],
+  "modules-left": ["network", "cffi/niri-taskbar"],
   "modules-center": ["clock"],
   "modules-right": ["cpu", "memory", "battery", "tray"],
 
-  "wlr/taskbar": {
-    "format": "{icon}",
-    "icon-size": 20,
-    "tooltip-format": "{title} | {app_id}",
-    "on-click": "activate",
-    "on-click-middle": "close",
-    "on-click-right": "fullscreen",
-    "all-outputs": false
+  "cffi/niri-taskbar": {
+    "module_path": "/home/cgeorgii/.local/lib/libniri_taskbar.so"
   },
 
   "clock": {
