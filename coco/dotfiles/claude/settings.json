@@ -1,19 +1,29 @@
 {
   "permissions": {
     "allow": [
+      "Bash(ghcib status)",
+      "Bash(ghcib status --wait)"
     ]
   },
   "model": "sonnet",
-  "enabledPlugins": {},
+  "enabledPlugins": {
+    "ghcib@atelier": true
+  },
   "extraKnownMarketplaces": {
     "cgeorgii-plugins": {
       "source": {
         "source": "directory",
         "path": "/home/cgeorgii/.claude/plugins/cgeorgii"
       }
+    },
+    "atelier": {
+      "source": {
+        "source": "directory",
+        "path": "/home/cgeorgii/code/ghcib"
+      }
     }
   },
   "alwaysThinkingEnabled": true,
-  "showThinkingSummaries": true,
-  "effortLevel": "high"
+  "effortLevel": "high",
+  "showThinkingSummaries": true
 }
