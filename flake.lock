@@ -75,6 +75,26 @@
         "type": "github"
       }
     },
+    "niri-taskbar": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1775771723,
+        "narHash": "sha256-JtoTQ2Pp/GtWwhbgQiRXdKbkFQRuYNPGvl3lYFv4q4M=",
+        "owner": "cgeorgii",
+        "repo": "niri-taskbar",
+        "rev": "4632cda2ee3491b0684a99c030313f7c88c87c11",
+        "type": "github"
+      },
+      "original": {
+        "owner": "cgeorgii",
+        "repo": "niri-taskbar",
+        "type": "github"
+      }
+    },
     "nixos-hardware": {
       "locked": {
         "lastModified": 1771969195,
@@ -226,6 +246,7 @@
       "inputs": {
         "flake-parts": "flake-parts",
         "home-manager": "home-manager",
+        "niri-taskbar": "niri-taskbar",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs",
         "nixpkgs-for-claude": "nixpkgs-for-claude",

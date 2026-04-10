@@ -13,6 +13,10 @@
     };
     pre-commit-hooks.url = "github:cachix/git-hooks.nix";
     workmux.url = "github:raine/workmux";
+    niri-taskbar = {
+      url = "github:cgeorgii/niri-taskbar";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     flake-parts.url = "github:hercules-ci/flake-parts";
   };
 
@@ -52,7 +56,6 @@
 
           overlayAttrs = {
             whispering = final.callPackage ./pkgs/whispering.nix { };
-            niri-taskbar = final.callPackage ./pkgs/niri-taskbar.nix { };
           };
 
         };

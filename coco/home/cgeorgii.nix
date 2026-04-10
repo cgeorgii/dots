@@ -39,6 +39,7 @@
         ./git.nix
         ./tmux.nix
         ./claude.nix
+        inputs.niri-taskbar.homeManagerModules.default
       ];
 
       xdg.configFile = {
@@ -53,7 +54,7 @@
         "workmux/config.yaml".source = link-dotfile "config/workmux/config.yaml";
       };
 
-      home.file.".local/lib/libniri_taskbar.so".source = "${pkgs.niri-taskbar}/lib/libniri_taskbar.so";
+      programs.niri-taskbar.enable = true;
 
       home.packages = with pkgs; [
         autojump
@@ -90,7 +91,6 @@
         starship
         swaybg # Wallpaper manager for Niri
         tree
-        niri-taskbar
         waybar
         inputs.workmux.packages.${pkgs.stdenv.hostPlatform.system}.default
         wasistlos
