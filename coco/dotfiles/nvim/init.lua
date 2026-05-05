@@ -498,6 +498,11 @@ require("lazy").setup({
   { "vmchale/dhall-vim" },
   { "hashivim/vim-terraform" },
   {
+    "folke/zen-mode.nvim",
+    cmd = "ZenMode",
+    opts = { window = { width = 100 } },
+  },
+  {
     "MeanderingProgrammer/render-markdown.nvim",
     dependencies = {
       "nvim-treesitter/nvim-treesitter",
@@ -511,6 +516,7 @@ require("lazy").setup({
         pattern = "markdown",
         callback = function()
           vim.keymap.set("n", "m", "<cmd>RenderMarkdown toggle<cr>", { buffer = true, desc = "Toggle markdown rendering" })
+          vim.keymap.set("n", "z", "<cmd>ZenMode<cr>", { buffer = true, desc = "Toggle zen mode" })
         end,
       })
     end,

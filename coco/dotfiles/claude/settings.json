@@ -1,13 +1,12 @@
 {
   "permissions": {
     "allow": [
-      "Bash(ghcib status)",
-      "Bash(ghcib status --wait)"
+      "Bash(tricorder status)",
+      "Bash(tricorder status --wait)"
     ]
   },
-  "model": "sonnet",
   "enabledPlugins": {
-    "ghcib@atelier": true
+    "tricorder@atelier": true
   },
   "extraKnownMarketplaces": {
     "cgeorgii-plugins": {
@@ -19,11 +18,12 @@
     "atelier": {
       "source": {
         "source": "directory",
-        "path": "/home/cgeorgii/code/ghcib"
+        "path": "/home/cgeorgii/code/tricorder"
       }
     }
   },
   "alwaysThinkingEnabled": true,
   "effortLevel": "high",
-  "showThinkingSummaries": true
+  "showThinkingSummaries": false,
+  "model": "sonnet"
 }

@@ -64,6 +64,7 @@
         devenv
         digikam
         discord
+        element-desktop
         maestral
         maestral-gui
         entr
@@ -234,6 +235,14 @@
         enableCompletion = true;
         autocd = true;
 
+        history = {
+          size = 100000;
+          save = 100000;
+          share = false;
+          ignoreAllDups = true;
+          append = true;
+        };
+
         initContent = "
         # Import systemd user environment variables (DISPLAY for XWayland)
         eval $(systemctl --user show-environment | grep -E '^(DISPLAY|WAYLAND_DISPLAY)=' | sed 's/^/export /')
@@ -296,8 +305,8 @@
           gb = "git bug";
           ge = "nvim .git/COMMIT_EDITMSG";
 
-          # [[ GHCIB ]]
-          ghcib = "~/.local/bin/ghcib-exe";
+          # [[ TRICORDER ]]
+          tricorder = "~/.local/bin/tricorder-exe";
 
           # [[ UTILS ]]
           cat = "bat";
@@ -376,6 +385,11 @@
       home.stateVersion = "21.11";
 
       programs.password-store.enable = true;
+
+      services.gnome-keyring = {
+        enable = true;
+        components = [ "secrets" ];
+      };
 
       # Enable xwayland-satellite for X11 app compatibility
       systemd.user.services.xwayland-satellite = {
