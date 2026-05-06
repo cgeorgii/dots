@@ -274,6 +274,14 @@
 
         export BAT_THEME=gruvbox-dark
 
+        function chpwd() {
+          case $PWD in
+            $HOME/code/tweag|$HOME/code/tweag/*) export CLAUDE_CONFIG_DIR=$HOME/.claude-tweag ;;
+            *)                                   unset CLAUDE_CONFIG_DIR ;;
+          esac
+        }
+        chpwd
+
         gh-pr-comments() {
           local PR REPO
           PR=$(gh pr view --json number --jq .number)

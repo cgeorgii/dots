@@ -5,6 +5,7 @@
       "Bash(tricorder status --wait)"
     ]
   },
+  "model": "sonnet",
   "enabledPlugins": {
     "tricorder@atelier": true
   },
@@ -25,5 +26,9 @@
   "alwaysThinkingEnabled": true,
   "effortLevel": "high",
   "showThinkingSummaries": false,
-  "model": "sonnet"
+  "theme": "dark",
+  "editorMode": "vim",
+  "verbose": true,
+  "preferredNotifChannel": "kitty",
+  "autoCompactEnabled": false
 }
