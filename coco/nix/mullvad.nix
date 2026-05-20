@@ -1,7 +1,11 @@
-{ pkgs, ... }:
+{ pkgs, inputs, ... }:
 
+let
+  mullvad-pkgs = import inputs.nixpkgs-for-mullvad {
+    system = pkgs.stdenv.hostPlatform.system;
+  };
+in
 {
-  # Mullvad VPN configuration
   services.mullvad-vpn.enable = true;
-  services.mullvad-vpn.package = pkgs.mullvad-vpn;
+  services.mullvad-vpn.package = mullvad-pkgs.mullvad-vpn;
 }

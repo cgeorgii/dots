@@ -1,17 +1,17 @@
-{ pkgs, ... }:
+{ pkgs, inputs, ... }:
 
-{
-  # Add logseq to system packages
-  environment.systemPackages = with pkgs; [
-    logseq
-  ];
-
-  # Allow unfree license for logseq
-  nixpkgs.config = {
-    allowUnfreePredicate =
+let
+  logseq-pkgs = import inputs.nixpkgs-for-logseq {
+    system = pkgs.stdenv.hostPlatform.system;
+    config.allowUnfreePredicate =
       pkg:
       builtins.elem (pkgs.lib.getName pkg) [
         "logseq"
       ];
   };
+in
+{
+  environment.systemPackages = [
+    logseq-pkgs.logseq
+  ];
 }

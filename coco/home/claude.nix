@@ -7,6 +7,7 @@ let
     "${prefix}/CLAUDE.md".source = lib.link-dotfile "claude/CLAUDE.md";
     "${prefix}/settings.json".source = lib.link-dotfile "claude/settings.json";
     "${prefix}/skills".source = lib.link-dotfile "claude/skills";
+    "${prefix}/agents".source = lib.link-dotfile "claude/agents";
     "${prefix}/plugins/cgeorgii".source = lib.link-dotfile "claude/plugins";
   };
 in

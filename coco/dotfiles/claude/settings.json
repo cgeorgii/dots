@@ -1,8 +1,10 @@
 {
   "permissions": {
     "allow": [
+      "Bash(hpack)",
       "Bash(tricorder status)",
-      "Bash(tricorder status --wait)"
+      "Bash(tricorder status --wait)",
+      "Skill(tricorder:tricorder)"
     ]
   },
   "model": "sonnet",
@@ -10,12 +12,6 @@
     "tricorder@atelier": true
   },
   "extraKnownMarketplaces": {
-    "cgeorgii-plugins": {
-      "source": {
-        "source": "directory",
-        "path": "/home/cgeorgii/.claude/plugins/cgeorgii"
-      }
-    },
     "atelier": {
       "source": {
         "source": "directory",

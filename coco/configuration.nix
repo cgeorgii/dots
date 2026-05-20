@@ -1,5 +1,10 @@
-{ pkgs, ... }:
+{ pkgs, inputs, ... }:
 
+let
+  firefox-pkgs = import inputs.nixpkgs-for-firefox {
+    system = pkgs.stdenv.hostPlatform.system;
+  };
+in
 {
   # Import modules
   imports = [
@@ -19,7 +24,7 @@
   environment.systemPackages = with pkgs; [
     bat
     dconf
-    firefox
+    firefox-pkgs.firefox
     gitFull
     git-lfs
     libsecret

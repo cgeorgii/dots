@@ -33,6 +33,23 @@
           ];
       };
 
+      discord-pkgs = import inputs.nixpkgs-for-discord {
+        system = pkgs.stdenv.hostPlatform.system;
+        config.allowUnfreePredicate =
+          pkg:
+          builtins.elem (pkgs.lib.getName pkg) [
+            "discord"
+          ];
+      };
+
+      element-desktop-pkgs = import inputs.nixpkgs-for-element-desktop {
+        system = pkgs.stdenv.hostPlatform.system;
+      };
+
+      keepassxc-pkgs = import inputs.nixpkgs-for-keepassxc {
+        system = pkgs.stdenv.hostPlatform.system;
+      };
+
     in
     {
       imports = [
@@ -63,8 +80,8 @@
         claude-pkgs.claude-code
         devenv
         digikam
-        discord
-        element-desktop
+        discord-pkgs.discord
+        element-desktop-pkgs.element-desktop
         maestral
         maestral-gui
         entr
@@ -79,7 +96,7 @@
         imv
         jjui
         jujutsu
-        keepassxc
+        keepassxc-pkgs.keepassxc
         libreoffice
         lua-language-server
         nemo # File manager
@@ -105,8 +122,25 @@
         settings = {
           gui = {
             theme = {
-              selectedLineBgColor = [ "reverse" ];
-              selectedRangeBgColor = [ "reverse" ];
+              activeBorderColor = [
+                "#fe8019"
+                "bold"
+              ];
+              inactiveBorderColor = [ "#928374" ];
+              searchingActiveBorderColor = [
+                "#fabd2f"
+                "bold"
+              ];
+              optionsTextColor = [ "#83a598" ];
+              selectedLineBgColor = [ "#3c3836" ];
+              inactiveViewSelectedLineBgColor = [ "#504945" ];
+              selectedRangeBgColor = [ "#3c3836" ];
+              cherryPickedCommitFgColor = [ "#83a598" ];
+              cherryPickedCommitBgColor = [ "#458588" ];
+              markedBaseCommitFgColor = [ "#83a598" ];
+              markedBaseCommitBgColor = [ "#fabd2f" ];
+              unstagedChangesColor = [ "#fb4934" ];
+              defaultFgColor = [ "#ebdbb2" ];
             };
           };
         };
@@ -274,13 +308,13 @@
 
         export BAT_THEME=gruvbox-dark
 
-        function chpwd() {
-          case $PWD in
-            $HOME/code/tweag|$HOME/code/tweag/*) export CLAUDE_CONFIG_DIR=$HOME/.claude-tweag ;;
-            *)                                   unset CLAUDE_CONFIG_DIR ;;
-          esac
-        }
-        chpwd
+        # function chpwd() {
+        #   case $PWD in
+        #     $HOME/code/tweag|$HOME/code/tweag/*) export CLAUDE_CONFIG_DIR=$HOME/.claude-tweag ;;
+        #     *)                                   unset CLAUDE_CONFIG_DIR ;;
+        #   esac
+        # }
+        # chpwd
 
         gh-pr-comments() {
           local PR REPO

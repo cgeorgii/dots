@@ -1,5 +1,10 @@
-{ pkgs, ... }:
+{ pkgs, inputs, ... }:
 
+let
+  niri-pkgs = import inputs.nixpkgs-for-niri {
+    system = pkgs.stdenv.hostPlatform.system;
+  };
+in
 {
   xdg = {
     portal = {
@@ -14,14 +19,17 @@
   security.polkit.enable = true;
 
   # Enable Niri window manager
-  programs.niri.enable = true;
+  programs.niri = {
+    enable = true;
+    package = niri-pkgs.niri;
+  };
 
   # Autologin with greetd
   services.greetd = {
     enable = true;
     settings = {
       default_session = {
-        command = "${pkgs.niri}/bin/niri-session";
+        command = "${niri-pkgs.niri}/bin/niri-session";
         user = "cgeorgii";
       };
     };
