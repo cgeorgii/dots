@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage {
     hash = "sha256-PN+7s3KnbIdUSs+PmY3A80x//tIQu2aqaW/vN7gXTRU=";
   };
 
-  cargoHash = "sha256-WRc1+ZVhiIfmLHaczAPq21XudI08CgVhlIhVcf0rmSw=";
+  cargoHash = "sha256-Wbwp1U2oLur8tKNYyWFRj4XWigOhbxcWm6/RFk46TXY=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ gtk3 ];

@@ -55,6 +55,7 @@
       imports = [
         ./git.nix
         ./tmux.nix
+        ./zellij.nix
         ./claude.nix
         inputs.niri-taskbar.homeManagerModules.default
       ];
@@ -90,6 +91,7 @@
         fuzzel # App launcher for Niri
         fzf
         gh
+        glab
         home-manager
         hub
         imagemagick
@@ -325,6 +327,19 @@
           gh api --paginate \"repos/$REPO/pulls/$PR/reviews\" > /tmp/pr-reviews.json
           jq -s '([.[0][], .[1][]] | map({path, start_line, line, body})) + [.[2][] | select(.body != \"\") | {body}]' /tmp/pr-inline.json /tmp/pr-issue.json /tmp/pr-reviews.json > pr-comments.json
         }
+
+        glab-mr-comments() {
+          local BRANCH MR PROJECT
+          BRANCH=$(git rev-parse --abbrev-ref HEAD)
+          # Use glab api (not 'mr view -F json'): mr view runs the description through
+          # the glamour markdown renderer, which mangles the JSON under command
+          # substitution. Redirect to files for the same reason.
+          glab api \"projects/:id/merge_requests?source_branch=$BRANCH\" > /tmp/mr-meta.json
+          MR=$(jq '.[0].iid' /tmp/mr-meta.json)
+          PROJECT=$(jq '.[0].project_id' /tmp/mr-meta.json)
+          glab api --paginate \"projects/$PROJECT/merge_requests/$MR/notes\" > /tmp/mr-notes.json
+          jq -s 'flatten | [.[] | select(.system != true and .body != \"\") | if .type == \"DiffNote\" then {path: .position.new_path, line: .position.new_line, body} else {body} end]' /tmp/mr-notes.json > mr-comments.json
+        }
       ";
 
         shellAliases = {
@@ -348,12 +363,13 @@
           ge = "nvim .git/COMMIT_EDITMSG";
 
           # [[ TRICORDER ]]
-          tricorder = "~/.local/bin/tricorder-exe";
+          tricorder = "~/.local/bin/tricorder";
 
           # [[ UTILS ]]
           cat = "bat";
           ls = "eza --git --icons -a --group-directories-first";
           w = "workmux";
+          wz = "WORKMUX_BACKEND=zellij workmux";
           z = "zenith";
         };
 

@@ -25,13 +25,16 @@
   services.resolved = {
     enable = true;
     settings.Resolve = {
-      DNSSEC = "true";
+      # allow-downgrade / opportunistic keep encrypted, validated DNS whenever
+      # the network supports it, but fall back gracefully on captive portals
+      # (hotels, airports) that block DoT/DNSSEC until you authenticate.
+      DNSSEC = "allow-downgrade";
       Domains = [ "~." ];
       FallbackDNS = [
         "1.1.1.1#one.one.one.one"
         "1.0.0.1#one.one.one.one"
       ];
-      DNSOverTLS = "true";
+      DNSOverTLS = "opportunistic";
     };
   };
 

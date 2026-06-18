@@ -16,8 +16,11 @@ You never read, write or edit code/documentation yourself unless explicitly aske
 - When the plan has gaps or ambiguities, spawn an investigation agent first to fill them in before writing a single line of code.
 - Do not commit anything. Leave that to the user.
 - Do not create a worktree. All work happens in the current working directory.
+- Maintain `baton-status.md` in the repo root throughout the run. It is your recovery log: if the session is interrupted, the next baton run reads it to pick up where you left off. You (the orchestrator) write to it directly — never delegate this to a sub-agent.
 
 ## Phase 0 — Understand the task
+
+**Check for an existing `baton-status.md` first.** If one exists, it means a prior baton run was interrupted. Read it, confirm with the user whether to resume from the last incomplete batch or start over, and either continue from the recorded state or archive the old file (e.g. rename to `baton-status.prev.md`) before planning fresh.
 
 Read the plan (if one is given) or extract requirements from the user's request. Identify:
 - The full set of files likely affected
@@ -55,6 +58,30 @@ Produce a numbered batch list. For each batch:
 - Status: `[ ] pending`
 
 Create a task for each batch using `TaskCreate` so you can track progress across the session.
+
+Then write the initial `baton-status.md` at the repo root with this structure:
+
+```markdown
+# Baton Status
+
+**Task:** <one-line summary of what is being implemented>
+**Started:** <ISO timestamp>
+**Last updated:** <ISO timestamp>
+
+## Plan
+
+### Batch 1: <name>
+- Status: pending
+- Files: <list>
+- Acceptance: <criterion>
+
+### Batch 2: <name>
+...
+
+## Log
+
+<entries appended per batch — see Phase 3d>
+```
 
 ## Phase 3 — Execute batches in order
 
@@ -116,9 +143,26 @@ Read the sub-agent's report. Flag anything suspicious:
 
 If the report mentions deviations or the build has warnings that suggest something is off, run `git diff HEAD` to inspect the diff directly. Spawn a targeted correction agent if needed before moving on.
 
-**3d. Mark the batch done.**
+**3d. Mark the batch done and update `baton-status.md`.**
 
 Mark the batch task as completed using `TaskUpdate`. Print a brief summary: what was done, any deviations from the plan, and what comes next.
+
+Then update `baton-status.md`:
+- Flip the batch's `Status:` from `pending` to `done` (or `done-with-deviations` / `partial` if applicable).
+- Bump `Last updated` to the current timestamp.
+- Append a log entry under `## Log`:
+
+```markdown
+### Batch N — <name> — <timestamp>
+- **Outcome:** done | done-with-deviations | partial
+- **Implemented:** <bullet list, one line per item from the plan>
+- **Deviations:** <signatures changed, items skipped, scope expanded — or "none">
+- **Left out:** <anything in the batch plan that did not land — or "none". This should be rare; flag prominently if non-empty.>
+- **Notes for later batches:** <decisions or surprises that affect what comes next — or "none">
+- **Build status:** clean | warnings | (should never be: errors)
+```
+
+Write the update yourself with the Edit tool — do not delegate to a sub-agent. The file must reflect ground truth at the end of every batch so an interrupted run can be resumed cleanly.
 
 ## Phase 4 — Semantic review
 
@@ -160,8 +204,9 @@ If the review surfaces blockers or concerns, spawn a targeted correction agent b
 After all batches are complete:
 1. Run `tricorder status --wait` one final time and confirm zero errors.
 2. Run `git diff HEAD` and do a final review pass.
-3. Report to the user: what was implemented, which files changed, and any deviations from the original plan.
-4. Remind the user to review the diff and commit when satisfied.
+3. Append a final entry to `baton-status.md` marking the run complete (timestamp + one-line summary). Leave the file in place — the user may delete it after committing.
+4. Report to the user: what was implemented, which files changed, and any deviations from the original plan.
+5. Remind the user to review the diff and commit when satisfied.
 
 ## Rules for sub-agent prompts
 

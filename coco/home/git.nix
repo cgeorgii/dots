@@ -60,6 +60,7 @@ in
       navigate = true;
       syntax-theme = "gruvbox-dark";
       light = false;
+      pager = "less --mouse --wheel-lines=3 -R -F";
     };
   };
 }

@@ -7,7 +7,6 @@
       "Skill(tricorder:tricorder)"
     ]
   },
-  "model": "sonnet",
   "enabledPlugins": {
     "tricorder@atelier": true
   },
@@ -26,5 +25,6 @@
   "editorMode": "vim",
   "verbose": true,
   "preferredNotifChannel": "kitty",
-  "autoCompactEnabled": false
+  "autoCompactEnabled": false,
+  "tui": "fullscreen"
 }

@@ -10,6 +10,7 @@ This file provides guidance to Claude Code when working with code in this reposi
 - **Never run sudo commands directly**: Always ask the user to run them in a separate terminal
 - **All changes via declarative Nix config**: Never modify system files directly; use NixOS/Home-Manager configuration files
 - **Don't edit systemd services directly**: Use the appropriate Nix modules instead
+- **Refactor narration** - when necessary - should be done in the chat, not in comments in the produced code.
 
 ## Dotfile Management
 

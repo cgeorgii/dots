@@ -8,7 +8,7 @@ user-invocable: true
 
 Create a git commit using conventional commit format, with an inline review step.
 
-1. Run `git diff --staged` to see staged changes. Filter obviously auto-generated files to avoid polluting the context.
+1. Run `git status` first to see which files are staged. Then run `git diff --staged -- <files>` scoped to the relevant files only, skipping obviously auto-generated ones (lockfiles, generated code, etc.) to avoid polluting the context.
 2. Assess whether the staged changes are cohesive. If they appear to span unrelated concerns
    (e.g. a bug fix mixed with a refactor, or changes to unrelated features), warn the user.
    Use AskUserQuestion with the list of changed files and a brief explanation of why they seem
