@@ -19,6 +19,7 @@ in
     ./nix/audio.nix
     ./nix/boot.nix
     ./nix/locale.nix
+    ./nix/oom.nix
   ];
 
   environment.systemPackages = with pkgs; [
