@@ -152,6 +152,10 @@
       home.sessionVariables = {
         XCURSOR_THEME = "Adwaita";
         XCURSOR_SIZE = "24";
+        # Keep Claude Code's theme at truecolor inside tmux; without this it
+        # special-cases $TMUX and clamps chalk to 256 colors, washing out
+        # diff/comment text. Official opt-out for the upstream clamp.
+        CLAUDE_CODE_TMUX_TRUECOLOR = "1";
       };
 
       # Default applications for file types
