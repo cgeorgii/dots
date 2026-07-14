@@ -21,7 +21,7 @@
   "alwaysThinkingEnabled": true,
   "effortLevel": "high",
   "showThinkingSummaries": false,
-  "theme": "dark",
+  "theme": "auto",
   "editorMode": "vim",
   "verbose": true,
   "preferredNotifChannel": "kitty",

@@ -1,0 +1,5 @@
+# Active delta theme (light) — symlinked to theme-active.gitconfig by darkman.
+# Included after [delta] in the generated git config, so these win.
+[delta]
+	light = true
+	syntax-theme = "gruvbox-light"

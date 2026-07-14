@@ -1,12 +1,14 @@
-/* Waybar Style - Gruvbox Dark with Rounded Pills
+/* Waybar Style - Gruvbox with Rounded Pills
  *
  * Design: Rounded pill modules
- * Colors: Gruvbox Dark (#282828 bg, #ebdbb2 fg, #fabd2f accent)
- * Font: IosevkaTerm Nerd Font Mono 13px
- * Background: Transparent window, semi-transparent modules (rgba 60,56,54,0.8)
+ * Colors: defined in colors-active.css (dark/light, swapped by darkman)
+ * Font: IosevkaTerm Nerd Font Mono 14px
+ * Background: Transparent window, semi-transparent modules (alpha 0.8)
  * Modules: 99px border-radius for pill shape
  * Taskbar: Grouped pills, darker on hover, active state highlighted
  */
+
+@import "colors-active.css";
 
 * {
   font-family: "IosevkaTerm Nerd Font Mono", "Font Awesome 6 Free", monospace;
@@ -16,7 +18,7 @@
 
 window#waybar {
   background: transparent;
-  color: #ebdbb2;
+  color: @fg;
 }
 
 button {
@@ -42,8 +44,8 @@ button:hover {
 #network,
 #tray {
   padding: 0 10px;
-  color: #ebdbb2;
-  background-color: rgba(60, 56, 54, 0.8);
+  color: @fg;
+  background-color: alpha(@surface, 0.8);
   border-radius: 99px;
 }
 
@@ -74,32 +76,32 @@ button:hover {
 }
 
 #battery.charging {
-  color: #fabd2f;
+  color: @accent;
 }
 
 #battery.warning:not(.charging) {
-  color: #fe8019;
+  color: @warning;
 }
 
 #battery.critical:not(.charging) {
-  color: #fb4934;
+  color: @critical;
   animation: blink 0.5s linear infinite alternate;
 }
 
 @keyframes blink {
   to {
-    background-color: #fb4934;
-    color: #282828;
+    background-color: @critical;
+    color: @critical_fg;
   }
 }
 
 /* Network */
 #network {
-  color: #83a598;
+  color: @network;
 }
 
 #network.disconnected {
-  color: #fb4934;
+  color: @critical;
 }
 
 /* Niri Taskbar */
@@ -108,8 +110,8 @@ button:hover {
 }
 
 .niri-taskbar button {
-  color: #ebdbb2;
-  background-color: rgba(60, 56, 54, 0.8);
+  color: @fg;
+  background-color: alpha(@surface, 0.8);
 }
 
 .niri-taskbar button:first-child {
@@ -125,15 +127,15 @@ button:hover {
 }
 
 .niri-taskbar button:hover {
-  background-color: rgba(80, 73, 69, 0.8);
+  background-color: alpha(@hover, 0.8);
 }
 
 .niri-taskbar button.focused {
-  background-color: rgba(124, 111, 100, 0.8);
+  background-color: alpha(@focused, 0.8);
 }
 
 .niri-taskbar button.focused:hover {
-  background-color: rgba(146, 131, 116, 0.8);
+  background-color: alpha(@focused_hover, 0.8);
 }
 
 /* System Tray */
@@ -143,5 +145,5 @@ button:hover {
 
 #tray > .needs-attention {
   -gtk-icon-effect: highlight;
-  background-color: #fb4934;
+  background-color: @critical;
 }

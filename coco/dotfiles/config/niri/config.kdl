@@ -95,8 +95,8 @@ hotkey-overlay {
 binds {
     // Window management
     Mod+Return { spawn "kitty"; }
-    Mod+Space { spawn "fuzzel"; }
-    Mod5+Space { spawn "fuzzel"; }
+    Mod+Space { spawn "fuzzel-themed"; }
+    Mod5+Space { spawn "fuzzel-themed"; }
 
     // Close window
     Mod+Shift+Q { close-window; }

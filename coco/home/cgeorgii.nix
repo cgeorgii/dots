@@ -1,6 +1,9 @@
 { inputs, ... }:
 
 {
+  # Forward flake inputs (e.g. nix-colors) into home-manager modules.
+  home-manager.extraSpecialArgs = { inherit inputs; };
+
   home-manager.users.cgeorgii =
     {
       config,
@@ -54,6 +57,7 @@
     {
       imports = [
         ./git.nix
+        ./theme.nix
         ./tmux.nix
         ./zellij.nix
         ./claude.nix
@@ -64,7 +68,7 @@
         # Link the entire nvim directory structure
         "nvim".source = link-dotfile "nvim";
         "niri/config.kdl".source = link-dotfile "config/niri/config.kdl";
-        "fuzzel/fuzzel.ini".source = link-dotfile "config/fuzzel/fuzzel.ini";
+        # fuzzel-{dark,light}.ini are generated from the shared palette in theme.nix
         "waybar/config".source = link-dotfile "config/waybar/config.json";
         "waybar/style.css".source = link-dotfile "config/waybar/style.css";
         "jjui/config.toml".source = link-dotfile "config/jjui/config.toml";
@@ -197,9 +201,12 @@
 
       gtk = {
         enable = true;
+        # gruvbox-gtk-theme ships both Gruvbox-Dark and Gruvbox-Light; darkman
+        # swaps between them at runtime via the gtk-theme gsetting. This is only
+        # the boot default.
         theme = {
           name = "Gruvbox-Dark";
-          package = pkgs.gruvbox-dark-gtk;
+          package = pkgs.gruvbox-gtk-theme;
         };
         iconTheme = {
           name = "Mint-Y-Sand";
@@ -209,12 +216,8 @@
           name = "Adwaita";
           package = pkgs.adwaita-icon-theme;
         };
-        gtk3.extraConfig = {
-          gtk-application-prefer-dark-theme = true;
-        };
-        gtk4.extraConfig = {
-          gtk-application-prefer-dark-theme = true;
-        };
+        # No static prefer-dark hint: the light/dark choice is driven at runtime
+        # by darkman through the color-scheme gsetting and the gtk-theme name.
       };
 
       qt = {
@@ -224,7 +227,10 @@
 
       programs.kitty = {
         enable = true;
-        themeFile = "gruvbox-dark";
+        themeFile = "gruvbox-dark"; # boot default; overridden by the include below
+        # Appended last so it wins over themeFile. darkman repoints
+        # theme-active.conf at the dark/light theme and sends SIGUSR1 to reload.
+        extraConfig = "include theme-active.conf";
         font = {
           name = "IosevkaTerm Nerd Font Mono";
           size = 14;
@@ -312,7 +318,11 @@
         # No delay entering vim normal mode
         export KEYTIMEOUT=1
 
-        export BAT_THEME=gruvbox-dark
+        # bat probes the terminal background per invocation and picks the
+        # matching gruvbox variant, so it follows the darkman theme in any shell.
+        export BAT_THEME=auto
+        export BAT_THEME_DARK=gruvbox-dark
+        export BAT_THEME_LIGHT=gruvbox-light
 
         # function chpwd() {
         #   case $PWD in

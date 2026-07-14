@@ -12,6 +12,9 @@ in
     lfs.enable = true;
     includes = [
       { path = "~/.gitconfig"; } # GH adds auth information to this file
+      # delta light/dark theme, swapped by darkman. Included after [delta], so
+      # it overrides. git re-reads config per invocation -> follows live.
+      { path = "~/.config/delta/theme-active.gitconfig"; }
       {
         path = "~/code/tweag/.gitconfig";
         condition = "gitdir:~/code/tweag/";
@@ -58,8 +61,8 @@ in
     enableGitIntegration = true;
     options = {
       navigate = true;
-      syntax-theme = "gruvbox-dark";
-      light = false;
+      # light/dark + syntax-theme come from ~/.config/delta/theme-active.gitconfig
+      # (darkman-swapped include), so they are not hardcoded here.
       pager = "less --mouse --wheel-lines=3 -R -F";
     };
   };

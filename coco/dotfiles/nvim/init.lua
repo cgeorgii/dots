@@ -63,6 +63,37 @@ require("lazy").setup({
     end,
   },
 
+  -- Follow the system dark/light preference (driven by darkman via the
+  -- org.gnome.desktop.interface color-scheme gsetting). Polls and flips the
+  -- colorscheme live in already-running instances. The palettes come from the
+  -- same nix-colors source as kitty/waybar/fuzzel (generated in theme.nix), so
+  -- nvim's background matches the terminal and follows the variant exactly.
+  {
+    "f-person/auto-dark-mode.nvim",
+    priority = 1000,
+    config = function()
+      local ok, palettes = pcall(dofile, vim.fn.expand("~/.config/nvim-theme.lua"))
+      local base16 = require("base16-colorscheme")
+      local function apply(bg, name)
+        vim.o.background = bg
+        if ok and palettes[bg] then
+          base16.setup(palettes[bg])
+        else
+          vim.cmd("colorscheme " .. name)
+        end
+      end
+      require("auto-dark-mode").setup({
+        update_interval = 3000,
+        set_dark_mode = function()
+          apply("dark", "base16-gruvbox-dark-medium")
+        end,
+        set_light_mode = function()
+          apply("light", "base16-gruvbox-light-medium")
+        end,
+      })
+    end,
+  },
+
   -- UI enhancements
   {
     "nvim-lualine/lualine.nvim",
