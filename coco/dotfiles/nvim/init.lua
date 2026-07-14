@@ -314,6 +314,8 @@ require("lazy").setup({
     init = function()
       vim.g.haskell_tools = {
         hls = {
+          -- Temporarily disable by setting auto_attach to `false`
+          auto_attach = true,
           default_settings = {
             haskell = {
               plugin = {
