@@ -149,6 +149,10 @@ binds {
     Mod+Shift+Down { move-window-down; }
     Mod+Shift+Up { move-window-up; }
 
+    // Meta+Comma/Period: Stack window into / eject focused window from column
+    Mod+Comma { consume-window-into-column; }
+    Mod+Period { consume-or-expel-window-right; }
+
     // AltGr+1-9: Switch to specific workspace
     Mod5+1 { focus-workspace 1; }
     Mod5+2 { focus-workspace 2; }
