@@ -1,7 +1,7 @@
 { inputs, ... }:
 
 {
-  # Forward flake inputs (e.g. nix-colors) into home-manager modules.
+  # Forward flake inputs (e.g. schemes) into home-manager modules.
   home-manager.extraSpecialArgs = { inherit inputs; };
 
   home-manager.users.cgeorgii =
@@ -123,34 +123,11 @@
         xwayland-satellite # XWayland support for Niri
       ];
 
-      programs.lazygit = {
-        enable = true;
-        settings = {
-          gui = {
-            theme = {
-              activeBorderColor = [
-                "#fe8019"
-                "bold"
-              ];
-              inactiveBorderColor = [ "#928374" ];
-              searchingActiveBorderColor = [
-                "#fabd2f"
-                "bold"
-              ];
-              optionsTextColor = [ "#83a598" ];
-              selectedLineBgColor = [ "#3c3836" ];
-              inactiveViewSelectedLineBgColor = [ "#504945" ];
-              selectedRangeBgColor = [ "#3c3836" ];
-              cherryPickedCommitFgColor = [ "#83a598" ];
-              cherryPickedCommitBgColor = [ "#458588" ];
-              markedBaseCommitFgColor = [ "#83a598" ];
-              markedBaseCommitBgColor = [ "#fabd2f" ];
-              unstagedChangesColor = [ "#fb4934" ];
-              defaultFgColor = [ "#ebdbb2" ];
-            };
-          };
-        };
-      };
+      # lazygit's theme is rendered at runtime by tinty (see coco/home/theme.nix
+      # and dotfiles/bin/tinty-render.sh). Keeping `settings` empty means
+      # home-manager installs the package but leaves config.yml to the theme
+      # renderer, which owns that file.
+      programs.lazygit.enable = true;
 
       # Session variables (XDG_CURRENT_DESKTOP set by compositor)
       home.sessionVariables = {
@@ -477,6 +454,33 @@
           NotifyAccess = "all";
           ExecStart = "${pkgs.xwayland-satellite}/bin/xwayland-satellite";
           StandardOutput = "journal";
+        };
+        Install.WantedBy = [ "graphical-session.target" ];
+      };
+
+      # Run waybar as a user service instead of a niri spawn-at-startup one-shot,
+      # so it always comes back if it dies (e.g. the GTK reorder crash on SIGUSR2
+      # theme reloads, or a manual kill). Restart=always covers SIGTERM too,
+      # which Restart=on-failure ignores; an explicit `systemctl stop` still
+      # stops it. ExecStartPre clears any stray instance before (re)starting.
+      systemd.user.services.waybar = {
+        Unit = {
+          Description = "Waybar status bar";
+          PartOf = "graphical-session.target";
+          After = "graphical-session.target";
+          Requisite = "graphical-session.target";
+          # Never give up restarting: repeated reload-crashes while browsing
+          # themes must not trip the default start-rate limiter and leave the
+          # bar permanently down.
+          StartLimitIntervalSec = 0;
+        };
+        Service = {
+          # NixOS runs waybar as ".waybar-wrapped", so match that to actually
+          # clear a stray instance (a plain "waybar" pattern never matches).
+          ExecStartPre = "-${pkgs.procps}/bin/pkill -x .waybar-wrapped";
+          ExecStart = "${pkgs.waybar}/bin/waybar";
+          Restart = "always";
+          RestartSec = 1;
         };
         Install.WantedBy = [ "graphical-session.target" ];
       };

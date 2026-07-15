@@ -42,11 +42,18 @@ button:hover {
 #cpu,
 #memory,
 #network,
+#custom-theme,
 #tray {
   padding: 0 10px;
   color: @fg;
   background-color: alpha(@surface, 0.8);
   border-radius: 99px;
+}
+
+/* Theme toggle: click to flip light/dark, right-click for the picker */
+#custom-theme {
+  color: @accent;
+  margin-left: 4px;
 }
 
 #window,

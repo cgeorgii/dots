@@ -20,7 +20,7 @@
 
   "modules-left": ["network", "cffi/niri-taskbar"],
   "modules-center": ["clock"],
-  "modules-right": ["cpu", "memory", "battery", "tray"],
+  "modules-right": ["cpu", "memory", "battery", "custom/theme", "tray"],
 
   "cffi/niri-taskbar": {
     "module_path": "/home/cgeorgii/.local/lib/libniri_taskbar.so"
@@ -32,12 +32,12 @@
   },
 
   "cpu": {
-    "format": "{usage}% ",
+    "format": "{usage}% <span size='xx-large' rise='-4000'></span>",
     "tooltip": false
   },
 
   "memory": {
-    "format": "{}% "
+    "format": "{}% <span size='xx-large' rise='-4000'></span>"
   },
 
   "battery": {
@@ -46,19 +46,29 @@
       "critical": 15
     },
     "format": "{capacity}% {icon}",
-    "format-charging": "{capacity}% ",
-    "format-plugged": "{capacity}% ",
+    "format-charging": "{capacity}% <span size='xx-large' rise='-4000'></span>",
+    "format-plugged": "{capacity}% <span size='xx-large' rise='-4000'></span>",
     "format-alt": "{time} {icon}",
-    "format-icons": ["", "", "", "", ""]
+    "format-icons": ["<span size='xx-large' rise='-4000'></span>", "<span size='xx-large' rise='-4000'></span>", "<span size='xx-large' rise='-4000'></span>", "<span size='xx-large' rise='-4000'></span>", "<span size='xx-large' rise='-4000'></span>"]
   },
 
   "network": {
-    "format-wifi": "",
-    "format-ethernet": "",
-    "tooltip-format": "{ifname} via {gwaddr} ",
-    "format-linked": "",
+    "format-wifi": "<span size='xx-large'></span>",
+    "format-ethernet": "<span size='xx-large'></span>",
+    "tooltip-format": "{ifname} via {gwaddr} <span size='xx-large'></span>",
+    "format-linked": "<span size='xx-large'></span>",
     "format-disconnected": "⚠",
     "format-alt": "{ifname}: {ipaddr}/{cidr}"
+  },
+
+  "custom/theme": {
+    "exec": "/home/cgeorgii/dots/coco/dotfiles/bin/theme-status.sh",
+    "return-type": "json",
+    "interval": 30,
+    "format": "{}",
+    "tooltip": true,
+    "on-click": "/home/cgeorgii/dots/coco/dotfiles/bin/theme-status.sh toggle",
+    "on-click-right": "/home/cgeorgii/dots/coco/dotfiles/bin/theme-status.sh menu"
   },
 
   "tray": {

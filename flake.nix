@@ -24,7 +24,8 @@
       url = "github:cgeorgii/niri-taskbar";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nix-colors.url = "github:misterio77/nix-colors";
+    schemes.url = "github:tinted-theming/schemes";
+    schemes.flake = false;
     flake-parts.url = "github:hercules-ci/flake-parts";
   };
 

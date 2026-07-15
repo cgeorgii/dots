@@ -54,43 +54,43 @@ end
 
 -- Plugin specifications
 require("lazy").setup({
-  -- Theme
+  -- Theme. tinty (see coco/home/theme.nix) writes the active base16/base24
+  -- palette to ~/.config/nvim-theme-active.lua on every `tinty apply` (whether
+  -- from darkman's light/dark switch or a manual `theme-menu` pick). We apply
+  -- it on startup and poll its mtime so already-running instances re-theme
+  -- live, matching the terminal exactly for whichever scheme is active.
   {
     "RRethy/nvim-base16",
     priority = 1000, -- Load early
     config = function()
-      vim.cmd('colorscheme base16-gruvbox-dark-medium')
-    end,
-  },
-
-  -- Follow the system dark/light preference (driven by darkman via the
-  -- org.gnome.desktop.interface color-scheme gsetting). Polls and flips the
-  -- colorscheme live in already-running instances. The palettes come from the
-  -- same nix-colors source as kitty/waybar/fuzzel (generated in theme.nix), so
-  -- nvim's background matches the terminal and follows the variant exactly.
-  {
-    "f-person/auto-dark-mode.nvim",
-    priority = 1000,
-    config = function()
-      local ok, palettes = pcall(dofile, vim.fn.expand("~/.config/nvim-theme.lua"))
       local base16 = require("base16-colorscheme")
-      local function apply(bg, name)
-        vim.o.background = bg
-        if ok and palettes[bg] then
-          base16.setup(palettes[bg])
-        else
-          vim.cmd("colorscheme " .. name)
+      local active = vim.fn.expand("~/.config/nvim-theme-active.lua")
+      local uv = vim.uv or vim.loop
+      local last
+
+      local function apply()
+        local ok, t = pcall(dofile, active)
+        if not ok or type(t) ~= "table" or type(t.palette) ~= "table" then
+          vim.cmd("colorscheme base16-gruvbox-dark-medium")
+          return
         end
+        vim.o.background = t.variant == "light" and "light" or "dark"
+        base16.setup(t.palette)
       end
-      require("auto-dark-mode").setup({
-        update_interval = 3000,
-        set_dark_mode = function()
-          apply("dark", "base16-gruvbox-dark-medium")
-        end,
-        set_light_mode = function()
-          apply("light", "base16-gruvbox-light-medium")
-        end,
-      })
+
+      apply()
+      local st = uv.fs_stat(active)
+      last = st and st.mtime.sec
+
+      local timer = uv.new_timer()
+      timer:start(2000, 2000, vim.schedule_wrap(function()
+        local s = uv.fs_stat(active)
+        local m = s and s.mtime.sec
+        if m and m ~= last then
+          last = m
+          apply()
+        end
+      end))
     end,
   },
 
