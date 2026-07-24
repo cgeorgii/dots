@@ -102,6 +102,8 @@
         imv
         jjui
         jujutsu
+        kdePackages.breeze-icons # Icon theme for Dolphin
+        kdePackages.dolphin # File manager (supports clipboard image paste)
         keepassxc-pkgs.keepassxc
         libreoffice
         lua-language-server
@@ -144,7 +146,7 @@
         enable = true;
         defaultApplications = {
           # File manager
-          "inode/directory" = "nemo.desktop";
+          "inode/directory" = "org.kde.dolphin.desktop";
 
           # Web browser
           "x-scheme-handler/http" = "firefox.desktop";
@@ -197,9 +199,14 @@
         # by darkman through the color-scheme gsetting and the gtk-theme name.
       };
 
+      # KDE platform theme so Qt apps (Dolphin especially) colour themselves
+      # from ~/.config/kdeglobals, which tinty-render regenerates from the
+      # active base16 palette. Breeze style + kde platform theme make every
+      # widget follow that scheme, matching the rest of the base16 system.
       qt = {
         enable = true;
-        platformTheme.name = "gtk";
+        platformTheme.name = "kde";
+        style.name = "breeze";
       };
 
       programs.kitty = {

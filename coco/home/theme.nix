@@ -24,7 +24,6 @@ let
   ];
   lightSchemes = [
     "base16-classic-light"
-    "base16-default-light"
     "base16-flexoki-light"
     "base16-humanoid-light"
     "base16-grayscale-light"
@@ -74,6 +73,7 @@ let
       pkgs.dconf
       pkgs.tmux
       pkgs.systemd
+      pkgs.dbus
     ];
     text = ''exec bash "${dotfiles}/bin/tinty-render.sh" "$@"'';
   };
