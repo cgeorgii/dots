@@ -78,7 +78,6 @@ in
       "audio"
       "wheel"
       "networkmanager"
-      "docker"
     ];
   };
 
@@ -95,7 +94,12 @@ in
     enable32Bit = true;
   };
 
-  virtualisation.docker.enable = true;
+  virtualisation.podman = {
+    enable = true;
+    dockerCompat = true;
+    dockerSocket.enable = true;
+    defaultNetwork.settings.dns_enabled = true;
+  };
 
   environment.variables.EDITOR = "nvim";
 
