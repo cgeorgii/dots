@@ -6,37 +6,21 @@
   # Enable networking
   networking.networkmanager.enable = true;
 
-  networking.extraHosts = ''
-    127.0.0.1       zeus-bucket.localhost
-    127.0.0.1       dev.zeuslogics.com
-  '';
+  # networking.extraHosts = ''
+  #   127.0.0.1       dev.example.com
+  # '';
 
   # Firewall - block all ports by default
   networking.firewall.enable = true;
   networking.firewall.allowedTCPPorts = [ ];
   networking.firewall.allowedUDPPorts = [ ];
 
-  # DNS Configuration (router already uses 1.1.1.1)
-  networking.nameservers = [
-    "1.1.1.1#one.one.one.one"
-    "1.0.0.1#one.one.one.one"
-  ];
-
-  services.resolved = {
-    enable = true;
-    settings.Resolve = {
-      # allow-downgrade / opportunistic keep encrypted, validated DNS whenever
-      # the network supports it, but fall back gracefully on captive portals
-      # (hotels, airports) that block DoT/DNSSEC until you authenticate.
-      DNSSEC = "allow-downgrade";
-      Domains = [ "~." ];
-      FallbackDNS = [
-        "1.1.1.1#one.one.one.one"
-        "1.0.0.1#one.one.one.one"
-      ];
-      DNSOverTLS = "opportunistic";
-    };
-  };
+  # DNS is left to NetworkManager/resolvconf, i.e. whatever the network hands
+  # out. Encrypted DNS comes from Firefox's DoH (configuration.nix) and, on
+  # untrusted networks, from the Mullvad tunnel, which already sets its own
+  # 1.1.1.1. systemd-resolved is deliberately not enabled: a global
+  # `Domains = ["~."]` override defeats the DNS hijack captive portals rely on,
+  # and the daemon is a single point of failure for all name resolution.
 
   # Network performance optimizations for congested ISP connections
   # Based on network diagnostics showing high latency and packet loss

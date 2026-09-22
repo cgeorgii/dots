@@ -194,11 +194,11 @@ binds {
 
     // Screen lock and system control
     F9 { spawn "swaylock" "-f"; }
-    F10 { spawn "sh" "-c" "swaylock -f && systemctl suspend"; }
+    F10 allow-when-locked=true { spawn "sh" "-c" "pgrep -x swaylock >/dev/null || swaylock -f && systemctl suspend"; }
 
-    // Brightness and volume (adjust keys as needed for your laptop)
-    XF86MonBrightnessUp   { spawn "light" "-A" "5"; }
-    XF86MonBrightnessDown { spawn "light" "-U" "5"; }
+    // Brightness and volume
+    XF86MonBrightnessUp   allow-when-locked=true { spawn "brightnessctl" "set" "5%+"; }
+    XF86MonBrightnessDown allow-when-locked=true { spawn "brightnessctl" "set" "5%-" "-n" "1"; }
     XF86AudioRaiseVolume  { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.05+"; }
     XF86AudioLowerVolume  { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.05-"; }
     XF86AudioMute         { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SINK@" "toggle"; }

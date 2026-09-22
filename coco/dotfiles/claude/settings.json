@@ -7,6 +7,7 @@
       "Skill(tricorder:tricorder)"
     ]
   },
+  "model": "opus",
   "enabledPlugins": {
     "tricorder@atelier": true
   },
@@ -20,11 +21,11 @@
   },
   "alwaysThinkingEnabled": true,
   "effortLevel": "high",
+  "tui": "fullscreen",
   "showThinkingSummaries": false,
   "theme": "auto",
   "editorMode": "vim",
   "verbose": true,
   "preferredNotifChannel": "kitty",
-  "autoCompactEnabled": false,
-  "tui": "fullscreen"
+  "autoCompactEnabled": false
 }
