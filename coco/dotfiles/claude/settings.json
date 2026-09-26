@@ -79,7 +79,7 @@
   "showThinkingSummaries": false,
   "theme": "auto",
   "editorMode": "vim",
-  "verbose": true,
+  "verbose": false,
   "preferredNotifChannel": "kitty",
   "autoCompactEnabled": false
 }
