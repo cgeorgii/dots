@@ -1,7 +1,7 @@
 {
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    nixpkgs-for-claude.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs-for-claude.url = "github:NixOS/nixpkgs/nixos-unstable-small";
     nixpkgs-for-signal.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs-for-spotify.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs-for-discord.url = "github:NixOS/nixpkgs/nixos-unstable";
