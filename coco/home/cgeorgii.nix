@@ -61,6 +61,7 @@
         ./tmux.nix
         ./zellij.nix
         ./claude.nix
+        ./xcompose.nix
         inputs.niri-taskbar.homeManagerModules.default
       ];
 
@@ -75,8 +76,6 @@
         "jjui/themes".source = link-dotfile "config/jjui/themes";
         "workmux/config.yaml".source = link-dotfile "config/workmux/config.yaml";
       };
-
-      home.file.".XCompose".source = link-dotfile "XCompose";
 
       programs.niri-taskbar.enable = true;
 
