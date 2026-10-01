@@ -80,6 +80,6 @@
   "theme": "auto",
   "editorMode": "vim",
   "verbose": false,
-  "preferredNotifChannel": "kitty",
+  "preferredNotifChannel": "notifications_disabled",
   "autoCompactEnabled": false
 }
