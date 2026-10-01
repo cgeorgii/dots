@@ -15,7 +15,7 @@
 // - Super+Ctrl+H/L: Focus monitor left/right
 // - Super+J/K: Switch workspace down/up
 // - Super+Shift+S: Screenshot
-// - F9: Lock, F10: Lock+suspend
+// - F9: Lock (+ KeePassXC), F10: Lock+suspend
 
 input {
     keyboard {
@@ -193,8 +193,8 @@ binds {
     Ctrl+Print { screenshot-window; }
 
     // Screen lock and system control
-    F9 { spawn "swaylock" "-f"; }
-    F10 allow-when-locked=true { spawn "sh" "-c" "pgrep -x swaylock >/dev/null || swaylock -f && systemctl suspend"; }
+    F9 { spawn "sh" "-c" "pgrep -x keepassxc >/dev/null && keepassxc --lock; swaylock -f"; }
+    F10 allow-when-locked=true { spawn "sh" "-c" "pgrep -x keepassxc >/dev/null && keepassxc --lock; pgrep -x swaylock >/dev/null || swaylock -f && systemctl suspend"; }
 
     // Brightness and volume
     XF86MonBrightnessUp   allow-when-locked=true { spawn "brightnessctl" "set" "5%+"; }
