@@ -76,6 +76,8 @@
         "workmux/config.yaml".source = link-dotfile "config/workmux/config.yaml";
       };
 
+      home.file.".XCompose".source = link-dotfile "XCompose";
+
       programs.niri-taskbar.enable = true;
 
       home.packages = with pkgs; [

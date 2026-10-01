@@ -1,0 +1,5 @@
+include "%L"
+
+# us(intl): ' + c produces ç (as in pt-BR) instead of ć
+<dead_acute> <c> : "ç" ccedilla
+<dead_acute> <C> : "Ç" Ccedilla
