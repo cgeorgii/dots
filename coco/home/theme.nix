@@ -74,6 +74,7 @@ let
       pkgs.tmux
       pkgs.systemd
       pkgs.dbus
+      config.services.mako.package
     ];
     text = ''exec bash "${dotfiles}/bin/tinty-render.sh" "$@"'';
   };
@@ -130,6 +131,11 @@ in
     hooks = [ "${tinty-render}/bin/tinty-render" ]
   '';
 
+  # mako reads the palette tinty-render writes; included last so it overrides
+  # the base settings. It refuses to start if the include is missing, so
+  # activation seeds an empty one.
+  services.mako.settings.include = "${config.xdg.configHome}/mako/theme-active";
+
   home.packages = [
     pkgs.darkman
     pkgs.tinty
@@ -146,6 +152,8 @@ in
   home.activation.tintyTheme = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     run mkdir -p "${tintyData}/repos"
     run ln -sfn '${inputs.schemes}' "${tintyData}/repos/schemes"
+    run mkdir -p "${config.xdg.configHome}/mako"
+    [ -e "${config.xdg.configHome}/mako/theme-active" ] || run touch "${config.xdg.configHome}/mako/theme-active"
     if [ ! -e "${tintyData}/current_scheme" ]; then
       run ${tintyApply darkDefault} || true
     fi
