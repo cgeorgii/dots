@@ -1,0 +1,7 @@
+Match exec "ssh-keepassxc-unlock %r@%n"
+
+Host gitlab.haskell.org
+    HostName gitlab.haskell.org
+    User git
+    IdentityFile ~/.ssh/id_ed25519_gitlab_haskell
+    IdentitiesOnly yes

@@ -8,6 +8,7 @@
     {
       config,
       pkgs,
+      osConfig,
       ...
     }:
     let
@@ -53,6 +54,24 @@
         system = pkgs.stdenv.hostPlatform.system;
       };
 
+      # Pins the deps of the ssh `Match exec` hook; the script itself stays an
+      # out-of-store dotfile so edits apply without a rebuild.
+      ssh-keepassxc-unlock = pkgs.writeShellApplication {
+        name = "ssh-keepassxc-unlock";
+        runtimeInputs = [
+          osConfig.programs.ssh.package
+          osConfig.programs.niri.package
+          keepassxc-pkgs.keepassxc
+          pkgs.jq
+          pkgs.coreutils
+          pkgs.util-linux
+          pkgs.procps
+          pkgs.libnotify
+          pkgs.systemd
+        ];
+        text = ''exec bash "${config.home.homeDirectory}/dots/coco/dotfiles/bin/ssh-keepassxc-unlock.sh" "$@"'';
+      };
+
     in
     {
       imports = [
@@ -64,6 +83,8 @@
         ./xcompose.nix
         inputs.niri-taskbar.homeManagerModules.default
       ];
+
+      home.file.".ssh/config".source = link-dotfile "ssh/config";
 
       xdg.configFile = {
         # Link the entire nvim directory structure
@@ -106,6 +127,7 @@
         kdePackages.breeze-icons # Icon theme for Dolphin
         kdePackages.dolphin # File manager (supports clipboard image paste)
         keepassxc-pkgs.keepassxc
+        ssh-keepassxc-unlock
         libreoffice
         lua-language-server
         nemo # File manager
