@@ -33,7 +33,7 @@ in
       push.autoSetupRemote = true;
       credential = {
         helper = "manager";
-        credentialStore = "gpg";
+        credentialStore = "secretservice";
       };
       alias = {
         b = "branch";
