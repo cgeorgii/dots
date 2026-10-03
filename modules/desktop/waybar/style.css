@@ -2,17 +2,16 @@
  *
  * Design: Rounded pill modules
  * Colors: defined in colors-active.css (dark/light, swapped by darkman)
- * Font: IosevkaTerm Nerd Font Mono 14px
+ * Font: fonts.css, generated from the shared style (modules/style.nix)
  * Background: Transparent window, semi-transparent modules (alpha 0.8)
  * Modules: 99px border-radius for pill shape
  * Taskbar: Grouped pills, darker on hover, active state highlighted
  */
 
 @import "colors-active.css";
+@import "fonts.css";
 
 * {
-  font-family: "IosevkaTerm Nerd Font Mono", "Font Awesome 6 Free", monospace;
-  font-size: 14px;
   font-feature-settings: "tnum";
 }
 

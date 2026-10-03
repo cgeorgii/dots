@@ -1,3 +1,8 @@
+{ config, ... }:
+
+let
+  inherit (config) style;
+in
 {
   # GTK, Qt and cursor defaults; the runtime palette comes from theme.nix.
   flake.modules.homeManager.theme =
@@ -5,26 +10,25 @@
     {
       # Session variables (XDG_CURRENT_DESKTOP set by compositor)
       home.sessionVariables = {
-        XCURSOR_THEME = "Adwaita";
-        XCURSOR_SIZE = "24";
+        XCURSOR_THEME = style.cursor.name;
+        XCURSOR_SIZE = toString style.cursor.size;
       };
 
       gtk = {
         enable = true;
-        # gruvbox-gtk-theme ships both Gruvbox-Dark and Gruvbox-Light; darkman
-        # swaps between them at runtime via the gtk-theme gsetting. This is only
-        # the boot default.
+        # darkman swaps between the dark and light variants at runtime via the
+        # gtk-theme gsetting. This is only the boot default.
         theme = {
-          name = "Gruvbox-Dark";
-          package = pkgs.gruvbox-gtk-theme;
+          name = style.gtk.dark;
+          package = style.gtk.package pkgs;
         };
         iconTheme = {
-          name = "Mint-Y-Sand";
-          package = pkgs.mint-y-icons;
+          name = style.icons.name;
+          package = style.icons.package pkgs;
         };
         cursorTheme = {
-          name = "Adwaita";
-          package = pkgs.adwaita-icon-theme;
+          name = style.cursor.name;
+          package = style.cursor.package pkgs;
         };
         # No static prefer-dark hint: the light/dark choice is driven at runtime
         # by darkman through the color-scheme gsetting and the gtk-theme name.

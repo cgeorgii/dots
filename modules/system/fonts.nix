@@ -1,20 +1,25 @@
+{ config, ... }:
+
+let
+  inherit (config) style;
+in
 {
   flake.modules.nixos.fonts =
     { pkgs, ... }:
 
     {
       fonts = {
-        packages = with pkgs; [
-          font-awesome
-          nerd-fonts.iosevka
-          nerd-fonts.iosevka-term
-
+        packages = [
+          pkgs.font-awesome
+        ]
+        ++ style.font.packages pkgs
+        ++ (with pkgs; [
           # Additional fonts for PDF compatibility
           liberation_ttf
           dejavu_fonts
           noto-fonts
           noto-fonts-color-emoji
-        ];
+        ]);
 
         fontconfig = {
           enable = true;
@@ -28,8 +33,8 @@
               "DejaVu Sans"
             ];
             monospace = [
-              "IosevkaTerm Nerd Font Mono"
-              "Iosevka Nerd Font Mono"
+              style.font.mono
+              style.font.monoFallback
             ];
           };
         };

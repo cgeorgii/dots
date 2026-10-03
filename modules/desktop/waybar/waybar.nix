@@ -1,3 +1,8 @@
+{ config, ... }:
+
+let
+  inherit (config) style;
+in
 {
   flake.modules.homeManager.waybar =
     { pkgs, link-dotfile, ... }:
@@ -5,6 +10,13 @@
       xdg.configFile = {
         "waybar/config".source = link-dotfile ./config.json;
         "waybar/style.css".source = link-dotfile ./style.css;
+        # Imported by style.css, so the font follows the shared style
+        "waybar/fonts.css".text = ''
+          * {
+            font-family: "${style.font.mono}", "Font Awesome 6 Free", monospace;
+            font-size: ${toString style.font.size}px;
+          }
+        '';
       };
 
       home.packages = [ pkgs.waybar ];

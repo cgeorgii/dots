@@ -1,5 +1,13 @@
-{ self, inputs, ... }:
+{
+  self,
+  inputs,
+  config,
+  ...
+}:
 
+let
+  inherit (config) style;
+in
 {
   perSystem =
     { pkgs, ... }:
@@ -12,8 +20,8 @@
         # Absolute, since the generated kitty.conf lives in the store.
         extraConfig = "include \${HOME}/.config/kitty/theme-active.conf";
         font = {
-          name = "IosevkaTerm Nerd Font Mono";
-          size = 14;
+          name = style.font.mono;
+          inherit (style.font) size;
         };
         settings = {
           # Match alacritty's minimal look

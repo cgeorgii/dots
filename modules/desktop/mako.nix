@@ -1,5 +1,13 @@
-{ self, inputs, ... }:
+{
+  self,
+  inputs,
+  config,
+  ...
+}:
 
+let
+  inherit (config) style;
+in
 {
   perSystem =
     { pkgs, ... }:
@@ -8,7 +16,7 @@
         inherit pkgs;
         settings = {
           default-timeout = 10000;
-          font = "IosevkaTerm Nerd Font Mono 14";
+          font = "${style.font.mono} ${toString style.font.size}";
           border-size = 2;
           border-radius = 0;
           padding = "10";

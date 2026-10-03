@@ -1,5 +1,13 @@
-{ self, inputs, ... }:
+{
+  self,
+  inputs,
+  config,
+  ...
+}:
 
+let
+  inherit (config) style;
+in
 {
   flake.modules.homeManager.theme =
     {
@@ -85,7 +93,15 @@
           pkgs.dbus
           self.packages.${pkgs.stdenv.hostPlatform.system}.mako
         ];
-        text = ''exec bash "${dotfile-path ./tinty-render.sh}" "$@"'';
+        # The shared style, for the configs the script renders
+        text = ''
+          export STYLE_FONT_MONO=${lib.escapeShellArg style.font.mono}
+          export STYLE_FONT_LAUNCHER_SIZE=${toString style.font.launcherSize}
+          export STYLE_ICON_THEME=${lib.escapeShellArg style.icons.name}
+          export STYLE_GTK_DARK=${lib.escapeShellArg style.gtk.dark}
+          export STYLE_GTK_LIGHT=${lib.escapeShellArg style.gtk.light}
+          exec bash "${dotfile-path ./tinty-render.sh}" "$@"
+        '';
       };
 
       # fuzzel has no daemon or include directive, so it reads the rendered config

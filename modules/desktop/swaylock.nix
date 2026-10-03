@@ -1,4 +1,9 @@
-{ self, inputs, ... }:
+{
+  self,
+  inputs,
+  config,
+  ...
+}:
 
 {
   perSystem =
@@ -7,7 +12,7 @@
       packages.swaylock = inputs.wrapper-modules.wrappers.swaylock.wrap {
         inherit pkgs;
         settings = {
-          image = ./wallpapers/02108_navajoland_1920x1080.jpg;
+          image = config.style.wallpaper;
           scaling = "fill";
           show-failed-attempts = true;
         };
