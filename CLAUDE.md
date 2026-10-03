@@ -23,3 +23,11 @@ Hot-reloaded dotfiles live next to the feature that uses them and are linked wit
 **When adding new configuration files**: put them beside the feature module and link them with `link-dotfile` rather than copying files. Configs fully declared in Nix can instead be wrapped as a package with nix-wrapper-modules (see kitty, swaylock, mako).
 
 **Important**: When creating new files for Nix flakes, ensure they are tracked by git before testing with nix commands. Use `git add -N path/to/file` to track without staging.
+
+## Roadmap
+
+Open work lives in [ROADMAP.md](ROADMAP.md), finished and dropped work in [COMPLETED.md](COMPLETED.md), and every ID in [INDEX.md](INDEX.md). Read the conventions at the top of ROADMAP.md before filing, starting, finishing or dropping an item: an ID is created by adding its index row, and finishing an item moves it to COMPLETED.md and updates the index. Record untriaged findings in the Inbox rather than allocating an ID.
+
+## Cross-references
+
+Comments and docs link with [tagref](https://github.com/stepchowfun/tagref) sigils: each roadmap item heading and each shared concept carries a tag, and code and docs cite it only through a ref, never as a bare item number. When a hot-reloaded dotfile or script hardcodes a path in the checkout, pin it with a file or dir sigil so moving the target fails the check. `tagref list-refs | grep <label>` finds everything that touches a tag, and `tagref check` validates (it also runs as a pre-commit hook).

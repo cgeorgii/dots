@@ -1,5 +1,7 @@
 { lib, ... }:
 
+# [tag:shared-style] The one place for fonts, cursor, icons, GTK theme and
+# wallpaper; hot-reloaded configs get generated files that include it.
 {
   options.style = lib.mkOption {
     type = lib.types.lazyAttrsOf lib.types.raw;

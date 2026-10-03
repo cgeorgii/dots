@@ -61,6 +61,7 @@
     "format-alt": "{ifname}: {ipaddr}/{cidr}"
   },
 
+  // Checkout path of the script below [file:modules/desktop/theme/theme-status.sh]
   "custom/theme": {
     "exec": "/home/cgeorgii/dots/modules/desktop/theme/theme-status.sh",
     "return-type": "json",

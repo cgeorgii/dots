@@ -2,7 +2,7 @@
 # tinty-render — regenerate every themed config from the palette that tinty
 # exports into the environment, then live-reload the running consumers.
 #
-# Run as tinty's apply/init hook (see theme.nix next to this script). This is the single
+# Run as tinty's apply/init hook through its Nix wrapper [ref:tinty-render-wrapper]. This is the single
 # source of truth for how a base16/base24 scheme maps onto each app. It is a
 # plain dotfile so theming can be tweaked without a rebuild; the Nix wrapper
 # only supplies PATH (procps/dconf/tmux).
@@ -13,10 +13,11 @@ set -u
 
 cfg="${XDG_CONFIG_HOME:-$HOME/.config}"
 
-# Fonts, icons and GTK theme names come from the shared style (modules/style.nix),
+# Fonts, icons and GTK theme names come from the shared style [ref:shared-style],
 # exported by the Nix wrapper.
 : "${STYLE_FONT_MONO:?} ${STYLE_FONT_LAUNCHER_SIZE:?} ${STYLE_ICON_THEME:?}"
 : "${STYLE_GTK_DARK:?} ${STYLE_GTK_LIGHT:?}"
+# Checkout path of the delta themes [dir:modules/dev/git]
 git_dir="$HOME/dots/modules/dev/git"
 
 # Assemble base00..base0F as "rrggbb" (no leading #) from tinty's per-channel

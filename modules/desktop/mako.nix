@@ -20,8 +20,8 @@ in
           border-size = 2;
           border-radius = 0;
           padding = "10";
-          # The palette tinty-render writes. mako refuses to start if the
-          # include is missing, so theme.nix seeds an empty one on activation.
+          # The palette tinty-render writes; activation seeds an empty one
+          # [ref:mako-theme-seed].
           include = "~/.config/mako/theme-active";
         };
       };

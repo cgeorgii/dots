@@ -239,7 +239,7 @@ window-rule {
     open-floating true
 }
 
-// Cursor and wallpaper, generated from the shared style (modules/style.nix)
+// Cursor and wallpaper, generated from the shared style [ref:shared-style]
 include "~/.config/niri/style.kdl"
 
 // Environment variables for Wayland/Niri

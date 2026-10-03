@@ -14,6 +14,8 @@
         hooks = {
           nixfmt.enable = true;
           deadnix.enable = true;
+          # Cross-references: no dangling refs or duplicate tags
+          tagref.enable = true;
         };
       };
 
@@ -23,6 +25,7 @@
         packages = [
           pkgs.nil
           pkgs.git-bug
+          pkgs.tagref
         ];
       };
     };

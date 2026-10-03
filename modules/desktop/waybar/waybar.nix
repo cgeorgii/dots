@@ -10,7 +10,7 @@ in
       xdg.configFile = {
         "waybar/config".source = link-dotfile ./config.json;
         "waybar/style.css".source = link-dotfile ./style.css;
-        # Imported by style.css, so the font follows the shared style
+        # Imported by style.css, so the font follows the shared style [ref:shared-style]
         "waybar/fonts.css".text = ''
           * {
             font-family: "${style.font.mono}", "Font Awesome 6 Free", monospace;

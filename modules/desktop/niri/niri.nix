@@ -51,7 +51,7 @@ in
       imports = [ inputs.niri-taskbar.homeManagerModules.default ];
 
       xdg.configFile."niri/config.kdl".source = link-dotfile ./config.kdl;
-      # Included by config.kdl, so cursor and wallpaper follow the shared style
+      # Included by config.kdl, so cursor and wallpaper follow the shared style [ref:shared-style]
       xdg.configFile."niri/style.kdl".text = ''
         cursor {
             xcursor-theme "${style.cursor.name}"

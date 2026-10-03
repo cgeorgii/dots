@@ -2,7 +2,7 @@
  *
  * Design: Rounded pill modules
  * Colors: defined in colors-active.css (dark/light, swapped by darkman)
- * Font: fonts.css, generated from the shared style (modules/style.nix)
+ * Font: fonts.css, generated from the shared style [ref:shared-style]
  * Background: Transparent window, semi-transparent modules (alpha 0.8)
  * Modules: 99px border-radius for pill shape
  * Taskbar: Grouped pills, darker on hover, active state highlighted

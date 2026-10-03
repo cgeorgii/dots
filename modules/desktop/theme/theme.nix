@@ -80,7 +80,7 @@ in
         fi
       '';
 
-      # The render logic lives in a hot-reloadable dotfile so theming can be tweaked
+      # [tag:tinty-render-wrapper] The render logic lives in a hot-reloadable dotfile so theming can be tweaked
       # without a rebuild; this thin wrapper only supplies the PATH the script needs
       # (darkman's systemd environment is too lean to find dconf/pkill/tmux).
       tinty-render = pkgs.writeShellApplication {
@@ -169,6 +169,8 @@ in
       # on first setup (no scheme applied yet), so waybar/kitty/fuzzel/nvim have
       # their generated inputs before the first darkman run — but a later rebuild
       # never overrides the current light/dark choice. darkman maintains it after.
+      # [tag:mako-theme-seed] It also creates an empty mako theme-active, since
+      # mako refuses to start while its include is missing.
       home.activation.tintyTheme = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
         run mkdir -p "${tintyData}/repos"
         run ln -sfn '${inputs.schemes}' "${tintyData}/repos/schemes"
