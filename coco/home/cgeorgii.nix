@@ -54,6 +54,23 @@
         system = pkgs.stdenv.hostPlatform.system;
       };
 
+      # workmux's sidebar daemon polls `gh` for PR status with no way to turn it
+      # off, and every call prompts for the SSH key. Put a failing `gh` first on
+      # its PATH only: it then skips the repo and the PR status stays blank.
+      workmux =
+        let
+          upstream = inputs.workmux.packages.${pkgs.stdenv.hostPlatform.system}.default;
+          gh-stub = pkgs.writeShellScriptBin "gh" "exit 1";
+        in
+        pkgs.symlinkJoin {
+          name = "workmux-without-gh";
+          paths = [ upstream ];
+          nativeBuildInputs = [ pkgs.makeWrapper ];
+          postBuild = ''
+            wrapProgram $out/bin/workmux --prefix PATH : ${gh-stub}/bin
+          '';
+        };
+
       # Pins the deps of the ssh `Match exec` hook; the script itself stays an
       # out-of-store dotfile so edits apply without a rebuild.
       ssh-keepassxc-unlock = pkgs.writeShellApplication {
@@ -141,7 +158,7 @@
         swaybg # Wallpaper manager for Niri
         tree
         waybar
-        inputs.workmux.packages.${pkgs.stdenv.hostPlatform.system}.default
+        workmux
         wasistlos
         whispering
         wl-clipboard
