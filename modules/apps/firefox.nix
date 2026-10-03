@@ -1,17 +1,16 @@
-{ inputs, ... }:
+{ self, inputs, ... }:
 
 {
-  flake.modules.nixos.firefox =
-    { pkgs, ... }:
+  perSystem =
+    { system, ... }:
     let
-      firefox-pkgs = import inputs.nixpkgs-for-firefox {
-        system = pkgs.stdenv.hostPlatform.system;
-      };
-
+      firefox-pkgs = import inputs.nixpkgs-for-firefox { inherit system; };
+    in
+    {
       # DoH runs over 443, which restrictive networks cannot blanket-block the way
       # they block DoT on 853, and Firefox suspends it behind captive portals until
       # the login completes. Unlocked so it can be turned off in the UI.
-      firefox-with-doh = firefox-pkgs.firefox.override {
+      packages.firefox = firefox-pkgs.firefox.override {
         extraPolicies = {
           DNSOverHTTPS = {
             Enabled = true;
@@ -20,9 +19,12 @@
           };
         };
       };
-    in
+    };
+
+  flake.modules.nixos.firefox =
+    { pkgs, ... }:
     {
-      environment.systemPackages = [ firefox-with-doh ];
+      environment.systemPackages = [ self.packages.${pkgs.stdenv.hostPlatform.system}.firefox ];
     };
 
   flake.modules.homeManager.firefox = {

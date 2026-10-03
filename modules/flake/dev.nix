@@ -5,7 +5,7 @@
     {
       system,
       config,
-      final,
+      pkgs,
       ...
     }:
     {
@@ -17,12 +17,12 @@
         };
       };
 
-      devShells.default = final.mkShell {
+      devShells.default = pkgs.mkShell {
         inherit (config.checks.pre-commit-check) shellHook;
         name = "coco-dev";
         packages = [
-          final.nil
-          final.git-bug
+          pkgs.nil
+          pkgs.git-bug
         ];
       };
     };

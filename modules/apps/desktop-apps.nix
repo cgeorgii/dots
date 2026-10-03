@@ -11,7 +11,6 @@
         maestral
         maestral-gui
         pavucontrol
-        whispering
       ];
 
       xdg.mimeApps.defaultApplications."image/jpeg" = "userapp-imv-B518F3.desktop";
