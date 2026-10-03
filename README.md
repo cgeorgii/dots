@@ -1,10 +1,9 @@
 Installation
 ------------
-Symlink this folder into /etc/nixos using sudo:
+Clone this repository to `~/dots` (dotfiles are linked from that path), then
+run:
 
-    ❯ sudo ln -s /home/cgeorgii/projects/dots/nixos/* /etc/nixos
-
-Run `sudo nixos-rebuild switch`.
+    ❯ sudo nixos-rebuild switch --flake ~/dots#coco
 
 Configuring git
 ---------------
@@ -24,7 +23,7 @@ The dotfiles include configuration for secure credential storage using git-crede
    - Future authentications will use the stored PAT automatically
    - No browser-based auth - uses CLI-based token entry only
 
-3. The configuration in home/cgeorgii.nix includes:
+3. The configuration in modules/dev/git/git.nix includes:
    ```nix
    credential = {
      helper = "manager";

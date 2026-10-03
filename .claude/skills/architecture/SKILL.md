@@ -6,46 +6,70 @@ user-invocable: true
 
 # Repository Architecture
 
-This is a NixOS dotfiles repository with flake-based configuration that manages:
-- NixOS system configuration for "coco" machine (ThinkPad X1 9th gen)
-- Home-Manager user configurations with dotfile symlinks
-- Automated git repository synchronization via systemd services
-- Development environment with pre-commit hooks
+A flake for the "coco" machine (ThinkPad X1 9th gen), organised with the
+dendritic pattern: every `.nix` file under `modules/` is a flake-parts module,
+loaded automatically by import-tree. `flake.nix` holds only inputs and
+`mkFlake { inherit inputs; } (import-tree ./modules)`.
 
-## Key Components
+## Features
 
-- `flake.nix`: Main flake with nixos-hardware, home-manager, and custom app integration
-- `common.nix`: System-wide packages and configuration shared across machines
-- `home/cgeorgii.nix`: User-specific configuration with dotfile symlinks and Niri/Waybar setup
-- `nix/git-repos.nix`: Custom NixOS module for automatic git repository management
-- `dotfiles/`: Configuration files symlinked via home-manager
+A feature is a file (or directory) that publishes modules under one name, for
+each layer it touches:
+
+- `flake.modules.nixos.<name>`: NixOS side (services, system packages, PAM)
+- `flake.modules.homeManager.<name>`: home-manager side (user packages, dotfiles)
+- `perSystem.packages.<name>`: packages it builds or wraps (`nix run .#<name>`)
+
+For example `modules/terminal/tmux/tmux.nix` installs tmux system-wide, links
+`tmux.conf` and adds the tmux shell aliases. The same name may be defined in
+several files (`flake.modules` merges them), e.g. `theme` spans
+`modules/desktop/theme/theme.nix` and `toolkits.nix`.
+
+Feature modules take `inputs` and `self` from the flake-parts scope; there are
+no specialArgs.
+
+## Layout
+
+- `modules/flake/`: systems, dev shell and pre-commit checks, `flake.modules` support
+- `modules/hosts/coco/`: the nixosConfiguration (`default.nix`), host-only
+  settings and the lists of nixos and homeManager features it uses
+  (`configuration.nix`), and the generated `_hardware-configuration.nix`
+- `modules/system/`: nix settings, base packages, locale, network, security
+  (ssh agent, KeePassXC), input (xkb + XCompose), fonts, audio, oom, ...
+- `modules/desktop/`: niri, waybar, swaylock, mako, theme (tinty/darkman, GTK/Qt), files (Dolphin)
+- `modules/shell/`, `modules/terminal/`, `modules/editor/`, `modules/dev/`, `modules/apps/`
+- `modules/home/dotfiles.nix`: the `link-dotfile` and `dotfile-path` helpers
+- `modules/users/cgeorgii.nix`: the user account and home-manager basics
+
+import-tree only loads `*.nix` files and skips any path containing `/_`, so
+plain NixOS modules or `callPackage` files that aren't flake-parts modules get
+a `_` prefix (`_hardware-configuration.nix`, `_xcompose.nix`, `whispering/_package.nix`).
+
+## Dotfile Management
+
+Hot-reloaded dotfiles live next to the feature that links them (niri's
+`config.kdl` beside `niri.nix`, `nvim/` beside `neovim.nix`). Features link
+them with `link-dotfile ./config.kdl`, an out-of-store symlink into the
+`~/dots` checkout, so edits apply without a rebuild. `dotfile-path ./file`
+gives the checkout path as a string, for scripts and settings. Both fail
+evaluation if the file is missing or not tracked by git.
+
+## Wrapped Programs
+
+Programs whose config is fully declared in Nix are wrapped with
+nix-wrapper-modules and exposed as packages: kitty, swaylock and mako. Their
+config lives in the store, so changing it needs a rebuild. Hot-reloaded or
+tinty-rendered configs (niri, waybar, nvim, fuzzel, tmux, zellij, claude,
+lazygit) stay on home-manager links. Starship stays on home-manager because
+`starship init` would bypass the wrapper's `STARSHIP_CONFIG`.
 
 ## Desktop Environment
 
-- Niri (Wayland compositor)
-- Waybar (status bar)
-- Fuzzel (application launcher)
-- Kitty (terminal emulator)
-- Zellij (terminal multiplexer)
-
-## Dotfile Management Strategy
-
-Uses `config.lib.file.mkOutOfStoreSymlink` to create symlinks instead of copying files, enabling hot-reloading without rebuilds. All dotfiles live in `dotfiles/` and are symlinked to appropriate locations.
-
-Configuration files for the user's home directory are symlinked in `home/cgeorgii.nix`. When adding new configuration files, follow this pattern by placing them in `dotfiles/` and creating symlinks through home-manager rather than copying files.
+- Niri (Wayland compositor), Waybar (status bar), Fuzzel (launcher)
+- Kitty (terminal), tmux / Zellij (multiplexers)
+- tinty + darkman for runtime light/dark and colour schemes
 
 ## Git Hooks
 
-- Pre-commit hooks are enabled via github:cachix/git-hooks.nix
-- Run `nix develop` to activate hooks in your local environment
-- Enabled hooks:
-  - nixfmt: Auto-formats Nix files
-  - deadnix: Finds unused variables in Nix files
-- Development shell includes: nil (Nix LSP), git-bug (issue tracker)
-
-## Automated Repository Management
-
-- `nix/git-repos.nix` provides systemd service for automatic git repository syncing
-- Configured repositories are cloned and kept up-to-date automatically
-- Service runs on boot and every 30 minutes
-- Skips updates if repositories have uncommitted changes
+- Pre-commit hooks via github:cachix/git-hooks.nix: nixfmt and deadnix
+- `nix develop` installs them; the dev shell also has nil and git-bug
