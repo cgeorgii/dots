@@ -1,4 +1,4 @@
-{ inputs, ... }:
+{ self, inputs, ... }:
 
 {
   flake.nixosConfigurations.coco = inputs.nixpkgs.lib.nixosSystem {
@@ -6,9 +6,13 @@
     specialArgs = { inherit inputs; };
     modules = [
       # Apply our overlay module
-      inputs.self.nixosModules.default
+      self.nixosModules.default
 
-      ../../coco
+      self.modules.nixos.coco
+
+      # Home-manager
+      inputs.home-manager.nixosModules.home-manager
+      ../../../coco/home/cgeorgii.nix
     ];
   };
 }
