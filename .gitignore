@@ -1,4 +1,4 @@
 .pre-commit-config.yaml
 .direnv
 result
-coco/dotfiles/claude/skills/synced/
+modules/dev/claude/skills/synced/

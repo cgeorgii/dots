@@ -3,8 +3,8 @@
     { link-dotfile, ... }:
 
     {
-      home.file.".gitignore".source = link-dotfile "gitignore";
-      home.file."./code/tweag/.gitconfig".source = link-dotfile "gitconfig-work";
+      home.file.".gitignore".source = link-dotfile ./gitignore;
+      home.file."./code/tweag/.gitconfig".source = link-dotfile ./gitconfig-work;
 
       programs.git = {
         enable = true;

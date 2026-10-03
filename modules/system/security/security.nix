@@ -40,10 +40,10 @@
 
   flake.modules.homeManager.security =
     {
-      config,
       pkgs,
       osConfig,
       link-dotfile,
+      dotfile-path,
       ...
     }:
     let
@@ -66,11 +66,11 @@
           pkgs.libnotify
           pkgs.systemd
         ];
-        text = ''exec bash "${config.home.homeDirectory}/dots/coco/dotfiles/bin/ssh-keepassxc-unlock.sh" "$@"'';
+        text = ''exec bash "${dotfile-path ./ssh-keepassxc-unlock.sh}" "$@"'';
       };
     in
     {
-      home.file.".ssh/config".source = link-dotfile "ssh/config";
+      home.file.".ssh/config".source = link-dotfile ./ssh-config;
 
       home.packages = [
         keepassxc-pkgs.keepassxc

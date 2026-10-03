@@ -47,7 +47,7 @@
     {
       imports = [ inputs.niri-taskbar.homeManagerModules.default ];
 
-      xdg.configFile."niri/config.kdl".source = link-dotfile "config/niri/config.kdl";
+      xdg.configFile."niri/config.kdl".source = link-dotfile ./config.kdl;
 
       programs.niri-taskbar.enable = true;
 

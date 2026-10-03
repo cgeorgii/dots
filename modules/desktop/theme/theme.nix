@@ -6,12 +6,11 @@
       pkgs,
       config,
       lib,
+      dotfile-path,
       ...
     }:
 
     let
-      dotfiles = "${config.home.homeDirectory}/dots/coco/dotfiles";
-
       # Curated "theme of the day" rings. darkman picks one scheme per day by
       # date, so the theme rotates daily while still flipping light<->dark at
       # sunrise/sunset. Any base16/base24 id from the schemes repo works; edit
@@ -86,7 +85,7 @@
           pkgs.dbus
           config.services.mako.package
         ];
-        text = ''exec bash "${dotfiles}/bin/tinty-render.sh" "$@"'';
+        text = ''exec bash "${dotfile-path ./tinty-render.sh}" "$@"'';
       };
 
       # fuzzel has no daemon or include directive, so it reads the rendered config

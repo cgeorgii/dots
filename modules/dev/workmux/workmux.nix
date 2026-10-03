@@ -27,7 +27,7 @@
     {
       home.packages = [ self.packages.${pkgs.stdenv.hostPlatform.system}.workmux ];
 
-      xdg.configFile."workmux/config.yaml".source = link-dotfile "config/workmux/config.yaml";
+      xdg.configFile."workmux/config.yaml".source = link-dotfile ./config.yaml;
 
       programs.zsh.shellAliases = {
         w = "workmux";

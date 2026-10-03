@@ -62,13 +62,13 @@
   },
 
   "custom/theme": {
-    "exec": "/home/cgeorgii/dots/coco/dotfiles/bin/theme-status.sh",
+    "exec": "/home/cgeorgii/dots/modules/desktop/theme/theme-status.sh",
     "return-type": "json",
     "interval": 30,
     "format": "{}",
     "tooltip": true,
-    "on-click": "/home/cgeorgii/dots/coco/dotfiles/bin/theme-status.sh toggle",
-    "on-click-right": "/home/cgeorgii/dots/coco/dotfiles/bin/theme-status.sh menu"
+    "on-click": "/home/cgeorgii/dots/modules/desktop/theme/theme-status.sh toggle",
+    "on-click-right": "/home/cgeorgii/dots/modules/desktop/theme/theme-status.sh menu"
   },
 
   "tray": {

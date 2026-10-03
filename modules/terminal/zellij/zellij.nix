@@ -12,7 +12,7 @@
       home.packages = [ pkgs.zellij ];
 
       xdg.configFile = {
-        "zellij/config.kdl".source = link-dotfile "config/zellij/config.kdl";
+        "zellij/config.kdl".source = link-dotfile ./config.kdl;
         "zellij/plugins/zellij-autolock.wasm".source = zellij-autolock;
       };
 

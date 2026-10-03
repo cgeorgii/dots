@@ -2,7 +2,7 @@
 # tinty-render — regenerate every themed config from the palette that tinty
 # exports into the environment, then live-reload the running consumers.
 #
-# Run as tinty's apply/init hook (see coco/home/theme.nix). This is the single
+# Run as tinty's apply/init hook (see theme.nix next to this script). This is the single
 # source of truth for how a base16/base24 scheme maps onto each app. It is a
 # plain dotfile so theming can be tweaked without a rebuild; the Nix wrapper
 # only supplies PATH (procps/dconf/tmux).
@@ -12,7 +12,7 @@
 set -u
 
 cfg="${XDG_CONFIG_HOME:-$HOME/.config}"
-dotfiles="$HOME/dots/coco/dotfiles"
+git_dir="$HOME/dots/modules/dev/git"
 
 # Assemble base00..base0F as "rrggbb" (no leading #) from tinty's per-channel
 # hex env vars, e.g. TINTY_SCHEME_PALETTE_BASE0A_HEX_{R,G,B}.
@@ -248,7 +248,7 @@ dbus-send --session --type=signal /KGlobalSettings \
 # --- variant-only consumers -------------------------------------------------
 # delta (git pager): git re-reads config per invocation, so no reload needed.
 mkdir -p "$cfg/delta"
-ln -sf "$dotfiles/config/delta/delta-$variant.gitconfig" "$cfg/delta/theme-active.gitconfig"
+ln -sf "$git_dir/delta-$variant.gitconfig" "$cfg/delta/theme-active.gitconfig"
 
 # GTK / portal-aware apps follow the variant via the color-scheme gsetting.
 if [ "$variant" = "dark" ]; then

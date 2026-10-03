@@ -3,8 +3,8 @@
     { pkgs, link-dotfile, ... }:
     {
       xdg.configFile = {
-        "waybar/config".source = link-dotfile "config/waybar/config.json";
-        "waybar/style.css".source = link-dotfile "config/waybar/style.css";
+        "waybar/config".source = link-dotfile ./config.json;
+        "waybar/style.css".source = link-dotfile ./style.css;
       };
 
       home.packages = [ pkgs.waybar ];

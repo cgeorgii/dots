@@ -8,7 +8,7 @@
   flake.modules.homeManager.tmux =
     { link-dotfile, ... }:
     {
-      home.file.".tmux.conf".source = link-dotfile "tmux.conf";
+      home.file.".tmux.conf".source = link-dotfile ./tmux.conf;
 
       programs.tmux.newSession = true;
 

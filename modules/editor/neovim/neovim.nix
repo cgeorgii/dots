@@ -13,7 +13,7 @@
     { pkgs, link-dotfile, ... }:
     {
       # Link the entire nvim directory structure
-      xdg.configFile."nvim".source = link-dotfile "nvim";
+      xdg.configFile."nvim".source = link-dotfile ./nvim;
 
       home.packages = [ pkgs.lua-language-server ];
 

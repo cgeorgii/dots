@@ -37,7 +37,7 @@ Theming (light/dark + colour schemes)
 
 Colours are driven at runtime by [tinty], so the theme can change without a
 rebuild. `tinty apply` exports the active [base16]/[base24] palette into the
-environment and runs `coco/dotfiles/bin/tinty-render.sh`, which regenerates each
+environment and runs `modules/desktop/theme/tinty-render.sh`, which regenerates each
 app's config and live-reloads it. The scheme catalogue is the
 `tinted-theming/schemes` flake input (a read-only, offline copy — `tinty sync`
 is never run).
@@ -45,7 +45,7 @@ is never run).
 ### Switching light/dark
 
 `darkman` flips automatically at Berlin sunrise/sunset, applying the configured
-defaults (`darkDefault` / `lightDefault` in `coco/home/theme.nix`). To switch
+defaults (`darkDefault` / `lightDefault` in `modules/desktop/theme/theme.nix`). To switch
 by hand:
 
 ```
@@ -63,7 +63,7 @@ $ tinty list                              # list every scheme id
 ```
 
 A manual pick lasts until darkman's next sun event, which reapplies a default.
-Change `darkDefault` / `lightDefault` in `coco/home/theme.nix` to make a scheme
+Change `darkDefault` / `lightDefault` in `modules/desktop/theme/theme.nix` to make a scheme
 stick as the automatic choice.
 
 ### What follows the theme
@@ -75,7 +75,7 @@ GTK apps — these flip between the gruvbox light/dark variants and follow the
 "auto"`) follows the terminal background, so it tracks kitty.
 
 To tweak how a scheme maps onto an app, edit
-`coco/dotfiles/bin/tinty-render.sh` — it is a hot dotfile and takes effect on the
+`modules/desktop/theme/tinty-render.sh` — it is a hot dotfile and takes effect on the
 next `tinty apply` (no rebuild).
 
 [tinty]: https://github.com/tinted-theming/tinty

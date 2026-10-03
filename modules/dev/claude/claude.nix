@@ -15,12 +15,12 @@
       };
 
       claudeFiles = prefix: {
-        "${prefix}/CLAUDE.md".source = link-dotfile "claude/CLAUDE.md";
-        "${prefix}/settings.json".source = link-dotfile "claude/settings.json";
-        "${prefix}/keybindings.json".source = link-dotfile "claude/keybindings.json";
-        "${prefix}/skills".source = link-dotfile "claude/skills";
-        "${prefix}/agents".source = link-dotfile "claude/agents";
-        "${prefix}/plugins/cgeorgii".source = link-dotfile "claude/plugins";
+        "${prefix}/CLAUDE.md".source = link-dotfile ./CLAUDE.md;
+        "${prefix}/settings.json".source = link-dotfile ./settings.json;
+        "${prefix}/keybindings.json".source = link-dotfile ./keybindings.json;
+        "${prefix}/skills".source = link-dotfile ./skills;
+        "${prefix}/agents".source = link-dotfile ./agents;
+        "${prefix}/plugins/cgeorgii".source = link-dotfile ./plugins;
       };
     in
     {

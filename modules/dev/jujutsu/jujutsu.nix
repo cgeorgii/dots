@@ -8,8 +8,8 @@
       ];
 
       xdg.configFile = {
-        "jjui/config.toml".source = link-dotfile "config/jjui/config.toml";
-        "jjui/themes".source = link-dotfile "config/jjui/themes";
+        "jjui/config.toml".source = link-dotfile ./config.toml;
+        "jjui/themes".source = link-dotfile ./themes;
       };
     };
 }
