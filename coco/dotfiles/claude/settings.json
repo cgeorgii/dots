@@ -81,5 +81,10 @@
   "editorMode": "vim",
   "verbose": false,
   "preferredNotifChannel": "notifications_disabled",
-  "autoCompactEnabled": false
+  "autoCompactEnabled": false,
+  "attribution": {
+    "commit": "",
+    "pr": "",
+    "sessionUrl": false
+  }
 }
