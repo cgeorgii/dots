@@ -48,7 +48,6 @@
       claude
       niri
       waybar
-      swaylock
       mako
       theme
       files
