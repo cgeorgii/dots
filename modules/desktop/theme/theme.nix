@@ -1,4 +1,4 @@
-{ inputs, ... }:
+{ self, inputs, ... }:
 
 {
   flake.modules.homeManager.theme =
@@ -83,7 +83,7 @@
           pkgs.tmux
           pkgs.systemd
           pkgs.dbus
-          config.services.mako.package
+          self.packages.${pkgs.stdenv.hostPlatform.system}.mako
         ];
         text = ''exec bash "${dotfile-path ./tinty-render.sh}" "$@"'';
       };
@@ -139,11 +139,6 @@
         items = []
         hooks = [ "${tinty-render}/bin/tinty-render" ]
       '';
-
-      # mako reads the palette tinty-render writes; included last so it overrides
-      # the base settings. It refuses to start if the include is missing, so
-      # activation seeds an empty one.
-      services.mako.settings.include = "${config.xdg.configHome}/mako/theme-active";
 
       home.packages = [
         pkgs.darkman
