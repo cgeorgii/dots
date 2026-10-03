@@ -24,7 +24,6 @@
         name = "coco-dev";
         packages = [
           pkgs.nil
-          pkgs.git-bug
           pkgs.tagref
         ];
       };

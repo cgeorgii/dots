@@ -105,7 +105,6 @@
           gan = "git add . -N";
           gitconfig = "nvim ~/.gitconfig";
           lg = "lazygit";
-          gb = "git bug";
           ge = "nvim .git/COMMIT_EDITMSG";
 
           # [[ TRICORDER ]]

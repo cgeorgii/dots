@@ -72,7 +72,7 @@ lazygit) stay on home-manager links. Starship stays on home-manager because
 ## Git Hooks
 
 - Pre-commit hooks via github:cachix/git-hooks.nix: nixfmt, deadnix and tagref
-- `nix develop` installs them; the dev shell also has nil, git-bug and tagref
+- `nix develop` installs them; the dev shell also has nil and tagref
 
 ## Roadmap and Cross-references
 
