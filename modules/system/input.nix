@@ -16,4 +16,7 @@
         };
       };
     };
+
+  # Compose rules for the us(intl) dead keys
+  flake.modules.homeManager.input = ./_xcompose.nix;
 }

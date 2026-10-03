@@ -19,4 +19,8 @@
         logseq-pkgs.logseq
       ];
     };
+
+  flake.modules.homeManager.logseq = {
+    xdg.mimeApps.defaultApplications."x-scheme-handler/logseq" = "Logseq.desktop";
+  };
 }

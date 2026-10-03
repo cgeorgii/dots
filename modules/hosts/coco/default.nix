@@ -9,10 +9,6 @@
       self.nixosModules.default
 
       self.modules.nixos.coco
-
-      # Home-manager
-      inputs.home-manager.nixosModules.home-manager
-      ../../../coco/home/cgeorgii.nix
     ];
   };
 }

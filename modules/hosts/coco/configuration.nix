@@ -5,6 +5,7 @@
     imports = [
       ./_hardware-configuration.nix
       inputs.nixos-hardware.nixosModules.lenovo-thinkpad-x1-9th-gen
+      inputs.home-manager.nixosModules.home-manager
     ]
     ++ (with self.modules.nixos; [
       nix
@@ -18,11 +19,45 @@
       fonts
       audio
       oom
+      zsh
+      tmux
+      neovim
       niri
+      swaylock
+      files
       firefox
       mullvad
       logseq
     ]);
+
+    home-manager.users.cgeorgii.imports = with self.modules.homeManager; [
+      dotfiles
+      cgeorgii
+      input
+      security
+      zsh
+      starship
+      cli
+      kitty
+      tmux
+      zellij
+      neovim
+      git
+      jujutsu
+      workmux
+      claude
+      niri
+      waybar
+      swaylock
+      mako
+      theme
+      files
+      firefox
+      logseq
+      chat
+      spotify
+      desktop-apps
+    ];
 
     networking.hostName = "coco"; # The codependent computer
 
