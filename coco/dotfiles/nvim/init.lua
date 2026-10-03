@@ -321,6 +321,16 @@ require("lazy").setup({
     end,
   },
 
+  -- ufo: tree-sitter parser, highlight queries and filetype, built from the ufo
+  -- repo with `nix build .#ufo-nvim -o ~/.local/share/nvim/ufo-nvim`
+  {
+    dir = vim.fn.expand("~/.local/share/nvim/ufo-nvim"),
+    name = "ufo-nvim",
+    lazy = false,
+    -- Grayscale "how much you care" theme, applied in ufo buffers only
+    config = function() require('ufo.care').setup() end,
+  },
+
   -- Conform for formatting
   {
     "stevearc/conform.nvim",
