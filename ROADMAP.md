@@ -41,6 +41,50 @@ Triaging gives a finding an ID and moves it under its area, or deletes it.
 
 ## Items
 
+### 1.1 — Explore an ephemeral root filesystem [tag:1.1-ephemeral-root]
+
+**Kind:** proposal
+**Status:** open
+**Depends on:** none
+
+Wipe the root filesystem on every boot and keep only state that is declared
+to persist, so the machine is exactly what the configuration describes and
+undeclared state can't silently pile up. This is an exploration: decide
+whether it's worth it, and how, before changing the disk.
+
+- **Current layout:** a single ext4 filesystem on LUKS (`nvme0n1p2`, 1.8 TB,
+  671 GB used) holds `/`, `/nix` and `/home`, with swap on a separate LUKS
+  partition. Ext4 has no snapshots, so every option below needs a new
+  layout, i.e. a reinstall or a careful conversion with a full backup.
+- **Ways to wipe root:**
+  - a tmpfs mounted at `/`, with `/nix` and a `/persist` on disk; simplest,
+    but root lives in RAM;
+  - btrfs subvolumes, with root rolled back to an empty snapshot in the
+    initrd (with `boot.initrd.systemd`); keeps root on disk and allows
+    diffing it before the rollback;
+  - ZFS with a blank-snapshot rollback; the same idea, with an
+    out-of-tree kernel module.
+- **Declaring what persists:** the nix-community `impermanence` module, or
+  its newer alternative `preservation`, mounts declared paths from
+  `/persist`. Candidates on this machine: `/etc/machine-id`, SSH host keys,
+  NetworkManager connections, bluetooth pairings, Mullvad's and fwupd's
+  state, `/var/lib/nixos` (UID/GID allocations), and the journal.
+- **Home** is a separate decision: wiping it too means listing everything
+  else that has to persist (the `~/dots` checkout every out-of-store link
+  points into, the KeePassXC database, the tinty state, browser profiles,
+  Claude Code's config dirs, ...). Keeping `/home` persistent and wiping
+  only root is the usual first step.
+- **Inventory first, on the current system:** list what's written outside
+  `/nix` and `/home` during normal use, e.g. as root after a few days of
+  uptime:
+  `find / -xdev \( -path /nix -o -path /home \) -prune -o -newer /run/booted-system -print`
+  (`-prune` keeps it out of the store). That list is the persistence set,
+  and it shows how big the job is before anything changes.
+
+**Done when:** the inventory exists, a layout and persistence approach is
+chosen (or the idea is dropped, with the reason), and if it goes ahead, the
+migration is split into its own items.
+
 ### 2.1 — Try noctalia as the desktop shell [tag:2.1-noctalia-shell]
 
 **Kind:** proposal

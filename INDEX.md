@@ -14,5 +14,6 @@ index only says where the item is. Conventions are in [ROADMAP.md](ROADMAP.md).
 
 | ID | Title | File |
 |----|-------|------|
+| [ref:1.1-ephemeral-root] | Explore an ephemeral root filesystem | [ROADMAP.md](ROADMAP.md) |
 | [ref:2.1-noctalia-shell] | Try noctalia as the desktop shell | [ROADMAP.md](ROADMAP.md) |
 | [ref:3.1-roadmap-program] | A program to manage roadmap files | [ROADMAP.md](ROADMAP.md) |
