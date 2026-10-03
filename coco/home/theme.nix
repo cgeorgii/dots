@@ -30,8 +30,8 @@ let
     "base16-oxocarbon-light"
     "base16-selenized-light"
     "base16-equilibrium-light"
-    "base16-cave-light"
-    "base16-dune-light"
+    "base16-atelier-cave-light"
+    "base16-atelier-dune-light"
     "base16-gruvbox-light-soft"
     "base16-atelier-heath-light"
     "base16-precious-light-warm"
@@ -55,12 +55,19 @@ let
 
   # darkman hook body: apply the day's scheme from `schemes`, indexed by the
   # day of the year so it advances once per calendar day and wraps around.
+  # A failed apply only shows up in darkman's journal, so surface it as a
+  # notification too.
   themeOfDay = schemes: ''
     set -- ${lib.concatStringsSep " " schemes}
     day="$(${pkgs.coreutils}/bin/date +%j)"
     idx="$(( (10#$day - 1) % $# + 1 ))"
     eval "scheme=\''${$idx}"
-    ${tinty} apply "$scheme" --config ${tintyConfig} --data-dir ${tintyData}
+    if ! out="$(${tinty} apply "$scheme" --config ${tintyConfig} --data-dir ${tintyData} 2>&1)"; then
+      printf '%s\n' "$out" >&2
+      ${pkgs.libnotify}/bin/notify-send -u critical -a darkman \
+        "Theme switch failed: $scheme" "$out"
+      exit 1
+    fi
   '';
 
   # The render logic lives in a hot-reloadable dotfile so theming can be tweaked
