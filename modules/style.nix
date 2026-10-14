@@ -44,6 +44,10 @@
       package = pkgs: pkgs.gruvbox-gtk-theme;
     };
 
-    wallpaper = ./desktop/wallpapers/02108_navajoland_1920x1080.jpg;
+    # One per variant; darkman swaps between them at runtime [ref:active-wallpaper].
+    wallpaper = {
+      dark = ./desktop/wallpapers/dark-space.jpg;
+      light = ./desktop/wallpapers/02108_navajoland_1920x1080.jpg;
+    };
   };
 }

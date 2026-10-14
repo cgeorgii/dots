@@ -46,22 +46,41 @@ in
     };
 
   flake.modules.homeManager.niri =
-    { pkgs, link-dotfile, ... }:
+    {
+      pkgs,
+      config,
+      link-dotfile,
+      ...
+    }:
     {
       imports = [ inputs.niri-taskbar.homeManagerModules.default ];
 
       xdg.configFile."niri/config.kdl".source = link-dotfile ./config.kdl;
-      # Included by config.kdl, so cursor and wallpaper follow the shared style [ref:shared-style]
+      # Included by config.kdl, so the cursor follows the shared style [ref:shared-style]
       xdg.configFile."niri/style.kdl".text = ''
         cursor {
             xcursor-theme "${style.cursor.name}"
             xcursor-size ${toString style.cursor.size}
         }
-
-        spawn-at-startup "swaybg" "-i" "${style.wallpaper}" "-m" "fill"
       '';
 
       programs.niri-taskbar.enable = true;
+
+      # A user service rather than a spawn-at-startup, so tinty-render can
+      # restart it onto the other variant's wallpaper [ref:active-wallpaper].
+      systemd.user.services.swaybg = {
+        Unit = {
+          Description = "Wallpaper";
+          PartOf = "graphical-session.target";
+          After = "graphical-session.target";
+          Requisite = "graphical-session.target";
+        };
+        Service = {
+          ExecStart = "${pkgs.swaybg}/bin/swaybg -i ${config.xdg.dataHome}/wallpaper/active -m fill";
+          Restart = "on-failure";
+        };
+        Install.WantedBy = [ "graphical-session.target" ];
+      };
 
       home.packages = with pkgs; [
         fuzzel # App launcher for Niri

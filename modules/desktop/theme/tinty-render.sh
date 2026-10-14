@@ -8,7 +8,7 @@
 # only supplies PATH (procps/dconf/tmux).
 #
 # Palette-driven consumers (kitty, waybar, lazygit, fuzzel, nvim) track any
-# scheme; delta/tmux/gtk follow the light/dark variant only.
+# scheme; delta/tmux/gtk/wallpaper follow the light/dark variant only.
 set -u
 
 cfg="${XDG_CONFIG_HOME:-$HOME/.config}"
@@ -264,6 +264,14 @@ else
 fi
 dconf write /org/gnome/desktop/interface/color-scheme "'$scheme'" 2>/dev/null || true
 dconf write /org/gnome/desktop/interface/gtk-theme "'$gtk'" 2>/dev/null || true
+
+# Wallpaper: repoint the active symlink [ref:active-wallpaper] and restart
+# swaybg only when the variant actually changed.
+wall="${XDG_DATA_HOME:-$HOME/.local/share}/wallpaper/active"
+if [ "$(readlink "$wall" 2>/dev/null)" != "$variant" ]; then
+  ln -sfn "$variant" "$wall"
+  systemctl --user try-restart swaybg 2>/dev/null || true
+fi
 
 # tmux: re-theme every running server via the gruvbox plugin.
 if tmux list-sessions >/dev/null 2>&1; then

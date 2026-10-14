@@ -156,6 +156,11 @@ in
         hooks = [ "${tinty-render}/bin/tinty-render" ]
       '';
 
+      # [tag:active-wallpaper] Both variants sit beside an `active` symlink that
+      # tinty-render points at the current one; swaybg and swaylock read it.
+      xdg.dataFile."wallpaper/dark".source = style.wallpaper.dark;
+      xdg.dataFile."wallpaper/light".source = style.wallpaper.light;
+
       home.packages = [
         pkgs.darkman
         pkgs.tinty
@@ -179,6 +184,7 @@ in
         if [ ! -e "${tintyData}/current_scheme" ]; then
           run ${tintyApply darkDefault} || true
         fi
+        [ -e "${config.xdg.dataHome}/wallpaper/active" ] || run ln -sfn dark "${config.xdg.dataHome}/wallpaper/active"
       '';
     };
 }

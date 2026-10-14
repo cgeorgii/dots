@@ -1,7 +1,6 @@
 {
   self,
   inputs,
-  config,
   ...
 }:
 
@@ -12,7 +11,8 @@
       packages.swaylock = inputs.wrapper-modules.wrappers.swaylock.wrap {
         inherit pkgs;
         settings = {
-          image = config.style.wallpaper;
+          # Follows the light/dark variant; swaylock expands ~ [ref:active-wallpaper]
+          image = "~/.local/share/wallpaper/active";
           scaling = "fill";
           show-failed-attempts = true;
         };
