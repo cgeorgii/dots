@@ -21,4 +21,3 @@ User-specific preferences and behavioral guidelines for Claude Code across all p
 
 ## User Context
 - Comfortable with NixOS and functional programming patterns
-- Prefers hot-reloading configurations over rebuilds where possible
