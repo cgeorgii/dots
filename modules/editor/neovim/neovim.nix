@@ -20,6 +20,10 @@
       programs.neovim = {
         enable = true;
         withNodeJs = true;
+        withPython3 = false;
+        withRuby = false;
+        # init.lua is the hot-reloaded dotfile above; pass HM's provider settings through the wrapper instead
+        sideloadInitLua = true;
       };
     };
 }

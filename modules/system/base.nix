@@ -13,12 +13,14 @@
         git-credential-manager
         pinentry-gnome3
         readline
-        silver-searcher
         wget
         wally-cli
         xclip
         # zenith
-        udiskie
+        (udiskie.overridePythonAttrs (old: {
+          # Exercises the kernel keyring, which fails with EKEYREVOKED in the build sandbox
+          disabledTests = (old.disabledTests or [ ]) ++ [ "test_invalidate" ];
+        }))
       ];
 
       # Enable CUPS to print documents.

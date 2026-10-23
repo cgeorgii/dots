@@ -27,7 +27,6 @@
       files
       firefox
       mullvad
-      logseq
     ]);
 
     home-manager.users.cgeorgii.imports = with self.modules.homeManager; [
@@ -52,7 +51,6 @@
       theme
       files
       firefox
-      logseq
       chat
       spotify
       desktop-apps

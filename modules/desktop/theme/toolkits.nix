@@ -6,7 +6,7 @@ in
 {
   # GTK, Qt and cursor defaults; the runtime palette comes from theme.nix.
   flake.modules.homeManager.theme =
-    { pkgs, ... }:
+    { config, pkgs, ... }:
     {
       # Session variables (XDG_CURRENT_DESKTOP set by compositor)
       home.sessionVariables = {
@@ -30,6 +30,7 @@ in
           name = style.cursor.name;
           package = style.cursor.package pkgs;
         };
+        gtk4.theme = config.gtk.theme;
         # No static prefer-dark hint: the light/dark choice is driven at runtime
         # by darkman through the color-scheme gsetting and the gtk-theme name.
       };

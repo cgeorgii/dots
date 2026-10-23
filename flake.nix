@@ -8,8 +8,6 @@
     nixpkgs-for-element-desktop.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs-for-firefox.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs-for-keepassxc.url = "github:NixOS/nixpkgs/nixos-unstable";
-    nixpkgs-for-logseq.url = "github:NixOS/nixpkgs/nixos-unstable";
-    nixpkgs-for-mullvad.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs-for-niri.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     workmux.url = "github:raine/workmux";

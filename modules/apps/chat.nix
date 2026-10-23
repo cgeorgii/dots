@@ -13,6 +13,7 @@
         config.allowUnfreePredicate =
           pkg:
           builtins.elem (pkgs.lib.getName pkg) [
+            "discord-unwrapped"
             "discord"
           ];
       };
@@ -26,7 +27,7 @@
         discord-pkgs.discord
         element-desktop-pkgs.element-desktop
         signal-pkgs.signal-desktop
-        pkgs.wasistlos
+        pkgs.karere
       ];
 
       xdg.mimeApps.defaultApplications = {
