@@ -18,6 +18,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # The cachix branch only points at commits already in noctalia.cachix.org,
+    # and its own nixpkgs keeps the hashes matching the cache.
+    noctalia.url = "github:noctalia-dev/noctalia/cachix";
+
     niri-taskbar = {
       url = "github:cgeorgii/niri-taskbar";
       inputs.nixpkgs.follows = "nixpkgs";

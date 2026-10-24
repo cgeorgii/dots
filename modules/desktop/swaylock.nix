@@ -20,8 +20,14 @@
     };
 
   flake.modules.nixos.swaylock =
-    { pkgs, ... }:
     {
+      pkgs,
+      lib,
+      config,
+      ...
+    }:
+    # Part of the classic shell [ref:desktop-shell]
+    lib.mkIf (config.desktop.shell == "classic") {
       environment.systemPackages = [ self.packages.${pkgs.stdenv.hostPlatform.system}.swaylock ];
 
       security.pam.services.swaylock = { };

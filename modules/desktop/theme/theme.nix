@@ -183,6 +183,10 @@ in
         [ -e "${config.xdg.configHome}/mako/theme-active" ] || run touch "${config.xdg.configHome}/mako/theme-active"
         if [ ! -e "${tintyData}/current_scheme" ]; then
           run ${tintyApply darkDefault} || true
+        elif [ ! -e "${config.xdg.configHome}/noctalia/tinty.toml" ]; then
+          # Render the current scheme once for noctalia, added after it was applied
+          run ${tinty} apply "$(${tinty} current --config ${tintyConfig} --data-dir ${tintyData})" \
+            --config ${tintyConfig} --data-dir ${tintyData} || true
         fi
         [ -e "${config.xdg.dataHome}/wallpaper/active" ] || run ln -sfn dark "${config.xdg.dataHome}/wallpaper/active"
       '';

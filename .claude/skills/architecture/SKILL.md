@@ -36,7 +36,7 @@ no specialArgs.
   (`configuration.nix`), and the generated `_hardware-configuration.nix`
 - `modules/system/`: nix settings, base packages, locale, network, security
   (ssh agent, KeePassXC), input (xkb + XCompose), fonts, audio, oom, ...
-- `modules/desktop/`: niri, waybar, swaylock, mako, theme (tinty/darkman, GTK/Qt), files (Dolphin)
+- `modules/desktop/`: niri, waybar, swaylock, mako, noctalia, theme (tinty/darkman, GTK/Qt), files (Dolphin)
 - `modules/shell/`, `modules/terminal/`, `modules/editor/`, `modules/dev/`, `modules/apps/`
 - `modules/home/dotfiles.nix`: the `link-dotfile` and `dotfile-path` helpers
 - `modules/users/cgeorgii.nix`: the user account and home-manager basics
@@ -68,6 +68,24 @@ lazygit) stay on home-manager links. Starship stays on home-manager because
 - Niri (Wayland compositor), Waybar (status bar), Fuzzel (launcher)
 - Kitty (terminal), tmux / Zellij (multiplexers)
 - tinty + darkman for runtime light/dark and colour schemes
+
+### Switching the desktop shell
+
+`desktop.shell` [ref:desktop-shell] picks what runs around niri: `classic`
+(waybar, mako, fuzzel, swaylock, swaybg) or `noctalia`. The default build is
+classic, and the `noctalia` specialisation in
+`modules/hosts/coco/configuration.nix` sets it to noctalia, so one rebuild
+builds both and switching between them needs no further rebuild:
+
+- **At boot:** pick the `noctalia` entry in the systemd-boot menu.
+- **Live, to noctalia:**
+  `sudo /nix/var/nix/profiles/system/specialisation/noctalia/bin/switch-to-configuration switch`
+- **Live, back to classic:**
+  `sudo /nix/var/nix/profiles/system/bin/switch-to-configuration switch`
+
+Both commands are temporary: they don't change the boot default. A plain
+`nixos-rebuild switch` always activates classic, so add
+`--specialisation noctalia` to rebuild while staying on noctalia.
 
 ## Git Hooks
 

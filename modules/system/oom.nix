@@ -32,10 +32,11 @@
         # Periodic memory report to the journal (heartbeat for diagnosis).
         reportInterval = 3600;
 
-        # Spare core session components from being picked as the victim.
+        # Spare core session components from being picked as the victim. Names
+        # are the 15-character comm, so a wrapped noctalia is ".noctalia-wrapp".
         extraArgs = [
           "--avoid"
-          "^(systemd|Xorg|niri|swaylock|pipewire|wireplumber|swaync|greetd)$"
+          "^(systemd|Xorg|niri|swaylock|\\.noctalia-wrapp|pipewire|wireplumber|swaync|greetd)$"
         ];
       };
 

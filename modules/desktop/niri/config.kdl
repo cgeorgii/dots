@@ -6,8 +6,7 @@
 // - Gruvbox Dark color scheme
 // - Keyboard: US/US-intl, Caps->Escape, Ctrl+Space to switch layouts
 // - Natural scrolling on touchpad and mouse
-// - Waybar status bar (top, auto-start)
-// - Fuzzel app launcher (Super+D)
+// - Bar, launcher and lock come from the shell: shell.kdl below
 // - Kitty spawns at startup
 //
 // Key bindings:
@@ -15,7 +14,7 @@
 // - Super+Ctrl+H/L: Focus monitor left/right
 // - Super+J/K: Switch workspace down/up
 // - Super+Shift+S: Screenshot
-// - F9: Lock (+ KeePassXC), F10: Lock+suspend
+// - Super+Space: launcher, F9: lock (+ KeePassXC), F10: lock+suspend (shell.kdl)
 
 input {
     keyboard {
@@ -93,8 +92,6 @@ hotkey-overlay {
 binds {
     // Window management
     Mod+Return { spawn "kitty"; }
-    Mod+Space { spawn "fuzzel-themed"; }
-    Mod5+Space { spawn "fuzzel-themed"; }
 
     // Close window
     Mod+Shift+Q { close-window; }
@@ -191,10 +188,6 @@ binds {
     Print { screenshot-screen; }
     Ctrl+Print { screenshot-window; }
 
-    // Screen lock and system control
-    F9 { spawn "sh" "-c" "pgrep -x keepassxc >/dev/null && keepassxc --lock; swaylock -f"; }
-    F10 allow-when-locked=true { spawn "sh" "-c" "pgrep -x keepassxc >/dev/null && keepassxc --lock; pgrep -x swaylock >/dev/null || swaylock -f && systemctl suspend"; }
-
     // Brightness and volume
     XF86MonBrightnessUp   allow-when-locked=true { spawn "brightnessctl" "set" "5%+"; }
     XF86MonBrightnessDown allow-when-locked=true { spawn "brightnessctl" "set" "5%-" "-n" "1"; }
@@ -241,6 +234,10 @@ window-rule {
 
 // Cursor, generated from the shared style [ref:shared-style]
 include "~/.config/niri/style.kdl"
+
+// Launcher and lock binds, layer and window rules of the active shell
+// [ref:desktop-shell]
+include "~/.config/niri/shell.kdl"
 
 // Environment variables for Wayland/Niri
 // Prefer Wayland for Qt/Electron apps, but allow XWayland fallback

@@ -28,11 +28,17 @@ in
     };
 
   flake.modules.homeManager.mako =
-    { lib, pkgs, ... }:
+    {
+      lib,
+      pkgs,
+      osConfig,
+      ...
+    }:
     let
       mako = self.packages.${pkgs.stdenv.hostPlatform.system}.mako;
     in
-    {
+    # Part of the classic shell [ref:desktop-shell]
+    lib.mkIf (osConfig.desktop.shell == "classic") {
       home.packages = [ mako ];
 
       # mako starts on demand over D-Bus. The wrapper points its service file

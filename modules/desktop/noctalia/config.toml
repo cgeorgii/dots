@@ -1,0 +1,70 @@
+# Noctalia, the `noctalia` desktop shell [ref:2.1-noctalia-shell]
+#
+# Hot-reloaded. Noctalia merges every *.toml in ~/.config/noctalia in name
+# order: this file, style.toml (font, from Nix) and tinty.toml (mode and
+# wallpaper, from tinty-render). Changes made in its Settings window go to
+# settings.toml beside this file (linked from ~/.local/state/noctalia), which
+# loads last and wins over all of them.
+# Reference: https://docs.noctalia.dev/noctalia/configuration/
+
+[shell]
+telemetry_enabled = false
+# Apps started from the launcher run as their own transient user units, so
+# restarting the noctalia unit doesn't take them down.
+launch_apps_as_systemd_services = true
+
+[theme]
+# tinty is the source of truth: tinty-render writes palettes/tinty.json from
+# the active base16 scheme and sets `mode` in tinty.toml.
+source = "custom"
+custom_palette = "tinty"
+# tinty-render already sets the GNOME color-scheme and GTK theme.
+sync_color_scheme = false
+
+[theme.templates]
+# Apps are themed by tinty-render, not by noctalia's templates.
+enable_builtin_templates = false
+enable_community_templates = false
+
+[wallpaper]
+enabled = true
+fill_mode = "crop"
+# wallpaper.default.path comes from tinty.toml, per light/dark variant.
+
+[lockscreen]
+enabled = true
+
+[notification]
+enable_daemon = true
+
+[hooks]
+# Every lock (F9, F10, lid, idle) also locks KeePassXC, as swaylock's binds did.
+session_locked = "pgrep -x keepassxc >/dev/null && keepassxc --lock"
+
+[bar.main]
+position = "top"
+start = ["workspaces", "taskbar"]
+center = ["clock"]
+end = ["cpu", "memory", "battery", "theme", "tray", "notifications", "network", "bluetooth", "volume", "control-center", "session"]
+
+[widget.clock]
+format = "{:%e %B %H:%M}"
+
+[widget.cpu]
+type = "sysmon"
+stat = "cpu_usage"
+
+[widget.memory]
+type = "sysmon"
+stat = "ram_pct"
+
+# Light/dark through darkman, which applies a tinty scheme; noctalia's own
+# theme-mode widget would pin `mode` in settings.toml instead.
+[widget.theme]
+type = "custom_button"
+glyph = "sun-moon"
+tooltip = "Toggle light/dark (right-click: pick a scheme)"
+
+[widget.theme.actions]
+left = "exec darkman toggle"
+right = "exec kitty -e theme-menu"

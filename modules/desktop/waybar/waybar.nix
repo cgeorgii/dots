@@ -5,8 +5,15 @@ let
 in
 {
   flake.modules.homeManager.waybar =
-    { pkgs, link-dotfile, ... }:
     {
+      pkgs,
+      lib,
+      osConfig,
+      link-dotfile,
+      ...
+    }:
+    # Part of the classic shell [ref:desktop-shell]
+    lib.mkIf (osConfig.desktop.shell == "classic") {
       xdg.configFile = {
         "waybar/config".source = link-dotfile ./config.json;
         "waybar/style.css".source = link-dotfile ./style.css;

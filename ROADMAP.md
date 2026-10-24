@@ -267,7 +267,7 @@ to the host other than the vault; the `dev` container can't reach it.
 ### 2.1 — Try noctalia as the desktop shell [tag:2.1-noctalia-shell]
 
 **Kind:** proposal
-**Status:** open
+**Status:** in-progress (master)
 **Depends on:** none
 
 Noctalia is a desktop shell (bar, launcher, notifications, lock screen,
