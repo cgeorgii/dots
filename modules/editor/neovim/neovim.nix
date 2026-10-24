@@ -4,6 +4,7 @@
     {
       environment.systemPackages = [
         pkgs.gcc # Required for neovim-treesitter
+        pkgs.tree-sitter # nvim-treesitter main builds parsers with the CLI
       ];
 
       environment.variables.EDITOR = "nvim";

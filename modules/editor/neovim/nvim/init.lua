@@ -302,22 +302,32 @@ require("lazy").setup({
   -- Treesitter for better syntax highlighting
   {
     "nvim-treesitter/nvim-treesitter",
+    branch = "main",
+    lazy = false,
     build = ":TSUpdate",
     config = function()
-      require('nvim-treesitter.configs').setup {
-        ensure_installed = { "lua", "vim", "vimdoc", "typescript", "tsx", "sql", "haskell", "nix" },
-        sync_install = false,
-        auto_install = true,
-        ignore_install = {},
-        modules = {},
-        highlight = {
-          enable = true,
-          additional_vim_regex_highlighting = false,
-        },
-        indent = {
-          enable = true
-        }
-      }
+      local ts = require('nvim-treesitter')
+      ts.install { "lua", "vim", "vimdoc", "typescript", "tsx", "sql", "haskell", "nix", "markdown", "markdown_inline" }
+
+      local available = {}
+      for _, lang in ipairs(ts.get_available()) do available[lang] = true end
+
+      local function attach(buf, lang)
+        if not vim.api.nvim_buf_is_valid(buf) or not pcall(vim.treesitter.start, buf, lang) then return end
+        vim.bo[buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+      end
+
+      -- Highlight and indent every buffer with a parser, installing missing ones on first use
+      vim.api.nvim_create_autocmd("FileType", {
+        callback = function(args)
+          local lang = vim.treesitter.language.get_lang(args.match) or args.match
+          if vim.treesitter.language.add(lang) then
+            attach(args.buf, lang)
+          elseif available[lang] then
+            ts.install(lang):await(vim.schedule_wrap(function() attach(args.buf, lang) end))
+          end
+        end,
+      })
     end,
   },
 
