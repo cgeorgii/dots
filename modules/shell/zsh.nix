@@ -112,7 +112,8 @@
 
           # [[ UTILS ]]
           cat = "bat";
-          ls = "eza --git --icons -a --group-directories-first";
+          # eza waits on stdin when it's an open pipe, hanging in non-tty shells
+          ls = "eza --git --icons -a --group-directories-first </dev/null";
           z = "zenith";
         };
 
