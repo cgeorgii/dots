@@ -227,8 +227,7 @@ window-rule {
 // Cursor, generated from the shared style [ref:shared-style]
 include "~/.config/niri/style.kdl"
 
-// Launcher and lock binds, layer and window rules of the active shell
-// [ref:desktop-shell]
+// Launcher and lock binds and window rules of noctalia, written by its feature
 include "~/.config/niri/shell.kdl"
 
 // Environment variables for Wayland/Niri

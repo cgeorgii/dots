@@ -22,8 +22,6 @@
         pkgs.nerd-fonts.iosevka-term
       ];
       size = 14;
-      # fuzzel's prompt and list, which read better larger
-      launcherSize = 18;
     };
 
     cursor = {

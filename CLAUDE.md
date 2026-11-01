@@ -20,7 +20,7 @@ Dendritic flake-parts layout: every `.nix` file under `modules/` is loaded by im
 
 Hot-reloaded dotfiles live next to the feature that uses them and are linked with `link-dotfile ./file` (an out-of-store symlink into `~/dots`), so edits apply without rebuilds. Use `dotfile-path ./file` when a script or setting needs the path as a string.
 
-**When adding new configuration files**: put them beside the feature module and link them with `link-dotfile` rather than copying files. Configs fully declared in Nix can instead be wrapped as a package with nix-wrapper-modules (see kitty, swaylock, mako).
+**When adding new configuration files**: put them beside the feature module and link them with `link-dotfile` rather than copying files. Configs fully declared in Nix can instead be wrapped as a package with nix-wrapper-modules (see kitty).
 
 **Important**: When creating new files for Nix flakes, ensure they are tracked by git before testing with nix commands. Use `git add -N path/to/file` to track without staging.
 
@@ -34,4 +34,4 @@ Comments and docs link with [tagref](https://github.com/stepchowfun/tagref) sigi
 
 ## Manual
 
-How to operate the system (commands run by hand, such as switching the desktop shell) is documented in the mdbook under `docs/manual/`, not in skills or comments; comments point at a chapter with a file sigil. `dots-manual` in the dev shell serves it.
+How to operate the system (commands run by hand, such as triaging colour schemes) is documented in the mdbook under `docs/manual/`, not in skills or comments; comments point at a chapter with a file sigil. `dots-manual` in the dev shell serves it.

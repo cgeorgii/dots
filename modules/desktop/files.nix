@@ -20,7 +20,7 @@
         "application/zip" = "org.gnome.FileRoller.desktop";
       };
 
-      # Show Dolphin as "Files" in fuzzel. Overrides the package's desktop
+      # Show Dolphin as "Files" in the launcher. Overrides the package's desktop
       # entry (same id, so the mimeApps default and D-Bus activation still
       # resolve); "dolphin" stays in Keywords so the old name still finds it.
       xdg.desktopEntries."org.kde.dolphin" = {

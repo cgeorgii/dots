@@ -4,7 +4,7 @@
 
 # The desktop
 
-- [Switching the desktop shell](desktop-shell.md)
+- [The desktop shell](noctalia.md)
 - [Themes](themes.md)
 
 # Editing

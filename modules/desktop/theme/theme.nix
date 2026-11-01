@@ -1,5 +1,4 @@
 {
-  self,
   inputs,
   config,
   ...
@@ -82,29 +81,14 @@ in
           pkgs.tmux
           pkgs.systemd
           pkgs.dbus
-          self.packages.${pkgs.stdenv.hostPlatform.system}.mako
         ];
         # The shared style, for the configs the script renders
         text = ''
-          export STYLE_FONT_MONO=${lib.escapeShellArg style.font.mono}
-          export STYLE_FONT_LAUNCHER_SIZE=${toString style.font.launcherSize}
-          export STYLE_ICON_THEME=${lib.escapeShellArg style.icons.name}
           export STYLE_GTK_DARK=${lib.escapeShellArg style.gtk.dark}
           export STYLE_GTK_LIGHT=${lib.escapeShellArg style.gtk.light}
           exec bash "${dotfile-path ./tinty-render.sh}" "$@"
         '';
       };
-
-      # fuzzel has no daemon or include directive, so it reads the rendered config
-      # at launch. Falls back to defaults if the theme hasn't been rendered yet.
-      fuzzel-themed = pkgs.writeShellScriptBin "fuzzel-themed" ''
-        conf="$HOME/.config/fuzzel/fuzzel-active.ini"
-        if [ -f "$conf" ]; then
-          exec ${pkgs.fuzzel}/bin/fuzzel --config "$conf" "$@"
-        else
-          exec ${pkgs.fuzzel}/bin/fuzzel "$@"
-        fi
-      '';
 
       # Pick any scheme interactively (overrides darkman until its next sun event)
       # and mark schemes keep/skip. The fzf logic lives in the hot-reloaded
@@ -150,31 +134,26 @@ in
         hooks = [ "${tinty-render}/bin/tinty-render" ]
       '';
 
-      # [tag:active-wallpaper] Both variants sit beside an `active` symlink that
-      # tinty-render points at the current one; swaybg and swaylock read it.
+      # [tag:active-wallpaper] One wallpaper per variant; tinty-render points
+      # noctalia at the current one.
       xdg.dataFile."wallpaper/dark".source = style.wallpaper.dark;
       xdg.dataFile."wallpaper/light".source = style.wallpaper.light;
 
       home.packages = [
         pkgs.darkman
         pkgs.tinty
-        fuzzel-themed
         theme-menu
       ];
 
       # Point tinty's schemes repo at the flake input (a read-only nix-store dir;
       # apply/init only ever read it). `ln -sfn` re-points the symlink without
       # descending into it. Seed the active theme files with the dark default ONLY
-      # on first setup (no scheme applied yet), so waybar/kitty/fuzzel/nvim have
+      # on first setup (no scheme applied yet), so kitty/noctalia/nvim have
       # their generated inputs before the first darkman run — but a later rebuild
       # never overrides the current light/dark choice. darkman maintains it after.
-      # [tag:mako-theme-seed] It also creates an empty mako theme-active, since
-      # mako refuses to start while its include is missing.
       home.activation.tintyTheme = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
         run mkdir -p "${tintyData}/repos"
         run ln -sfn '${inputs.schemes}' "${tintyData}/repos/schemes"
-        run mkdir -p "${config.xdg.configHome}/mako"
-        [ -e "${config.xdg.configHome}/mako/theme-active" ] || run touch "${config.xdg.configHome}/mako/theme-active"
         if [ ! -e "${tintyData}/current_scheme" ]; then
           run ${tintyApply darkDefault} || true
         elif [ ! -e "${config.xdg.configHome}/noctalia/tinty.toml" ]; then
@@ -182,7 +161,6 @@ in
           run ${tinty} apply "$(${tinty} current --config ${tintyConfig} --data-dir ${tintyData})" \
             --config ${tintyConfig} --data-dir ${tintyData} || true
         fi
-        [ -e "${config.xdg.dataHome}/wallpaper/active" ] || run ln -sfn dark "${config.xdg.dataHome}/wallpaper/active"
       '';
     };
 }

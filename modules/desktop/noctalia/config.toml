@@ -38,7 +38,7 @@ enabled = true
 enable_daemon = true
 
 [hooks]
-# Every lock (F9, F10, lid, idle) also locks KeePassXC, as swaylock's binds did.
+# Every lock (F9, F10, lid, idle) also locks KeePassXC.
 session_locked = "pgrep -x keepassxc >/dev/null && keepassxc --lock"
 
 [plugins]

@@ -4,20 +4,19 @@ let
   inherit (config) style;
 in
 {
-  # [ref:2.1-noctalia-shell] Bar, launcher, notifications, lock screen and
-  # wallpaper in one process; the `noctalia` shell [ref:desktop-shell].
+  # [ref:2.1-noctalia-shell] The desktop shell around niri: bar, launcher,
+  # notifications, lock screen and wallpaper in one process.
   flake.modules.homeManager.noctalia =
     {
       pkgs,
       lib,
-      osConfig,
       link-dotfile,
       ...
     }:
     let
       noctalia = inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default;
     in
-    lib.mkIf (osConfig.desktop.shell == "noctalia") {
+    {
       home.packages = [ noctalia ];
 
       # Every *.toml here is merged in name order and hot-reloaded. tinty-render
@@ -79,21 +78,5 @@ in
         };
         Install.WantedBy = [ "graphical-session.target" ];
       };
-
-      # Only one process can own org.freedesktop.Notifications. Switching from
-      # the classic shell leaves a D-Bus-activated mako running, so stop it
-      # before the noctalia unit starts.
-      home.activation.stopMako = lib.hm.dag.entryBefore [ "reloadSystemd" ] ''
-        export XDG_RUNTIME_DIR="''${XDG_RUNTIME_DIR:-/run/user/$(id -u)}"
-        if owner="$(${pkgs.systemd}/bin/busctl --user status --no-pager org.freedesktop.Notifications 2>/dev/null)"; then
-          pid="$(${pkgs.gnused}/bin/sed -n 's/^PID=//p' <<<"$owner")"
-          case "$(${pkgs.gnused}/bin/sed -n 's/^CommandLine=//p' <<<"$owner")" in
-            */bin/mako*)
-              verboseEcho "Stopping mako so noctalia can own notifications"
-              run kill "$pid"
-              ;;
-          esac
-        fi
-      '';
     };
 }

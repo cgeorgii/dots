@@ -22,10 +22,6 @@
     # and its own nixpkgs keeps the hashes matching the cache.
     noctalia.url = "github:noctalia-dev/noctalia/cachix";
 
-    niri-taskbar = {
-      url = "github:cgeorgii/niri-taskbar";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     schemes.url = "github:tinted-theming/schemes";
     schemes.flake = false;
     flake-parts.url = "github:hercules-ci/flake-parts";

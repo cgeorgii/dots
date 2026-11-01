@@ -18,7 +18,7 @@ user-invocable: true
 ## Packages
 
 - **Build or run a flake package**: `nix build .#kitty`, `nix run .#workmux`
-  (packages: firefox, kitty, mako, swaylock, whispering, workmux)
+  (packages: dots-manual, firefox, kitty, whispering, workmux)
 
 ## Flake Operations
 

@@ -36,7 +36,7 @@ no specialArgs.
   (`configuration.nix`), and the generated `_hardware-configuration.nix`
 - `modules/system/`: nix settings, base packages, locale, network, security
   (ssh agent, KeePassXC), input (xkb + XCompose), fonts, audio, oom, ...
-- `modules/desktop/`: niri, waybar, swaylock, mako, noctalia, theme (tinty/darkman, GTK/Qt), files (Dolphin)
+- `modules/desktop/`: niri, noctalia, theme (tinty/darkman, GTK/Qt), files (Dolphin)
 - `modules/shell/`, `modules/terminal/`, `modules/editor/`, `modules/dev/`, `modules/apps/`
 - `modules/home/dotfiles.nix`: the `link-dotfile` and `dotfile-path` helpers
 - `modules/users/cgeorgii.nix`: the user account and home-manager basics
@@ -57,21 +57,21 @@ evaluation if the file is missing or not tracked by git.
 ## Wrapped Programs
 
 Programs whose config is fully declared in Nix are wrapped with
-nix-wrapper-modules and exposed as packages: kitty, swaylock and mako. Their
-config lives in the store, so changing it needs a rebuild. Hot-reloaded or
-tinty-rendered configs (niri, waybar, nvim, fuzzel, tmux, zellij, claude,
-lazygit) stay on home-manager links. Starship stays on home-manager because
+nix-wrapper-modules and exposed as packages, such as kitty. Their config
+lives in the store, so changing it needs a rebuild. Hot-reloaded or
+tinty-rendered configs (niri, noctalia, nvim, tmux, zellij, claude, lazygit) stay on home-manager links. Starship stays on home-manager because
 `starship init` would bypass the wrapper's `STARSHIP_CONFIG`.
 
 ## Desktop Environment
 
-- Niri (Wayland compositor), Waybar (status bar), Fuzzel (launcher)
+- Niri (Wayland compositor), Noctalia (bar, launcher, notifications, lock
+  screen, wallpaper)
 - Kitty (terminal), tmux / Zellij (multiplexers)
 - tinty + darkman for runtime light/dark and colour schemes
 
 ## Manual
 
-How to operate the system (switching the desktop shell, ...) is documented in
+How to operate the system (theme triage, neovim keys, ...) is documented in
 the mdbook under `docs/manual/`; `dots-manual` in the dev shell serves it.
 
 ## Git Hooks

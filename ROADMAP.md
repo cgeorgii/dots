@@ -264,45 +264,6 @@ reach nothing but the VPN endpoint, before and after the tunnel is up; the
 inbox is read-only inside and there is no writable path from the container
 to the host other than the vault; the `dev` container can't reach it.
 
-### 2.1 — Try noctalia as the desktop shell [tag:2.1-noctalia-shell]
-
-**Kind:** proposal
-**Status:** in-progress (master)
-**Depends on:** none
-
-Noctalia is a desktop shell (bar, launcher, notifications, lock screen,
-wallpaper, OSD, control centre). Try it on niri without giving up the current
-setup.
-
-- **Version:** use v5 (a native rewrite configured in TOML; v5.2.1 as of
-  2026-10-02) from upstream's flake (`github:noctalia-dev/noctalia`, package only).
-  The nixpkgs package (4.5.0) and the noctalia wrapper in nix-wrapper-modules
-  are the old Quickshell-based v4 with JSON settings.
-- **What it replaces:** waybar with the theme-status widget and niri-taskbar,
-  mako (it claims `org.freedesktop.Notifications`, so only one can run),
-  fuzzel and `theme-menu`, swaylock (the F9/F10 binds that also lock
-  KeePassXC, and earlyoom's `--avoid` list name it), and swaybg in the
-  generated `style.kdl`.
-- **Trying it reversibly:** a `noctalia` feature with a hot-reloaded
-  `config.toml`, and a NixOS specialisation that swaps the waybar, mako and
-  swaylock features for it, so switching back and forth needs no rebuild.
-  The bar, launcher and lock lines move out of `config.kdl` into a generated
-  include, as `style.kdl` does, so each setup brings its own.
-- **Colours:** keep tinty as the source of truth. `tinty-render.sh` writes the
-  active base16 palette as a noctalia custom palette
-  (`~/.config/noctalia/palettes/tinty.json`, `source = "custom"`), which v5
-  applies live; the work is mapping base16 onto noctalia's 16 colour roles.
-  Without this, noctalia's own palette won't match the other apps.
-- **NixOS options** its wifi, bluetooth, power and battery widgets need:
-  `networking.networkmanager`, `hardware.bluetooth` and `services.upower` are
-  on; `services.power-profiles-daemon` (or `tuned`) is not, and may conflict
-  with the current `cpuFreqGovernor`/thermald setup.
-
-**Done when:** the specialisation boots into niri with noctalia replacing the
-bar, notifications, launcher, lock screen and wallpaper; locking still locks
-KeePassXC; switching to and from the specialisation works without a rebuild;
-and noctalia follows tinty's light/dark and scheme changes.
-
 ### 3.1 — A program to manage roadmap files [tag:3.1-roadmap-program]
 
 **Kind:** feature

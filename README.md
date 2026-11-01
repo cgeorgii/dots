@@ -67,7 +67,7 @@ manual.
 
 ### What follows the theme
 
-**Any scheme** (full palette): kitty, waybar, lazygit, fuzzel, nvim (all live).
+**Any scheme** (full palette): kitty, noctalia, lazygit, nvim (all live).
 **Light/dark variant only** (no per-scheme equivalent exists): delta, tmux, and
 GTK apps — these flip between the gruvbox light/dark variants and follow the
 `org.gnome.desktop.interface color-scheme` preference. Claude Code (`"theme":

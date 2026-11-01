@@ -36,7 +36,7 @@
         # are the 15-character comm, so a wrapped noctalia is ".noctalia-wrapp".
         extraArgs = [
           "--avoid"
-          "^(systemd|Xorg|niri|swaylock|\\.noctalia-wrapp|pipewire|wireplumber|swaync|greetd)$"
+          "^(systemd|Xorg|niri|\\.noctalia-wrapp|pipewire|wireplumber|swaync|greetd)$"
         ];
       };
 
