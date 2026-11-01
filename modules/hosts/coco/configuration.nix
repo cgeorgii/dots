@@ -60,10 +60,8 @@
 
     networking.hostName = "coco"; # The codependent computer
 
-    # Trying noctalia as the shell [ref:2.1-noctalia-shell]: pick "noctalia"
-    # in the boot menu, or switch to it live with
-    # `sudo /nix/var/nix/profiles/system/specialisation/noctalia/bin/switch-to-configuration switch`
-    # and back with `sudo /nix/var/nix/profiles/system/bin/switch-to-configuration switch`.
+    # Trying noctalia as the shell [ref:2.1-noctalia-shell]. Switching to and
+    # from it: [file:docs/manual/src/desktop-shell.md]
     specialisation.noctalia.configuration.desktop.shell = "noctalia";
 
     # Bootloader

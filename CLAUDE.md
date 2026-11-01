@@ -31,3 +31,7 @@ Open work lives in [ROADMAP.md](ROADMAP.md), finished and dropped work in [COMPL
 ## Cross-references
 
 Comments and docs link with [tagref](https://github.com/stepchowfun/tagref) sigils: each roadmap item heading and each shared concept carries a tag, and code and docs cite it only through a ref, never as a bare item number. When a hot-reloaded dotfile or script hardcodes a path in the checkout, pin it with a file or dir sigil so moving the target fails the check. `tagref list-refs | grep <label>` finds everything that touches a tag, and `tagref check` validates (it also runs as a pre-commit hook).
+
+## Manual
+
+How to operate the system (commands run by hand, such as switching the desktop shell) is documented in the mdbook under `docs/manual/`, not in skills or comments; comments point at a chapter with a file sigil. `dots-manual` in the dev shell serves it.

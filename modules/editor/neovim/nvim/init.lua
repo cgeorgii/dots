@@ -247,7 +247,7 @@ require("lazy").setup({
     end,
   },
 
-  -- WhichKey for keybindings
+  -- WhichKey for keybindings, documented in [file:docs/manual/src/neovim.md]
   {
     "folke/which-key.nvim",
     config = function()

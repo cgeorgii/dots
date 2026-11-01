@@ -2,3 +2,6 @@
 .direnv
 result
 modules/dev/claude/skills/synced/
+
+# Rendered manual (dots-manual build)
+docs/manual/book/

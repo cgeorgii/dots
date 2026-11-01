@@ -1,0 +1,10 @@
+[book]
+title = "The coco manual"
+language = "en"
+src = "src"
+
+[build]
+build-dir = "book"
+create-missing = false
+
+[output.html]
