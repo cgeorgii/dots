@@ -41,14 +41,22 @@ enable_daemon = true
 # Every lock (F9, F10, lid, idle) also locks KeePassXC, as swaylock's binds did.
 session_locked = "pgrep -x keepassxc >/dev/null && keepassxc --lock"
 
+[plugins]
+enabled = ["johnnyp0t/niri-workspace-stack"]
+
 [bar.main]
 position = "top"
-start = ["workspaces", "taskbar"]
+start = ["niri-stack", "taskbar"]
 center = ["clock"]
 end = ["cpu", "memory", "battery", "theme", "tray", "notifications", "network", "bluetooth", "volume", "control-center", "session"]
 
 [widget.clock]
 format = "{:%e %B %H:%M}"
+
+[widget.niri-stack]
+type = "johnnyp0t/niri-workspace-stack:stack"
+# The taskbar already lists the windows
+show_windows = false
 
 [widget.cpu]
 type = "sysmon"
