@@ -71,7 +71,7 @@ stat = "ram_pct"
 [widget.theme]
 type = "custom_button"
 glyph = "sun-moon"
-tooltip = "Toggle light/dark (right-click: pick a scheme)"
+# tooltip comes from tinty.toml, so it names the active scheme
 
 [widget.theme.actions]
 left = "exec darkman toggle"
