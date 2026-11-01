@@ -43,9 +43,9 @@ is never run).
 
 ### Switching light/dark
 
-`darkman` flips automatically at Berlin sunrise/sunset, applying the configured
-defaults (`darkDefault` / `lightDefault` in `modules/desktop/theme/theme.nix`). To switch
-by hand:
+`darkman` flips automatically at Berlin sunrise/sunset, applying one of the
+kept schemes of that variant per day (the `keep` lines in
+`modules/desktop/theme/scheme-marks`). To switch by hand:
 
 ```
 $ darkman toggle          # flip light <-> dark now
@@ -56,14 +56,14 @@ $ darkman get             # show the current mode
 ### Picking any scheme
 
 ```
-$ theme-menu                              # fuzzel picker over all 500+ schemes
+$ theme-menu                              # fzf picker; space marks keep/skip
 $ tinty apply base16-catppuccin-mocha     # apply a specific scheme
 $ tinty list                              # list every scheme id
 ```
 
-A manual pick lasts until darkman's next sun event, which reapplies a default.
-Change `darkDefault` / `lightDefault` in `modules/desktop/theme/theme.nix` to make a scheme
-stick as the automatic choice.
+A manual pick lasts until darkman's next sun event. Marking a scheme `keep` in
+`theme-menu` adds it to the daily rotation; see the Themes chapter of the
+manual.
 
 ### What follows the theme
 

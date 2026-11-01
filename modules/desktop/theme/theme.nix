@@ -19,41 +19,26 @@ in
     }:
 
     let
-      # Curated "theme of the day" rings. darkman picks one scheme per day by
-      # date, so the theme rotates daily while still flipping light<->dark at
-      # sunrise/sunset. Any base16/base24 id from the schemes repo works; edit
-      # these lists to taste. `theme-menu` can still apply any scheme ad-hoc.
-      darkSchemes = [
-        "base16-gruvbox-dark-medium"
-        "base16-nord"
-        "base16-tokyo-night-dark"
-        "base16-catppuccin-mocha"
-        "base16-kanagawa"
-        "base16-rose-pine"
-        "base16-gruvbox-material-dark-medium"
-      ];
-      lightSchemes = [
-        "base16-classic-light"
-        "base16-flexoki-light"
-        "base16-humanoid-light"
-        "base16-grayscale-light"
-        "base16-oxocarbon-light"
-        "base16-selenized-light"
-        "base16-equilibrium-light"
-        "base16-atelier-cave-light"
-        "base16-atelier-dune-light"
-        "base16-gruvbox-light-soft"
-        "base16-atelier-heath-light"
-        "base16-precious-light-warm"
-        "base16-atelier-estuary-light"
-        "base16-everforest-light-soft"
-        "base16-equilibrium-gray-light"
-        "base16-horizon-terminal-light"
-        "base16-gruvbox-material-light-hard"
-        "base16-gruvbox-material-light-soft"
-        "base16-gruvbox-material-light-medium"
-      ];
-      darkDefault = builtins.head darkSchemes;
+      # Seeded on first setup, before darkman has applied anything
+      darkDefault = "base16-gruvbox-dark-medium";
+
+      # [tag:scheme-marks] keep/skip marks set with TAB in theme-menu. darkman
+      # picks one kept scheme per day by date, so the theme rotates daily while
+      # still flipping light<->dark at sunrise/sunset. Hot-reloaded, so marking
+      # a scheme needs no rebuild.
+      marks = dotfile-path ./scheme-marks;
+
+      # "<id> <variant>" for every scheme tinty lists, so the picker and the
+      # rotation can split schemes into light and dark without parsing YAML.
+      variants = pkgs.runCommand "scheme-variants" { } ''
+        shopt -s nullglob
+        for f in ${inputs.schemes}/{base16,base24,tinted8}/*.{yaml,yml}; do
+          dir="''${f%/*}"
+          name="''${f##*/}"
+          v="$(sed -n 's/^variant: *"\{0,1\}\([a-z]*\).*/\1/p' "$f")"
+          echo "''${dir##*/}-''${name%.y*ml} ''${v:-dark}"
+        done | sort >$out
+      '';
 
       # tinty is the runtime theme engine. It exports the active palette into the
       # environment and runs our render hook; we point it at the flake's schemes
@@ -63,21 +48,27 @@ in
       tintyData = "${config.home.homeDirectory}/.local/share/tinted-theming/tinty";
       tintyApply = scheme: "${tinty} apply ${scheme} --config ${tintyConfig} --data-dir ${tintyData}";
 
-      # darkman hook body: apply the day's scheme from `schemes`, indexed by the
-      # day of the year so it advances once per calendar day and wraps around.
-      # A failed apply only shows up in darkman's journal, so surface it as a
-      # notification too.
-      themeOfDay = schemes: ''
-        set -- ${lib.concatStringsSep " " schemes}
+      # darkman hook body: apply the day's scheme from the kept schemes of
+      # `variant`, indexed by the day of the year so it advances once per
+      # calendar day and wraps around. A failure only shows up in darkman's
+      # journal, so surface it as a notification too.
+      themeOfDay = variant: ''
+        fail() {
+          printf '%s\n' "$2" >&2
+          ${pkgs.libnotify}/bin/notify-send -u critical -a darkman "$1" "$2"
+          exit 1
+        }
+        schemes="$(${pkgs.gawk}/bin/awk -v v=${variant} '
+          NR == FNR { if ($1 == "keep") k[$2] = 1; next }
+          $2 == v && ($1 in k) { print $1 }
+        ' ${lib.escapeShellArg marks} ${variants})"
+        [ -n "$schemes" ] || fail "No ${variant} theme kept" "Mark some with TAB in theme-menu."
+        set -- $schemes
         day="$(${pkgs.coreutils}/bin/date +%j)"
         idx="$(( (10#$day - 1) % $# + 1 ))"
         eval "scheme=\''${$idx}"
-        if ! out="$(${tinty} apply "$scheme" --config ${tintyConfig} --data-dir ${tintyData} 2>&1)"; then
-          printf '%s\n' "$out" >&2
-          ${pkgs.libnotify}/bin/notify-send -u critical -a darkman \
-            "Theme switch failed: $scheme" "$out"
-          exit 1
-        fi
+        out="$(${tinty} apply "$scheme" --config ${tintyConfig} --data-dir ${tintyData} 2>&1)" ||
+          fail "Theme switch failed: $scheme" "$out"
       '';
 
       # [tag:tinty-render-wrapper] The render logic lives in a hot-reloadable dotfile so theming can be tweaked
@@ -115,24 +106,27 @@ in
         fi
       '';
 
-      # Pick any scheme interactively (overrides darkman until its next sun event).
-      # An fzf picker: Enter applies the highlighted scheme in place and keeps the
-      # list open (so you can browse live — the terminal re-themes under fzf), Esc
-      # closes. Opens with the current scheme highlighted. fzf inherits kitty's
-      # (themed) ANSI colours, so the picker itself follows the active scheme.
-      theme-menu = pkgs.writeShellScriptBin "theme-menu" ''
-        list="$(${tinty} list --config ${tintyConfig} --data-dir ${tintyData})"
-        cur="$(${tinty} current --config ${tintyConfig} --data-dir ${tintyData} 2>/dev/null)"
-        idx="$(printf '%s\n' "$list" | ${pkgs.gnugrep}/bin/grep -nxF -- "$cur" | ${pkgs.coreutils}/bin/cut -d: -f1)"
-        args=(
-          --layout=reverse
-          --prompt 'theme > '
-          --header 'enter: apply   esc: close'
-          --bind "enter:execute-silent(${tinty} apply {} --config ${tintyConfig} --data-dir ${tintyData})"
-        )
-        [ -n "$idx" ] && args+=(--bind "load:pos($idx)")
-        printf '%s\n' "$list" | ${pkgs.fzf}/bin/fzf "''${args[@]}" || true
-      '';
+      # Pick any scheme interactively (overrides darkman until its next sun event)
+      # and mark schemes keep/skip. The fzf logic lives in the hot-reloaded
+      # theme-menu.sh; this wrapper supplies its PATH and data paths. fzf
+      # inherits kitty's (themed) ANSI colours, so the picker follows the scheme.
+      theme-menu = pkgs.writeShellApplication {
+        name = "theme-menu";
+        runtimeInputs = [
+          pkgs.tinty
+          pkgs.fzf
+          pkgs.gawk
+          pkgs.gnugrep
+          pkgs.coreutils
+        ];
+        text = ''
+          export THEME_MARKS=${lib.escapeShellArg marks}
+          export THEME_VARIANTS=${variants}
+          export TINTY_CONFIG=${tintyConfig}
+          export TINTY_DATA=${tintyData}
+          exec bash "${dotfile-path ./theme-menu.sh}" "$@"
+        '';
+      };
     in
     {
       services.darkman = {
@@ -143,9 +137,9 @@ in
           usegeoclue = false;
         };
         # darkman drives the automatic light/dark switch by applying the day's
-        # scheme from the matching ring; tinty's render hook repaints every consumer.
-        darkModeScripts.theme = themeOfDay darkSchemes;
-        lightModeScripts.theme = themeOfDay lightSchemes;
+        # kept scheme of that variant; tinty's render hook repaints every consumer.
+        darkModeScripts.theme = themeOfDay "dark";
+        lightModeScripts.theme = themeOfDay "light";
       };
 
       # tinty config: no template items (we theme entirely through the palette the
