@@ -33,8 +33,8 @@
     };
 
     icons = {
-      name = "Mint-Y-Sand";
-      package = pkgs: pkgs.mint-y-icons;
+      name = "Papirus";
+      package = pkgs: pkgs.papirus-icon-theme;
     };
 
     # Both variants ship in one package; darkman swaps between them at runtime.
