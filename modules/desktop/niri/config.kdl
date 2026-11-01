@@ -12,7 +12,7 @@
 // Key bindings:
 // - Super+H/L: Move window between monitors
 // - Super+Ctrl+H/L: Focus monitor left/right
-// - Super+J/K: Switch workspace down/up
+// - Super+J/K: Focus window down/up, then workspace at the column edge (+Shift: move)
 // - Super+Shift+S: Screenshot
 // - Super+Space: launcher, F9: lock (+ KeePassXC), F10: lock+suspend (shell.kdl)
 
@@ -104,17 +104,9 @@ binds {
     Mod5+H { focus-monitor-left; }
     Mod5+L { focus-monitor-right; }
 
-    // AltGr+J/K: Switch workspace
-    Mod5+J { focus-workspace-down; }
-    Mod5+K { focus-workspace-up; }
-
     // AltGr+Shift+H/L: Move window between monitors
     Mod5+Shift+H { move-column-to-monitor-left; }
     Mod5+Shift+L { move-column-to-monitor-right; }
-
-    // AltGr+Shift+J/K: Move window to workspace up/down
-    Mod5+Shift+J { move-column-to-workspace-down; }
-    Mod5+Shift+K { move-column-to-workspace-up; }
 
     // ==============================================================
     // LAYER 2: Meta (Mod) - Windows within Workspace
@@ -126,11 +118,11 @@ binds {
     Mod+Left { focus-column-left; }
     Mod+Right { focus-column-right; }
 
-    // Meta+J/K: Focus window up/down
-    Mod+J { focus-window-down; }
-    Mod+K { focus-window-up; }
-    Mod+Down { focus-window-down; }
-    Mod+Up { focus-window-up; }
+    // Meta+J/K: Focus window up/down, past the column edge to the next workspace
+    Mod+J { focus-window-or-workspace-down; }
+    Mod+K { focus-window-or-workspace-up; }
+    Mod+Down { focus-window-or-workspace-down; }
+    Mod+Up { focus-window-or-workspace-up; }
 
     // Meta+Shift+H/L: Swap with window left/right
     Mod+Shift+H { move-column-left; }
@@ -138,11 +130,11 @@ binds {
     Mod+Shift+Left { move-column-left; }
     Mod+Shift+Right { move-column-right; }
 
-    // Meta+Shift+J/K: Swap with window up/down
-    Mod+Shift+J { move-window-down; }
-    Mod+Shift+K { move-window-up; }
-    Mod+Shift+Down { move-window-down; }
-    Mod+Shift+Up { move-window-up; }
+    // Meta+Shift+J/K: Swap with window up/down, past the column edge to the next workspace
+    Mod+Shift+J { move-window-down-or-to-workspace-down; }
+    Mod+Shift+K { move-window-up-or-to-workspace-up; }
+    Mod+Shift+Down { move-window-down-or-to-workspace-down; }
+    Mod+Shift+Up { move-window-up-or-to-workspace-up; }
 
     // Meta+Comma/Period: Stack window into / eject focused window from column
     Mod+Comma { consume-window-into-column; }
