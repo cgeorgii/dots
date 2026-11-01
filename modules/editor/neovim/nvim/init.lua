@@ -52,6 +52,38 @@ local function insert_filename_with_fzf()
   }))
 end
 
+-- Toggle maximizing the current window, like tmux's zoom. The layout to
+-- restore is kept per tab.
+local function unzoom_window()
+  local restore = vim.t.zoom_restore
+  vim.t.zoom_restore = nil
+  vim.t.zoom_win = nil
+  vim.cmd(restore)
+end
+
+local function toggle_window_zoom()
+  if vim.t.zoom_restore then
+    unzoom_window()
+  elseif vim.fn.winnr("$") > 1 then
+    vim.t.zoom_restore = vim.fn.winrestcmd()
+    vim.t.zoom_win = vim.api.nvim_get_current_win()
+    vim.cmd("wincmd |")
+    vim.cmd("wincmd _")
+  end
+end
+
+-- Moving to another window unzooms, as in tmux. Floats (pickers, the file
+-- tree) don't count.
+vim.api.nvim_create_autocmd("WinEnter", {
+  callback = function()
+    local win = vim.api.nvim_get_current_win()
+    if vim.t.zoom_restore and win ~= vim.t.zoom_win
+        and vim.api.nvim_win_get_config(win).relative == "" then
+      unzoom_window()
+    end
+  end,
+})
+
 -- Plugin specifications
 require("lazy").setup({
   -- Theme. tinty (see coco/home/theme.nix) writes the active base16/base24
@@ -257,6 +289,7 @@ require("lazy").setup({
         { "<leader>h",  "<cmd>tabprevious<cr>",                                                           desc = "Go to previous tab" },
         { "<leader>l",  "<cmd>tabnext<cr>",                                                               desc = "Go to next tab" },
         { "<leader>q",  "<cmd>tabclose<cr>",                                                              desc = "Close current tab" },
+        { "<C-w>z",     toggle_window_zoom,                                                               desc = "Toggle zoom on current window" },
 
         -- Diagnostics navigation
         { "<leader>n",  "<cmd>lua vim.diagnostic.goto_next()<cr>",                                        desc = "Jump to next diagnostic" },
