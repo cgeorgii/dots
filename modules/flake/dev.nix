@@ -25,6 +25,8 @@
         packages = [
           pkgs.nil
           pkgs.tagref
+          pkgs.sops
+          pkgs.age
           config.packages.dots-manual
         ];
       };

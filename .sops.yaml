@@ -1,0 +1,10 @@
+# Recipients for sops-encrypted files; see [file:docs/manual/src/secrets.md]
+keys:
+  - &cgeorgii age17lq3mxer32xxehkpn2rqh9cyadsdl997dg6a5eqdd00kslwh0c9smjsdld
+  - &coco age18wq5vplkccd63av3n283zuqhymy5rqpfvj3euatd0r0pqet4sqhs4rvhtg
+creation_rules:
+  - path_regex: \.sops$
+    key_groups:
+      - age:
+          - *cgeorgii
+          - *coco

@@ -13,7 +13,9 @@
       cgeorgii
       locale
       network
+      vpn
       security
+      sops
       input
       peripherals
       fonts
@@ -33,6 +35,7 @@
       cgeorgii
       input
       security
+      sops
       zsh
       starship
       cli

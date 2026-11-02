@@ -10,6 +10,11 @@
 # Security
 
 - [SSH keys](ssh-keys.md)
+- [Secrets](secrets.md)
+
+# Networking
+
+- [VPN](vpn.md)
 
 # Editing
 
