@@ -2,6 +2,8 @@
   flake.modules.nixos.zsh = {
     programs.zsh = {
       enable = true;
+      # Would shadow the eza `ls` function from the home-manager half
+      shellAliases.ls = null;
     };
   };
 
@@ -90,6 +92,18 @@
           glab api --paginate \"projects/$PROJECT/merge_requests/$MR/notes\" > /tmp/mr-notes.json
           jq -s 'flatten | [.[] | select(.system != true and .body != \"\") | if .type == \"DiffNote\" then {path: .position.new_path, line: .position.new_line, body} else {body} end]' /tmp/mr-notes.json > mr-comments.json
         }
+
+        # Without a path argument eza reads file names from any non-tty stdin:
+        # it hangs on an open pipe and lists nothing from /dev/null. Always
+        # hand it a path so stdin is never consulted. The `function` keyword
+        # keeps NixOS's default `ls` alias from expanding into the name.
+        function ls {
+          local a
+          for a in \"$@\"; do
+            [[ $a != -* ]] && { eza --git --icons -a --group-directories-first \"$@\"; return; }
+          done
+          eza --git --icons -a --group-directories-first \"$@\" .
+        }
       ";
 
         shellAliases = {
@@ -112,8 +126,6 @@
 
           # [[ UTILS ]]
           cat = "bat";
-          # eza waits on stdin when it's an open pipe, hanging in non-tty shells
-          ls = "eza --git --icons -a --group-directories-first </dev/null";
           z = "zenith";
         };
 
