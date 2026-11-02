@@ -11,6 +11,7 @@
       };
 
       # Plain OpenSSH agent; KeePassXC adds keys on unlock and removes them on lock.
+      # Adding keys is documented in [file:docs/manual/src/ssh-keys.md]
       # gcr-ssh-agent (default with gnome-keyring) auto-loads keys from ~/.ssh,
       # bypassing that.
       programs.ssh.startAgent = true;
