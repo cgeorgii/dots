@@ -4,7 +4,7 @@
 
     {
       home.file.".gitignore".source = link-dotfile ./gitignore;
-      home.file."./code/tweag/.gitconfig".source = link-dotfile ./gitconfig-work;
+      home.file."./code/work/.gitconfig".source = link-dotfile ./gitconfig-work;
 
       programs.git = {
         enable = true;
@@ -15,8 +15,8 @@
           # it overrides. git re-reads config per invocation -> follows live.
           { path = "~/.config/delta/theme-active.gitconfig"; }
           {
-            path = "~/code/tweag/.gitconfig";
-            condition = "gitdir:~/code/tweag/";
+            path = "~/code/work/.gitconfig";
+            condition = "gitdir:~/code/work/";
           }
         ];
         settings = {

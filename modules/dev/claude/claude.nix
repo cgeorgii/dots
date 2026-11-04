@@ -26,7 +26,7 @@
     {
       home.packages = [ claude-pkgs.claude-code ];
 
-      home.file = claudeFiles ".claude" // claudeFiles ".claude-tweag";
+      home.file = claudeFiles ".claude" // claudeFiles ".claude-work";
 
       # Keep Claude Code's theme at truecolor inside tmux; without this it
       # special-cases $TMUX and clamps chalk to 256 colors, washing out

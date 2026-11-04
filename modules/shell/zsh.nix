@@ -62,13 +62,14 @@
         export BAT_THEME_DARK=gruvbox-dark
         export BAT_THEME_LIGHT=gruvbox-light
 
-        # function chpwd() {
-        #   case $PWD in
-        #     $HOME/code/tweag|$HOME/code/tweag/*) export CLAUDE_CONFIG_DIR=$HOME/.claude-tweag ;;
-        #     *)                                   unset CLAUDE_CONFIG_DIR ;;
-        #   esac
-        # }
-        # chpwd
+        # Claude Code has no per-directory accounts, only one login per config dir.
+        function chpwd() {
+          case $PWD in
+            $HOME/code/work|$HOME/code/work/*) export CLAUDE_CONFIG_DIR=$HOME/.claude-work ;;
+            *)                                 unset CLAUDE_CONFIG_DIR ;;
+          esac
+        }
+        chpwd
 
         gh-pr-comments() {
           local PR REPO
