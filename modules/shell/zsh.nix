@@ -8,7 +8,12 @@
   };
 
   flake.modules.homeManager.zsh =
-    { lib, pkgs, ... }:
+    {
+      lib,
+      pkgs,
+      dotfile-path,
+      ...
+    }:
     {
       programs.zsh = {
         enable = true;
@@ -55,6 +60,9 @@
 
         # No delay entering vim normal mode
         export KEYTIMEOUT=1
+
+        # Rebinds widgets the plugins have wrapped, so it has to load after them
+        source ${dotfile-path ./surround.zsh}
 
         # bat probes the terminal background per invocation and picks the
         # matching gruvbox variant, so it follows the darkman theme in any shell.
