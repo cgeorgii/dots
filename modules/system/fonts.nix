@@ -29,7 +29,8 @@ in
               "DejaVu Serif"
             ];
             sansSerif = [
-              "Liberation Sans"
+              style.font.mono
+              style.font.monoFallback
               "DejaVu Sans"
             ];
             monospace = [
