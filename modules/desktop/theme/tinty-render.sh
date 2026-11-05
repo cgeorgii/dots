@@ -211,6 +211,7 @@ fixed=$kde_font
 menuFont=$kde_font
 smallestReadableFont=$kde_font
 toolBarFont=$kde_font
+TerminalApplication=kitty
 
 [KDE]
 widgetStyle=Breeze

@@ -265,6 +265,8 @@
   </disable>
  </State>
  <ActionProperties scheme="Default">
+  <Action name="open_terminal" shortcut="F4"/>
+  <Action name="show_terminal_panel" shortcut=""/>
   <Action name="go_back" priority="0"/>
   <Action name="go_forward" priority="0"/>
   <Action name="go_up" priority="0"/>
