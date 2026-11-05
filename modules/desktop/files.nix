@@ -28,9 +28,13 @@
         force = true;
       };
 
-      # The sidebar places, linked the same way.
+      # The sidebar places and the toolbar layout, linked the same way.
       xdg.dataFile."user-places.xbel" = {
         source = link-dotfile ./user-places.xbel;
+        force = true;
+      };
+      xdg.dataFile."kxmlgui5/dolphin/dolphinui.rc" = {
+        source = link-dotfile ./dolphinui.rc;
         force = true;
       };
 
