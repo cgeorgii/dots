@@ -5,12 +5,12 @@
   };
 
   flake.modules.homeManager.files =
-    { pkgs, ... }:
+    { pkgs, link-dotfile, ... }:
     {
       home.packages = with pkgs; [
-        kdePackages.breeze-icons # Icon theme for Dolphin
+        kdePackages.breeze-icons # Icons Papirus falls back to in Dolphin
         kdePackages.dolphin # File manager (supports clipboard image paste)
-        nemo # File manager
+        file-roller # Archive manager, the default for zips below
       ];
 
       xdg.mimeApps.defaultApplications = {
@@ -18,6 +18,20 @@
         "inode/directory" = "org.kde.dolphin.desktop";
 
         "application/zip" = "org.gnome.FileRoller.desktop";
+      };
+
+      # What Dolphin's settings window saves. Dolphin writes through the link, so
+      # changes made in the GUI land in the checkout and show up in git. `force`
+      # replaces the regular file it creates on first start.
+      xdg.configFile."dolphinrc" = {
+        source = link-dotfile ./dolphinrc;
+        force = true;
+      };
+
+      # The sidebar places, linked the same way.
+      xdg.dataFile."user-places.xbel" = {
+        source = link-dotfile ./user-places.xbel;
+        force = true;
       };
 
       # Show Dolphin as "Files" in the launcher. Overrides the package's desktop

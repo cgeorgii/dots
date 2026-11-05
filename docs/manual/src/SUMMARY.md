@@ -6,6 +6,7 @@
 
 - [The desktop shell](noctalia.md)
 - [Themes](themes.md)
+- [File manager](files.md)
 
 # Security
 
