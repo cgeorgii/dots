@@ -86,6 +86,9 @@ in
         text = ''
           export STYLE_GTK_DARK=${lib.escapeShellArg style.gtk.dark}
           export STYLE_GTK_LIGHT=${lib.escapeShellArg style.gtk.light}
+          export STYLE_ICONS=${lib.escapeShellArg style.icons.name}
+          export STYLE_FONT=${lib.escapeShellArg style.font.mono}
+          export STYLE_FONT_UI_SIZE=${toString style.font.uiSize}
           exec bash "${dotfile-path ./tinty-render.sh}" "$@"
         '';
       };

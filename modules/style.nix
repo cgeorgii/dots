@@ -22,6 +22,7 @@
         pkgs.nerd-fonts.iosevka-term
       ];
       size = 14;
+      uiSize = 11;
     };
 
     cursor = {
