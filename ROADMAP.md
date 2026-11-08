@@ -39,6 +39,9 @@ Triaging gives a finding an ID and moves it under its area, or deletes it.
 
 ## Inbox
 
+- GTK 4 stays dark in light mode: Home Manager's `gtk4.theme` writes a static
+  `~/.config/gtk-4.0/gtk.css` importing `Gruvbox-Dark`, which darkman never swaps.
+
 ## Items
 
 ### 1.1 — Explore an ephemeral root filesystem [tag:1.1-ephemeral-root]

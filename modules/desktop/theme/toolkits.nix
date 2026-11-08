@@ -17,7 +17,7 @@ in
       gtk = {
         enable = true;
         # darkman swaps between the dark and light variants at runtime via the
-        # gtk-theme gsetting. This is only the boot default.
+        # gtk-theme gsetting. This only installs them and themes GTK 2 and 4.
         theme = {
           name = style.gtk.dark;
           package = style.gtk.package pkgs;
@@ -30,6 +30,9 @@ in
           name = style.cursor.name;
           package = style.cursor.package pkgs;
         };
+        # Home Manager would load this theme into the gtk-theme gsetting on every
+        # activation, undoing darkman's light variant until its next switch.
+        gtk3.theme = null;
         gtk4.theme = config.gtk.theme;
         # No static prefer-dark hint: the light/dark choice is driven at runtime
         # by darkman through the color-scheme gsetting and the gtk-theme name.
