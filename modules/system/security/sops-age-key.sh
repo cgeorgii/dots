@@ -6,7 +6,8 @@
 # Usage: sops-age-key
 
 db="$HOME/Dropbox/Apps/Keepass2Android/passbook.kdbx"
-entry="sops age key"
+# SOPS_AGE_KEY_ENTRY picks another entry, e.g. per repository from direnv
+entry="${SOPS_AGE_KEY_ENTRY:-sops age key}"
 
 fail() {
   zenity --error --title "sops" --text "$1" --no-markup 2>/dev/null
