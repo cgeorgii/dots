@@ -609,7 +609,7 @@ require("lazy").setup({
       "nvim-tree/nvim-web-devicons",
     },
     ft = { "markdown" },
-    opts = { anti_conceal = { enabled = false } },
+    opts = { pipe_table = { preset = "round" } },
     config = function(_, opts)
       require("render-markdown").setup(opts)
       vim.api.nvim_create_autocmd("FileType", {
@@ -619,13 +619,6 @@ require("lazy").setup({
           vim.keymap.set("n", "z", "<cmd>ZenMode<cr>", { buffer = true, desc = "Toggle zen mode" })
         end,
       })
-    end,
-  },
-  {
-    "dhruvasagar/vim-table-mode",
-    config = function()
-      vim.g.table_mode_corner_corner = '+'
-      vim.g.table_mode_header_fillchar = '='
     end,
   },
   {
