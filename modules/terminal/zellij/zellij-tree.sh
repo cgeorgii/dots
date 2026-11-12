@@ -10,12 +10,23 @@
 #   zellij-tree expand|collapse  fzf actions for the line under the cursor
 #   zellij-tree badge            print session@branch for the status bar
 #   zellij-tree here             attach or switch to a session named after $PWD
+#   zellij-tree root             make $PWD the current session's root
+#
+# Each session has a root directory, which new shells in it start in (see the
+# zsh hook in zellij.nix) rather than in the focused pane's directory.
 set -euo pipefail
 
 current="${ZELLIJ_SESSION_NAME:-}"
 self=$(realpath "${BASH_SOURCE[0]}")
 # Sessions whose tabs are shown, one per line; set up by `pick`.
 state="${ZELLIJ_TREE_STATE:-/dev/null}"
+# One file per session holding its root; the zsh hook reads the same path.
+roots="${XDG_RUNTIME_DIR:-/tmp}/zellij-roots"
+
+set_root() {
+  mkdir -p "$roots"
+  printf '%s\n' "$2" >"$roots/$1"
+}
 
 sessions() {
   # Live sessions only: exited ones can't be listed or previewed.
@@ -24,7 +35,17 @@ sessions() {
     awk '{ print $1 }'
 }
 
+# The tree, with the first ten lines numbered (0)-(9) for the digit keys, like
+# tmux; searching (--all) drops the numbers since the matches reorder.
 list() {
+  if [[ -n ${1:-} ]]; then
+    tree --all
+  else
+    tree | awk -F'\t' -v OFS='\t' 'NR <= 10 { $3 = "\033[2m(" NR - 1 ")\033[0m " $3 } { print }'
+  fi
+}
+
+tree() {
   local all=${1:-} s tabs n mark arrow
   while read -r s; do
     tabs=$(zellij --session "$s" action list-tabs --json 2>/dev/null || echo '[]')
@@ -78,7 +99,19 @@ reload_at() {
 }
 
 # Keys that act in navigation mode and are released to the query in search mode.
-nav='j,k,h,l,g,G,x,q,/'
+nav='j,k,h,l,g,G,x,q,/,0,1,2,3,4,5,6,7,8,9'
+
+# Digit N picks line (N), if the list is that long.
+digit() {
+  if ((${FZF_TOTAL_COUNT:-0} > $1)); then
+    echo "pos($(($1 + 1)))+accept"
+  fi
+}
+
+kill_session() {
+  zellij kill-session "$1" || true
+  rm -f "$roots/$1"
+}
 
 # esc leaves search mode, or quits from navigation mode.
 esc() {
@@ -116,13 +149,25 @@ badge() {
 here() {
   local name
   name=$(basename "$PWD" | tr . -)
-  if [[ -z ${ZELLIJ:-} ]]; then
-    exec zellij attach --create "$name"
-  fi
   if ! sessions | grep -qxF "$name"; then
-    zellij attach --create-background "$name"
+    set_root "$name" "$PWD"
+    if [[ -z ${ZELLIJ:-} ]]; then
+      exec zellij attach --create "$name"
+    fi
+    # Keep the hook's marker out of the new server, or its shells skip the root
+    env -u ZELLIJ_ROOTED zellij attach --create-background "$name"
+  elif [[ -z ${ZELLIJ:-} ]]; then
+    exec zellij attach "$name"
   fi
   zellij action switch-session "$name"
+}
+
+# Bound to C-s Enter, which runs this in a small floating pane in the focused
+# pane's directory.
+root() {
+  set_root "$current" "$PWD"
+  printf '\n  Session root: %s\n' "$PWD"
+  sleep 1
 }
 
 pick() {
@@ -135,19 +180,24 @@ pick() {
   start=$(list | cut -f1,2 | grep -nxF "$current"$'\t' | cut -d: -f1 || true)
 
   search="show-input+unbind($nav)+reload-sync(bash '$self' list --all)"
+  local d digits=()
+  for d in {0..9}; do
+    digits+=("--bind=$d:transform:bash '$self' digit $d")
+  done
   sel=$(
     list | fzf \
       --ansi --no-sort --layout=reverse --sync --no-input \
       --delimiter='\t' --with-nth=3 \
       --prompt='/' \
-      --header='j/k move · l/h expand/collapse · enter switch · x kill · / search · q quit' \
+      --header='j/k move · l/h expand/collapse · enter/0-9 switch · x kill · / search · q quit' \
       --preview="bash '$self' preview {1} {2}" \
       --preview-window='right,60%,follow' \
       --bind="start:pos(${start:-1})" \
       --bind='j:down,k:up,g:first,G:last,q:abort' \
       --bind="l:transform(bash '$self' expand {1} {2})" \
       --bind="h:transform(bash '$self' collapse {1} {2})" \
-      --bind="x:execute-silent(zellij kill-session {1})+reload(bash '$self' list)" \
+      --bind="x:execute-silent(bash '$self' kill {1})+reload(bash '$self' list)" \
+      "${digits[@]}" \
       --bind="/:$search" \
       --bind="esc:transform:bash '$self' esc"
   ) || exit 0
@@ -172,5 +222,8 @@ collapse) collapse "$2" "${3:-}" ;;
 esc) esc ;;
 badge) badge ;;
 here) here ;;
+root) root ;;
+digit) digit "$2" ;;
+kill) kill_session "$2" ;;
 *) pick ;;
 esac

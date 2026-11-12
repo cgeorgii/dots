@@ -86,6 +86,21 @@ keybinds clear-defaults=true {
             SwitchToMode "normal"
         }
 
+        // Make the focused pane's directory the session root, where new panes
+        // and tabs start (like tmux's attach -c)
+        bind "Enter" {
+            Run "zellij-tree" "root" {
+                floating true
+                close_on_exit true
+                name "session root"
+                x "20%"
+                y "40%"
+                width "60%"
+                height "5"
+            }
+            SwitchToMode "normal"
+        }
+
         // Built-in session manager, for creating and resurrecting sessions
         bind "S" {
             LaunchOrFocusPlugin "session-manager" {
