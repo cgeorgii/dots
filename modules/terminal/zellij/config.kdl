@@ -54,6 +54,9 @@ keybinds clear-defaults=true {
         bind "v" { NewPane "Right"; SwitchToMode "normal"; }
         bind "n" { NewPane "Down"; SwitchToMode "normal"; }
 
+        // Stacked panes: open one into the focused stack (Ctrl g groups panes)
+        bind "t" { NewPane "stacked"; SwitchToMode "normal"; }
+
         // Rename tab
         bind "," { SwitchToMode "RenameTab"; TabNameInput 0; }
 
@@ -139,6 +142,10 @@ keybinds clear-defaults=true {
         bind "Ctrl j" { MoveFocus "Down"; }
         bind "Ctrl k" { MoveFocus "Up"; }
         bind "Ctrl l" { MoveFocus "Right"; }
+
+        // Mark the focused pane into a group, then stack, float or close the
+        // group from its menu
+        bind "Ctrl g" { TogglePaneInGroup; }
 
         // Pane resizing: Ctrl-Alt-hjkl (matching tmux M-C-hjkl)
         bind "Ctrl Alt h" { Resize "Increase Left"; }
