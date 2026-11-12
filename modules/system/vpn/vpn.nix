@@ -32,6 +32,9 @@
           cipher = "AES-256-GCM";
           auth = "SHA512";
           reneg-seconds = 0;
+          # Cap the encrypted packet below the 1452-byte path MTU seen on DSL
+          # links; OpenVPN's default assumes 1492 and overshoots it.
+          mssfix = 1400;
           username = "christian.georgii";
           # Ask for the password (with the OTP appended) on every connect
           password-flags = 2;
