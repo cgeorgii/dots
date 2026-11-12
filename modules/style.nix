@@ -40,7 +40,16 @@
     gtk = {
       dark = "Gruvbox-Dark";
       light = "Gruvbox-Light";
-      package = pkgs: pkgs.gruvbox-gtk-theme;
+      # The GTK 3 stylesheets carry a GTK 4-only `border-spacing` declaration
+      # that every GTK 3 app reports as a theme parsing error on startup.
+      package =
+        pkgs:
+        pkgs.gruvbox-gtk-theme.overrideAttrs (old: {
+          postFixup = (old.postFixup or "") + ''
+            find $out/share/themes -path '*/gtk-3.0/*.css' -type f \
+              -exec sed -i '/^\s*border-spacing:/d' {} +
+          '';
+        });
     };
 
     # One per variant; darkman swaps between them at runtime [ref:active-wallpaper].
