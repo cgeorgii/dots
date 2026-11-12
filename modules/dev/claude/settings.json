@@ -1,4 +1,9 @@
 {
+  "attribution": {
+    "commit": "",
+    "pr": "",
+    "sessionUrl": false
+  },
   "permissions": {
     "allow": [
       "Bash(hpack)",
@@ -75,16 +80,12 @@
   },
   "alwaysThinkingEnabled": true,
   "effortLevel": "high",
+  "promptSuggestionEnabled": false,
   "tui": "fullscreen",
   "showThinkingSummaries": false,
   "theme": "auto",
   "editorMode": "vim",
   "verbose": false,
   "preferredNotifChannel": "notifications_disabled",
-  "autoCompactEnabled": false,
-  "attribution": {
-    "commit": "",
-    "pr": "",
-    "sessionUrl": false
-  }
+  "autoCompactEnabled": false
 }
