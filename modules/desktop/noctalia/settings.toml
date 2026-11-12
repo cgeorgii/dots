@@ -144,6 +144,9 @@ widget_order = [ "lockscreen-login-box@HDMI-A-1", "lockscreen-login-box@DP-3", "
         show_unlock_hint = true
         show_weather = true
 
+[plugins]
+enabled = []
+
 [theme]
 community_palette = "Paradise"
 
@@ -158,3 +161,9 @@ type = "spacer"
 
 [widget.spacer_4]
 type = "spacer"
+
+[widget.taskbar]
+group_by_workspace = true
+hide_empty_workspaces = true
+icon_scale = 1.2
+inactive_opacity = 0.5
