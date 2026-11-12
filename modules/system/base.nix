@@ -23,6 +23,12 @@
         }))
       ];
 
+      # NixOS's default set minus perl, which should stay off PATH.
+      environment.defaultPackages = with pkgs; [
+        rsync
+        strace
+      ];
+
       # Enable CUPS to print documents.
       services.printing.enable = true;
 
