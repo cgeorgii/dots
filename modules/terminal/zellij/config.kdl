@@ -1,7 +1,7 @@
 // Zellij Configuration
 // Matching tmux workflow with C-s prefix
 
-default_layout "compact"
+default_layout "compact-git"
 
 // Theme
 theme "gruvbox-dark"
@@ -69,8 +69,22 @@ keybinds clear-defaults=true {
         // Switch to pane mode for navigation
         bind "[" { SwitchToMode "scroll"; }
 
-        // List sessions (useful for switching)
+        // Session/tab tree picker, like tmux's choose-tree (zellij-tree.sh)
         bind "s" {
+            Run "zellij-tree" {
+                floating true
+                close_on_exit true
+                name "sessions"
+                x "5%"
+                y "5%"
+                width "90%"
+                height "90%"
+            }
+            SwitchToMode "normal"
+        }
+
+        // Built-in session manager, for creating and resurrecting sessions
+        bind "S" {
             LaunchOrFocusPlugin "session-manager" {
                 floating true
             }
