@@ -171,6 +171,8 @@ keybinds clear-defaults=true {
 
     // Scroll/Copy mode (activated by C-s [)
     scroll {
+        // The prefix still works here, like in tmux's copy mode
+        bind "Ctrl s" { ScrollToBottom; SwitchToMode "tmux"; }
         bind "Ctrl c" { ScrollToBottom; SwitchToMode "normal"; }
         bind "Esc" { ScrollToBottom; SwitchToMode "normal"; }
         bind "q" { ScrollToBottom; SwitchToMode "normal"; }
@@ -208,6 +210,7 @@ keybinds clear-defaults=true {
     }
 
     search {
+        bind "Ctrl s" { ScrollToBottom; SwitchToMode "tmux"; }
         bind "Esc" { ScrollToBottom; SwitchToMode "normal"; }
         bind "Ctrl c" { ScrollToBottom; SwitchToMode "normal"; }
         bind "n" { Search "down"; }

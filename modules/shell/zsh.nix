@@ -135,7 +135,6 @@
 
           # [[ UTILS ]]
           cat = "bat";
-          z = "zenith";
         };
 
         plugins = with pkgs; [

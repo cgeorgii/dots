@@ -52,6 +52,35 @@
         });
     };
 
+    # fzf drawn only from the terminal's ANSI palette, which tinty-render maps
+    # from the active scheme [file:modules/desktop/theme/tinty-render.sh]
+    # (18-20 are base01, base02, base04), so pickers follow light and dark.
+    # fzf's own defaults are fixed 256-colour greys that only suit dark.
+    fzf = rec {
+      colors = {
+        fg = "-1";
+        bg = "-1";
+        "fg+" = "-1";
+        "bg+" = "19";
+        gutter = "-1";
+        hl = "4";
+        "hl+" = "4";
+        header = "20";
+        footer = "20";
+        info = "20";
+        prompt = "4";
+        pointer = "1";
+        marker = "2";
+        spinner = "6";
+        label = "4";
+        border = "8";
+        separator = "8";
+        scrollbar = "8";
+      };
+      # For pickers launched outside a login shell, which lack FZF_DEFAULT_OPTS
+      flag = "--color=" + lib.concatStringsSep "," (lib.mapAttrsToList (k: v: "${k}:${v}") colors);
+    };
+
     # One per variant; darkman swaps between them at runtime [ref:active-wallpaper].
     wallpaper = {
       dark = ./desktop/wallpapers/dark-space.jpg;

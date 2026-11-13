@@ -9,7 +9,7 @@
 #   zellij-tree preview S [T]    print the focused pane of session S, tab T
 #   zellij-tree expand|collapse  fzf actions for the line under the cursor
 #   zellij-tree badge            print session@branch for the status bar
-#   zellij-tree here             attach or switch to a session named after $PWD
+#   zellij-tree here [DIR]       attach or switch to a session named after DIR ($PWD)
 #   zellij-tree root             make $PWD the current session's root
 #
 # Each session has a root directory, which new shells in it start in (see the
@@ -46,24 +46,29 @@ list() {
 }
 
 tree() {
-  local all=${1:-} s tabs n mark arrow
-  while read -r s; do
-    tabs=$(zellij --session "$s" action list-tabs --json 2>/dev/null || echo '[]')
-    n=$(jq length <<<"$tabs")
-    mark=""
-    [[ $s == "$current" ]] && mark=" \033[2m(attached)\033[0m"
+  local all=${1:-} s ss open tmp i
+  mapfile -t ss < <(sessions)
+  # Query every session's tabs at once: each query is a round trip to its server
+  tmp=$(mktemp -d -t zellij-tree.XXXXXX)
+  for i in "${!ss[@]}"; do
+    zellij --session "${ss[i]}" action list-tabs --json >"$tmp/$i" 2>/dev/null &
+  done
+  wait
+  for i in "${!ss[@]}"; do
+    s=${ss[i]}
+    open=false
     if [[ -n $all ]] || grep -qxF "$s" "$state" 2>/dev/null; then
-      arrow="▾"
-    else
-      arrow="▸"
+      open=true
     fi
-    printf "%s\t\t%s \033[1;34m%s\033[0m: %s tabs$mark\n" "$s" "$arrow" "$s" "$n"
-    [[ $arrow == "▸" ]] && continue
-    jq -r --arg s "$s" '
-      sort_by(.position) | (length - 1) as $last | to_entries[] |
-      "\($s)\t\(.value.position)\t    \(if .key == $last then "└─" else "├─" end) \(.value.position + 1): \(.value.name)\(if .value.active then " \u001b[33m*\u001b[0m" else "" end)"
-    ' <<<"$tabs"
-  done < <(sessions)
+    jq -rs --arg s "$s" --argjson open "$open" --argjson attached "$([[ $s == "$current" ]] && echo true || echo false)" '
+      (first // []) | sort_by(.position) | (length - 1) as $last |
+      "\($s)\t\t\(if $open then "▾" else "▸" end) \u001b[1;34m\($s)\u001b[0m: \(length) tabs\(if $attached then " \u001b[2m(attached)\u001b[0m" else "" end)",
+      (if $open then to_entries[] |
+        "\($s)\t\(.value.position)\t    \(if .key == $last then "└─" else "├─" end) \(.value.position + 1): \(.value.name)\(if .value.active then " \u001b[33m*\u001b[0m" else "" end)"
+      else empty end)
+    ' "$tmp/$i"
+  done
+  rm -rf "$tmp"
 }
 
 preview() {
@@ -144,13 +149,18 @@ badge() {
   printf '%s%s' "$current" "${branch:+@$branch}"
 }
 
-# Session named after the current directory, created there if it doesn't exist.
-# Inside zellij this switches to it rather than nesting a client.
+# Session named after directory $1 (default: the current one), created there if
+# it doesn't exist. Inside zellij this switches to it rather than nesting a client.
 here() {
-  local name
-  name=$(basename "$PWD" | tr . -)
+  local dir name
+  dir=$(realpath -e -- "${1:-.}" 2>/dev/null) && [[ -d $dir ]] || {
+    echo "zellij-tree: not a directory: ${1:-.}" >&2
+    return 1
+  }
+  cd -- "$dir"
+  name=$(basename "$dir" | tr . -)
   if ! sessions | grep -qxF "$name"; then
-    set_root "$name" "$PWD"
+    set_root "$name" "$dir"
     if [[ -z ${ZELLIJ:-} ]]; then
       exec zellij attach --create "$name"
     fi
@@ -177,7 +187,15 @@ pick() {
   state=$ZELLIJ_TREE_STATE
   trap 'rm -f "$state" "$state.list" "$state.tmp"' EXIT
 
-  start=$(list | cut -f1,2 | grep -nxF "$current"$'\t' | cut -d: -f1 || true)
+  # Built once, both for fzf and to start the cursor on the attached session
+  list >"$state.list"
+  start=$(cut -f1,2 "$state.list" | grep -nxF "$current"$'\t' | cut -d: -f1 || true)
+
+  # Key hints: bold green keys, labels in fzf's footer colour
+  local footer="" hint
+  for hint in "/ search" "x kill" "q quit"; do
+    footer+="${footer:+  }"$'\033[1;32m'"${hint%% *}"$'\033[0m'" ${hint#* }"
+  done
 
   search="show-input+unbind($nav)+reload-sync(bash '$self' list --all)"
   local d digits=()
@@ -185,11 +203,11 @@ pick() {
     digits+=("--bind=$d:transform:bash '$self' digit $d")
   done
   sel=$(
-    list | fzf \
+    fzf <"$state.list" \
       --ansi --no-sort --layout=reverse --sync --no-input \
       --delimiter='\t' --with-nth=3 \
       --prompt='/' \
-      --header='j/k move · l/h expand/collapse · enter/0-9 switch · x kill · / search · q quit' \
+      --footer="$footer" --footer-border=none \
       --preview="bash '$self' preview {1} {2}" \
       --preview-window='right,60%,follow' \
       --bind="start:pos(${start:-1})" \
@@ -221,7 +239,7 @@ expand) expand "$2" "${3:-}" ;;
 collapse) collapse "$2" "${3:-}" ;;
 esc) esc ;;
 badge) badge ;;
-here) here ;;
+here) here "${2:-}" ;;
 root) root ;;
 digit) digit "$2" ;;
 kill) kill_session "$2" ;;

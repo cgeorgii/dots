@@ -1,3 +1,8 @@
+{ config, ... }:
+
+let
+  inherit (config) style;
+in
 {
   flake.modules.homeManager.cli =
     { pkgs, ... }:
@@ -26,6 +31,7 @@
       programs.fzf = {
         enable = true;
         enableZshIntegration = true;
+        inherit (style.fzf) colors;
         defaultCommand = "fd --type f --hidden --exclude .git";
         fileWidget.command = "fd --type f --hidden --exclude .git";
         changeDirWidget.command = "fd --type d --hidden --exclude .git";

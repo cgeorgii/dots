@@ -95,8 +95,8 @@ in
 
       # Pick any scheme interactively (overrides darkman until its next sun event)
       # and mark schemes keep/skip. The fzf logic lives in the hot-reloaded
-      # theme-menu.sh; this wrapper supplies its PATH and data paths. fzf
-      # inherits kitty's (themed) ANSI colours, so the picker follows the scheme.
+      # theme-menu.sh; this wrapper supplies its PATH, data paths and the fzf
+      # colours (noctalia runs it with `kitty -e`, outside a login shell).
       theme-menu = pkgs.writeShellApplication {
         name = "theme-menu";
         runtimeInputs = [
@@ -107,6 +107,7 @@ in
           pkgs.coreutils
         ];
         text = ''
+          export FZF_DEFAULT_OPTS=${lib.escapeShellArg style.fzf.flag}" ''${FZF_DEFAULT_OPTS:-}"
           export THEME_MARKS=${lib.escapeShellArg marks}
           export THEME_VARIANTS=${variants}
           export TINTY_CONFIG=${tintyConfig}

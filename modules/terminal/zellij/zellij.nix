@@ -1,3 +1,8 @@
+{ config, ... }:
+
+let
+  inherit (config) style;
+in
 {
   flake.modules.homeManager.zellij =
     {
@@ -31,7 +36,9 @@
           git
           coreutils
         ];
+        # The zellij server is spawned by niri, not a shell
         text = ''
+          export FZF_DEFAULT_OPTS=${lib.escapeShellArg style.fzf.flag}" ''${FZF_DEFAULT_OPTS:-}"
           exec bash "${dotfile-path ./zellij-tree.sh}" "$@"
         '';
       };
@@ -73,7 +80,8 @@
         zja = "zellij attach";
         zjl = "zellij list-sessions";
         zjk = "zellij kill-session";
-        zjhere = "zellij-tree here";
+        # Attach to or create the session for a directory (default: here)
+        z = "zellij-tree here";
       };
     };
 }
