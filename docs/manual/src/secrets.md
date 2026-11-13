@@ -47,7 +47,7 @@ Each encrypted file is readable by two age keys, listed in `.sops.yaml`:
 5. Check the KeePassXC path, then remove the tmpfs copy:
 
    ```sh
-   sops decrypt modules/system/vpn/work.key.sops | head -1
+   sops decrypt modules/work/work.key.sops | head -1
    rm "$XDG_RUNTIME_DIR/sops-age.txt"
    ```
 
@@ -111,7 +111,7 @@ sops.secrets.thing = {
 ## Reading or replacing a secret
 
 ```sh
-sops decrypt modules/system/vpn/work.key.sops
+sops decrypt modules/work/work.key.sops
 ```
 
 To replace one, encrypt the new value over the old file as in

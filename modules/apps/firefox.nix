@@ -17,6 +17,9 @@
             ProviderURL = "https://mozilla.cloudflare-dns.com/dns-query";
             Locked = false;
           };
+          # Firefox ignores the system trust store on Linux, so the work CA
+          # trusted in the work module has to be installed into NSS as well.
+          Certificates.Install = [ "${../work/helmsauer2000-ca.crt}" ];
         };
       };
     };

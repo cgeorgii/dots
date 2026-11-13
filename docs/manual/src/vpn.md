@@ -1,7 +1,7 @@
 # VPN
 
 The work VPN is a NetworkManager OpenVPN connection named `work`, declared in
-`modules/system/vpn/vpn.nix`. Noctalia lists it under **VPNs** in the control
+`modules/work/_vpn.nix`. Noctalia lists it under **VPNs** in the control
 centre's network tab and shows a shield in the bar while it is up.
 
 The tunnel asks for a password with a one-time code on every connect.
@@ -33,14 +33,14 @@ nmcli connection down work
 ## How the profile is stored
 
 The connection was translated by hand from the Sophos user portal's `.ovpn`
-export. Its inline blocks became files in `modules/system/vpn/`:
+export. Its inline blocks became files in `modules/work/`:
 
 - `<ca>` → `work-ca.crt`, the public CA chain that checks the server.
 - `<cert>` → `work.crt`, my client certificate. It is public.
 - `<key>` → `work.key.sops`, my private key, encrypted (see
   [Secrets](secrets.md)).
 
-The other directives map onto `vpn` settings in `vpn.nix`. NetworkManager
+The other directives map onto `vpn` settings in `_vpn.nix`. NetworkManager
 writes the profile to `/run/NetworkManager/system-connections/` at boot, so
 changes made with `nmcli connection modify` last until the next reboot.
 
@@ -55,11 +55,11 @@ sed -n '/^<ca>/,/^<\/ca>/{/^<\/\?ca>/!p}' "$f" > work-ca.crt
 sed -n '/^<cert>/,/^<\/cert>/{/^<\/\?cert>/!p}' "$f" > work.crt
 sed -n '/^<key>/,/^<\/key>/{/^<\/\?key>/!p}' "$f" \
   | sops encrypt --input-type binary --output-type binary \
-      --filename-override modules/system/vpn/work.key.sops /dev/stdin \
+      --filename-override modules/work/work.key.sops /dev/stdin \
   > work.key.sops
 ```
 
-Compare its other directives with `vpn.nix`, rebuild, and delete the export.
+Compare its other directives with `_vpn.nix`, rebuild, and delete the export.
 
 ## Mullvad
 

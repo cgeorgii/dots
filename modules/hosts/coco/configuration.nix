@@ -13,7 +13,7 @@
       cgeorgii
       locale
       network
-      vpn
+      work
       security
       sops
       input
