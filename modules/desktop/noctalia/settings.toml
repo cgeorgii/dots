@@ -2,10 +2,12 @@ config_version = 15
 
 [bar.main]
 background_opacity = 0.79999998211860657
+border = "primary"
+border_width = 1.0
+concave_edge_corners = false
 end = [ "notifications", "spacer_4", "group:g2", "spacer_3", "group:g3", "spacer_2", "group:g1" ]
-margin_ends = 50
-padding = 20
-scale = 1.1000000089406967
+margin_ends = 40
+thickness = 35
 
     [[bar.main.capsule_group]]
     accordion = false
@@ -49,6 +51,9 @@ smart_auto_hide = true
 
 [hot_corners]
 enabled = true
+
+[lockscreen]
+fingerprint = false
 
 [lockscreen_widgets]
 enabled = false
@@ -146,6 +151,9 @@ widget_order = [ "lockscreen-login-box@HDMI-A-1", "lockscreen-login-box@DP-3", "
 
 [plugins]
 enabled = []
+
+[shell]
+password_style = "random"
 
 [theme]
 community_palette = "Paradise"
