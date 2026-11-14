@@ -1,4 +1,4 @@
-{ config, ... }:
+{ self, config, ... }:
 
 let
   inherit (config) style;
@@ -18,6 +18,8 @@ in
         url = "https://github.com/fresh2dev/zellij-autolock/releases/download/0.2.2/zellij-autolock.wasm";
         sha256 = "sha256-aclWB7/ZfgddZ2KkT9vHA6gqPEkJ27vkOVLwIEh7jqQ=";
       };
+
+      plugins = self.packages.${pkgs.stdenv.hostPlatform.system}.zellij-plugins;
 
       zjstatus = pkgs.fetchurl {
         url = "https://github.com/dj95/zjstatus/releases/download/v0.25.0/zjstatus.wasm";
@@ -53,27 +55,45 @@ in
         "zellij/config.kdl".source = link-dotfile ./config.kdl;
         "zellij/plugins/zellij-autolock.wasm".source = zellij-autolock;
         "zellij/plugins/zjstatus.wasm".source = zjstatus;
+        # Built from plugins/
+        "zellij/plugins/meld.wasm".source = "${plugins}/meld.wasm";
+        "zellij/plugins/autoname.wasm".source = "${plugins}/autoname.wasm";
         "zellij/layouts/compact-git.kdl".source = link-dotfile ./layout.kdl;
       };
 
-      # Sticky session roots: the first shell of each pane or tab starts in the
-      # session's root (kept by zellij-tree.sh) instead of the focused pane's
-      # directory. The marker keeps subshells, which inherit it, where they are.
-      # A session without a root yet takes the directory of its first shell.
-      programs.zsh.initContent = lib.mkOrder 500 ''
-        if [[ -n $ZELLIJ_SESSION_NAME && -z $ZELLIJ_ROOTED ]]; then
-          export ZELLIJ_ROOTED=1
-          () {
-            local file=''${XDG_RUNTIME_DIR:-/tmp}/zellij-roots/$ZELLIJ_SESSION_NAME root
-            if [[ -r $file ]]; then
-              root=$(<$file)
-              [[ -d $root ]] && cd -q -- $root
-            else
-              mkdir -p -- $file:h && print -r -- $PWD >$file
-            fi
-          }
-        fi
-      '';
+      programs.zsh.initContent = lib.mkMerge [
+        # Sticky session roots: the first shell of each pane or tab starts in the
+        # session's root (kept by zellij-tree.sh) instead of the focused pane's
+        # directory. The marker keeps subshells, which inherit it, where they are.
+        # A session without a root yet takes the directory of its first shell.
+        (lib.mkOrder 500 ''
+          if [[ -n $ZELLIJ_SESSION_NAME && -z $ZELLIJ_ROOTED ]]; then
+            export ZELLIJ_ROOTED=1
+            () {
+              local file=''${XDG_RUNTIME_DIR:-/tmp}/zellij-roots/$ZELLIJ_SESSION_NAME root
+              if [[ -r $file ]]; then
+                root=$(<$file)
+                [[ -d $root ]] && cd -q -- $root
+              else
+                mkdir -p -- $file:h && print -r -- $PWD >$file
+              fi
+            }
+          fi
+        '')
+
+        # Pane titles, which also name the tabs (plugins/autoname): the command
+        # while one runs, the directory at the prompt. Without the prompt half a
+        # pane keeps the title of the last program that set one, such as nvim.
+        (lib.mkOrder 1050 ''
+          if [[ -n $ZELLIJ ]]; then
+            autoload -Uz add-zsh-hook
+            _zellij_title_prompt() { print -Pn '\e]2;%20<…<%~%<<\a' }
+            _zellij_title_command() { print -rn -- $'\e]2;'"''${(V)1[1,40]}"$'\a' }
+            add-zsh-hook precmd _zellij_title_prompt
+            add-zsh-hook preexec _zellij_title_command
+          fi
+        '')
+      ];
 
       programs.zsh.shellAliases = {
         zj = "zellij";

@@ -8,6 +8,10 @@
 - [Themes](themes.md)
 - [File manager](files.md)
 
+# Terminal
+
+- [Zellij](zellij.md)
+
 # Security
 
 - [SSH keys](ssh-keys.md)

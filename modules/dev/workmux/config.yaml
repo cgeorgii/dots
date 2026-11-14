@@ -1,5 +1,4 @@
 agent: claude
-mode: session
 nerdfont: true
 
 # No PR column or PR placeholders: they run `gh repo view`, which prompts for
@@ -24,6 +23,7 @@ sidebar:
         - "{pane_title} {fill} {git_stats}"
       compact: "{status_icon} {primary} {pane_suffix} {fill} {elapsed}"
 
+# zellij splits 50/50 and ignores `percentage`; it still applies under tmux.
 panes:
   - command: <agent>
   - command: nvim prompt.md

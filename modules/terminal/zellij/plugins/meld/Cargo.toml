@@ -1,0 +1,10 @@
+[package]
+name = "meld"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+
+# zellij-tile only links against the zellij host on wasm, so the pure logic is
+# tested natively without it.
+[target.'cfg(target_family = "wasm")'.dependencies]
+zellij-tile.workspace = true

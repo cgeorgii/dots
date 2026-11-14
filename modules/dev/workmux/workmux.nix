@@ -31,7 +31,6 @@
 
       programs.zsh.shellAliases = {
         w = "workmux";
-        wz = "WORKMUX_BACKEND=zellij workmux";
       };
     };
 }

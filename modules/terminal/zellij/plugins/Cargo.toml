@@ -1,0 +1,18 @@
+[workspace]
+resolver = "2"
+members = ["meld", "autoname"]
+
+# One zellij-tile for both plugins; plugins.nix checks it against the zellij
+# in nixpkgs.
+[workspace.dependencies]
+zellij-tile = "=0.45.1"
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[profile.release]
+opt-level = "s"
+lto = true
+strip = true

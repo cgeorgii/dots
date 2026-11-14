@@ -5,3 +5,6 @@ modules/dev/claude/skills/synced/
 
 # Rendered manual (dots-manual build)
 docs/manual/book/
+
+# Cargo builds of the zellij plugin
+modules/terminal/zellij/plugins/target/
