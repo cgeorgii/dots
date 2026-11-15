@@ -66,8 +66,10 @@ Each behaviour is a small plugin in the Cargo workspace under
 `modules/terminal/zellij/plugins/`: `meld` for the zoom and for moving panes
 into stacks, `autoname` for the tab names. They are installed as `~/.config/zellij/plugins/<name>.wasm` and
 loaded in the background by `load_plugins` in `config.kdl`; removing one there
-turns its behaviour off. Unlike the KDL files they are built by Nix, so changes
-need a rebuild, and running sessions only pick up a new build once restarted.
+turns its behaviour off. The status bar, `bar`, is the layout's instead, but
+it too is configured under its alias in `config.kdl`. Unlike the KDL files
+the plugins are built by Nix, so changes need a rebuild, and running sessions
+only pick up a new build once restarted.
 
 The first time a session loads each one, zellij asks to grant it permissions;
 accept with `y`. Their tests run with `nix flake check`, which also fails when

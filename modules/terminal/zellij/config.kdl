@@ -405,6 +405,17 @@ plugins {
     autoname location="file:~/.config/zellij/plugins/autoname.wasm" {
         max_length "24"
     }
+    // The status bar of the layout, configured here with the other plugins
+    bar location="file:~/.config/zellij/plugins/bar.wasm" {
+        branch_command "zellij-tree branch"
+        // Nerd Font folder (nf-fa-folder) and branch (nf-dev-git_branch)
+        session_glyph  "\u{f07b}"
+        branch_glyph   "\u{e725}"
+        // Clicking the session block toggles the session picker, which
+        // the bar finds by its pane name
+        badge_command  "zellij run --floating --close-on-exit --name sessions --x 5% --y 5% --width 90% --height 90% -- zellij-tree"
+        badge_pane     "sessions"
+    }
 }
 
 load_plugins {
