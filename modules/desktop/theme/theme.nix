@@ -156,8 +156,12 @@ in
       # their generated inputs before the first darkman run — but a later rebuild
       # never overrides the current light/dark choice. darkman maintains it after.
       home.activation.tintyTheme = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-        run mkdir -p "${tintyData}/repos"
-        run ln -sfn '${inputs.schemes}' "${tintyData}/repos/schemes"
+        run mkdir -p "${tintyData}/scheme-repos"
+        run ln -sfn '${inputs.schemes}' "${tintyData}/scheme-repos/schemes"
+        # tinty before 0.35 read repos/schemes, which it no longer reads
+        if [ -L "${tintyData}/repos/schemes" ]; then
+          run rm "${tintyData}/repos/schemes"
+        fi
         if [ ! -e "${tintyData}/current_scheme" ]; then
           run ${tintyApply darkDefault} || true
         elif [ ! -e "${config.xdg.configHome}/noctalia/tinty.toml" ]; then
