@@ -15,6 +15,9 @@ copy_clipboard "primary"
 
 // Mouse support (enabled by default)
 mouse_mode true
+// Clicking an unfocused pane also sends the click into it, so a drag
+// selects at once (as tmux does)
+mouse_click_through true
 
 // Simplified UI
 simplified_ui false
