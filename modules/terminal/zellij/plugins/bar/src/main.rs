@@ -10,6 +10,8 @@
 //! Configuration:
 //! - `branch_command`: prints the branch of its working directory, or nothing;
 //! - `badge_command`: run when the session block is clicked;
+//! - `badge_pane`: the name of the floating pane `badge_command` opens; while
+//!   it is open in the tab, clicking the session block closes it instead;
 //! - `session_glyph`, `branch_glyph`: shown before the session and the branch.
 //!
 //! Commands are split on whitespace.
@@ -42,6 +44,7 @@ struct State {
     glyphs: render::Glyphs,
     branch_command: Vec<String>,
     badge_command: Vec<String>,
+    badge_pane: Option<String>,
     mode: ModeInfo,
     tabs: Vec<TabInfo>,
     panes: PaneManifest,
@@ -69,6 +72,7 @@ impl ZellijPlugin for State {
     fn load(&mut self, configuration: BTreeMap<String, String>) {
         self.branch_command = words(&configuration, "branch_command");
         self.badge_command = words(&configuration, "badge_command");
+        self.badge_pane = configuration.get("badge_pane").cloned();
         let glyph = |key| configuration.get(key).cloned().unwrap_or_default();
         self.glyphs = render::Glyphs {
             session: glyph("session_glyph"),
@@ -241,7 +245,24 @@ impl State {
         run_command_with_env_variables_and_cwd(&cmd, BTreeMap::new(), cwd.clone(), context);
     }
 
+    /// A floating terminal pane named `badge_pane` in the active tab.
+    fn badge_pane(&self) -> Option<u32> {
+        let name = self.badge_pane.as_deref()?;
+        let tab = self.tabs.iter().find(|t| t.active)?;
+        self.panes
+            .panes
+            .get(&tab.position)?
+            .iter()
+            .find(|p| p.is_floating && !p.is_plugin && p.title == name)
+            .map(|p| p.id)
+    }
+
+    /// Closes the badge's pane if it is open, else runs `badge_command`.
     fn run_badge_command(&self) {
+        if let Some(id) = self.badge_pane() {
+            close_terminal_pane(id);
+            return;
+        }
         if self.badge_command.is_empty() {
             return;
         }
