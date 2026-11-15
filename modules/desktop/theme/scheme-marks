@@ -68,7 +68,7 @@ keep base16-gruvbox-material-dark-medium
 keep base16-gruvbox-material-light-hard
 keep base16-gruvbox-material-light-medium
 keep base16-gruvbox-material-light-soft
-keep base16-horizon-terminal-light
+skip base16-horizon-terminal-light
 keep base16-humanoid-light
 keep base16-kanagawa
 keep base16-nord
