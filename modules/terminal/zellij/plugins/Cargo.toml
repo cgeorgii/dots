@@ -1,8 +1,8 @@
 [workspace]
 resolver = "2"
-members = ["meld", "autoname"]
+members = ["meld", "autoname", "bar"]
 
-# One zellij-tile for both plugins; plugins.nix checks it against the zellij
+# One zellij-tile for every plugin; plugins.nix checks it against the zellij
 # in nixpkgs.
 [workspace.dependencies]
 zellij-tile = "=0.45.1"

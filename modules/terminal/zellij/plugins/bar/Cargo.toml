@@ -1,0 +1,13 @@
+[package]
+name = "bar"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+
+[dependencies]
+unicode-width = "0.2"
+
+# zellij-tile only links against the zellij host on wasm, so the pure logic is
+# tested natively without it.
+[target.'cfg(target_family = "wasm")'.dependencies]
+zellij-tile.workspace = true

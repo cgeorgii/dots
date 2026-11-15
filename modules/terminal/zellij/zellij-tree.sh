@@ -8,7 +8,7 @@
 #   zellij-tree list [--all]     print the tree, tab-separated: session, tab, label
 #   zellij-tree preview S [T]    print the focused pane of session S, tab T
 #   zellij-tree expand|collapse  fzf actions for the line under the cursor
-#   zellij-tree badge            print session@branch for the status bar
+#   zellij-tree branch           print the git branch of $PWD for the status bar
 #   zellij-tree here [DIR]       attach or switch to a session named after DIR ($PWD)
 #   zellij-tree root             make $PWD the current session's root
 #
@@ -141,12 +141,10 @@ collapse() {
   reload_at "$1"
 }
 
-# The zjstatus session block: run with the focused pane's directory as cwd, from
-# the zellij server, whose environment names the session.
-badge() {
-  local branch
-  branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || true)
-  printf '%s%s' "$current" "${branch:+@$branch}"
+# The branch for the status bar (plugins/bar), run in the focused pane's
+# directory; it fails outside a repository.
+branch() {
+  git rev-parse --abbrev-ref HEAD 2>/dev/null
 }
 
 # Session named after directory $1 (default: the current one), created there if
@@ -238,7 +236,7 @@ preview) preview "$2" "${3:-}" ;;
 expand) expand "$2" "${3:-}" ;;
 collapse) collapse "$2" "${3:-}" ;;
 esc) esc ;;
-badge) badge ;;
+branch) branch ;;
 here) here "${2:-}" ;;
 root) root ;;
 digit) digit "$2" ;;

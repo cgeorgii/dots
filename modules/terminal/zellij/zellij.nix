@@ -21,11 +21,6 @@ in
 
       plugins = self.packages.${pkgs.stdenv.hostPlatform.system}.zellij-plugins;
 
-      zjstatus = pkgs.fetchurl {
-        url = "https://github.com/dj95/zjstatus/releases/download/v0.25.0/zjstatus.wasm";
-        sha256 = "sha256-KCzqshnlbhkIyfrDOQckH+bD4e99hfqrPl9DjO+HuP4=";
-      };
-
       zellij-tree = pkgs.writeShellApplication {
         name = "zellij-tree";
         runtimeInputs = with pkgs; [
@@ -54,8 +49,8 @@ in
       xdg.configFile = {
         "zellij/config.kdl".source = link-dotfile ./config.kdl;
         "zellij/plugins/zellij-autolock.wasm".source = zellij-autolock;
-        "zellij/plugins/zjstatus.wasm".source = zjstatus;
         # Built from plugins/
+        "zellij/plugins/bar.wasm".source = "${plugins}/bar.wasm";
         "zellij/plugins/meld.wasm".source = "${plugins}/meld.wasm";
         "zellij/plugins/autoname.wasm".source = "${plugins}/autoname.wasm";
         "zellij/layouts/compact-git.kdl".source = link-dotfile ./layout.kdl;
