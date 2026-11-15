@@ -155,6 +155,10 @@ enabled = []
 [shell]
 password_style = "random"
 
+[system.monitor]
+cpu_temp_activity_threshold = 70
+cpu_temp_critical_threshold = 90
+
 [theme]
 community_palette = "Paradise"
 

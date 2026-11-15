@@ -84,7 +84,6 @@
       enable32Bit = true;
     };
 
-    services.thermald.enable = true;
     powerManagement = {
       enable = true;
       cpuFreqGovernor = "performance";
