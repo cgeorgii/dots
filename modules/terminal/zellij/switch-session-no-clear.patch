@@ -1,0 +1,16 @@
+diff --git a/zellij-client/src/lib.rs b/zellij-client/src/lib.rs
+index ef41e96..d879143 100644
+--- a/zellij-client/src/lib.rs
++++ b/zellij-client/src/lib.rs
+@@ -1623,11 +1623,6 @@ pub fn start_client(
+         let mut stdout = os_input.get_stdout_writer();
+         stdout.write_all(goodbye_message.as_bytes()).unwrap();
+         stdout.flush().unwrap();
+-    } else {
+-        let clear_screen = "\u{1b}[2J";
+-        let mut stdout = os_input.get_stdout_writer();
+-        stdout.write_all(clear_screen.as_bytes()).unwrap();
+-        stdout.flush().unwrap();
+     }
+ 
+     let _ = send_input_instructions.send(InputInstruction::Exit);

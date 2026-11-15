@@ -14,6 +14,12 @@ in
     }:
 
     let
+      # Switching sessions blanks the screen until the new session draws, which
+      # it does in full on attach; keep the old screen up meanwhile, as tmux does
+      zellij = pkgs.zellij.overrideAttrs (old: {
+        patches = (old.patches or [ ]) ++ [ ./switch-session-no-clear.patch ];
+      });
+
       zellij-autolock = pkgs.fetchurl {
         url = "https://github.com/fresh2dev/zellij-autolock/releases/download/0.2.2/zellij-autolock.wasm";
         sha256 = "sha256-aclWB7/ZfgddZ2KkT9vHA6gqPEkJ27vkOVLwIEh7jqQ=";
@@ -23,8 +29,10 @@ in
 
       zellij-tree = pkgs.writeShellApplication {
         name = "zellij-tree";
-        runtimeInputs = with pkgs; [
+        runtimeInputs = [
           zellij
+        ]
+        ++ (with pkgs; [
           fzf
           jq
           gawk
@@ -32,7 +40,7 @@ in
           gnugrep
           git
           coreutils
-        ];
+        ]);
         # The zellij server is spawned by niri, not a shell
         text = ''
           export FZF_DEFAULT_OPTS=${lib.escapeShellArg style.fzf.flag}" ''${FZF_DEFAULT_OPTS:-}"
@@ -42,7 +50,7 @@ in
     in
     {
       home.packages = [
-        pkgs.zellij
+        zellij
         zellij-tree
       ];
 
