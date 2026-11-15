@@ -288,6 +288,18 @@ require("lazy").setup({
     end,
   },
 
+  -- Pins the headers of the scopes around the cursor (function, class...)
+  -- to the top of the window while their bodies scroll past
+  {
+    "nvim-treesitter/nvim-treesitter-context",
+    event = "BufReadPost",
+    opts = {
+      max_lines = 3,            -- At most three pinned lines
+      multiline_threshold = 1,  -- A multi-line header shows as its first line
+      trim_scope = "outer",     -- Over the limit, drop the outermost scopes
+    },
+  },
+
   -- ufo: tree-sitter parser, highlight queries and filetype, built from the ufo
   -- repo with `nix build .#ufo-nvim -o ~/.local/share/nvim/ufo-nvim`
   {
