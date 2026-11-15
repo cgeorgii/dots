@@ -24,5 +24,9 @@ vim.fn.expand('~/.vim/undodir')     -- Persistent undo directory
 vim.opt.clipboard = 'unnamedplus'   -- Use system clipboard by default
 vim.opt.timeoutlen = 500            -- For which-key
 vim.opt.title = true                -- Set terminal title
-vim.opt.titlestring = 'nvim %t'     -- Title format: "nvim filename"
+vim.opt.titlestring = 'nvim %t%( %M%)' -- "nvim filename", "+" when unsaved
+vim.opt.laststatus = 1              -- Statusline only between splits
+vim.opt.rulerformat =               -- Position in the command line: "Ln 12 of 340, Col 5"
+  '%30(%=Ln %l of %L, Col %v%)'
+vim.opt.fillchars:append({ eob = ' ' }) -- Blank lines past the end, no "~"
 vim.opt.autoread = true             -- Auto-reload files changed outside vim

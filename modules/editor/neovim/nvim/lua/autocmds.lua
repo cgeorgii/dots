@@ -59,4 +59,5 @@ vim.api.nvim_create_user_command('ToggleClipboard', function()
   else
     vim.opt.clipboard = "unnamedplus"
   end
+  vim.notify("Clipboard: " .. (IsSystemClipboard() and "system" or "editor"))
 end, {})
