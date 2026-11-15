@@ -19,15 +19,26 @@ cfg="${XDG_CONFIG_HOME:-$HOME/.config}"
 # Checkout path of the delta themes [dir:modules/dev/git]
 git_dir="$HOME/dots/modules/dev/git"
 
-# Assemble base00..base0F as "rrggbb" (no leading #) from tinty's per-channel
-# hex env vars, e.g. TINTY_SCHEME_PALETTE_BASE0A_HEX_{R,G,B}.
+# Assemble base00..base0F, and base10..base17 of a base24 scheme, as "rrggbb"
+# (no leading #) from tinty's per-channel hex env vars, e.g.
+# TINTY_SCHEME_PALETTE_BASE0A_HEX_{R,G,B}. Base16 schemes leave 10..17 empty.
 declare -A c
-for k in 00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F; do
+for k in 00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F 10 11 12 13 14 15 16 17; do
   r="TINTY_SCHEME_PALETTE_BASE${k}_HEX_R"
   g="TINTY_SCHEME_PALETTE_BASE${k}_HEX_G"
   b="TINTY_SCHEME_PALETTE_BASE${k}_HEX_B"
   c[$k]="${!r:-}${!g:-}${!b:-}"
 done
+
+# Bright ANSI red..cyan: base24's own bright accents, else the normal ones, as
+# base16 has no bright variants.
+declare -A bright
+bright[red]="${c[12]:-${c[08]}}"
+bright[yellow]="${c[13]:-${c[0A]}}"
+bright[green]="${c[14]:-${c[0B]}}"
+bright[cyan]="${c[15]:-${c[0C]}}"
+bright[blue]="${c[16]:-${c[0D]}}"
+bright[magenta]="${c[17]:-${c[0E]}}"
 
 variant="${TINTY_SCHEME_VARIANT:-dark}"
 [ "$variant" = "light" ] || variant="dark"
@@ -63,12 +74,12 @@ color5  #${c[0E]}
 color6  #${c[0C]}
 color7  #${c[05]}
 color8  #${c[03]}
-color9  #${c[08]}
-color10 #${c[0B]}
-color11 #${c[0A]}
-color12 #${c[0D]}
-color13 #${c[0E]}
-color14 #${c[0C]}
+color9  #${bright[red]}
+color10 #${bright[green]}
+color11 #${bright[yellow]}
+color12 #${bright[blue]}
+color13 #${bright[magenta]}
+color14 #${bright[cyan]}
 color15 #${c[07]}
 color16 #${c[09]}
 color17 #${c[0F]}
@@ -134,7 +145,7 @@ noctalia_roles() {
       "cursor": "#${c[05]}", "cursorText": "#${c[00]}",
       "selectionBg": "#${c[05]}", "selectionFg": "#${c[00]}",
       "normal": { "black": "#${c[00]}", "red": "#${c[08]}", "green": "#${c[0B]}", "yellow": "#${c[0A]}", "blue": "#${c[0D]}", "magenta": "#${c[0E]}", "cyan": "#${c[0C]}", "white": "#${c[05]}" },
-      "bright": { "black": "#${c[03]}", "red": "#${c[08]}", "green": "#${c[0B]}", "yellow": "#${c[0A]}", "blue": "#${c[0D]}", "magenta": "#${c[0E]}", "cyan": "#${c[0C]}", "white": "#${c[07]}" }
+      "bright": { "black": "#${c[03]}", "red": "#${bright[red]}", "green": "#${bright[green]}", "yellow": "#${bright[yellow]}", "blue": "#${bright[blue]}", "magenta": "#${bright[magenta]}", "cyan": "#${bright[cyan]}", "white": "#${c[07]}" }
     }
 EOF
 }
