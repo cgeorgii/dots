@@ -198,6 +198,12 @@ binds {
 
 // Window rules
 window-rule {
+    // Rounded corners on every window; the focus ring follows the radius
+    geometry-corner-radius 8
+    clip-to-geometry true
+}
+
+window-rule {
     // Startup terminal on Dell monitor, full width
     match at-startup=true app-id="kitty"
     open-on-output "DP-3"
