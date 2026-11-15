@@ -107,8 +107,13 @@ require("lazy").setup({
           vim.cmd("colorscheme base16-gruvbox-dark-medium")
           return
         end
+        -- As `:colorscheme` does: clear, paint, then announce it, so plugins
+        -- that derive their colours (gitsigns, ufo's care theme) redo them
+        vim.cmd("highlight clear")
         vim.o.background = t.variant == "light" and "light" or "dark"
         base16.setup(t.palette)
+        vim.g.colors_name = "base16-tinty"
+        vim.api.nvim_exec_autocmds("ColorScheme", { pattern = "base16-tinty", modeline = false })
       end
 
       apply()
