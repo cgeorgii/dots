@@ -1,9 +1,8 @@
 config_version = 20
 
 [bar.main]
-background_opacity = 0.79999998211860657
+background_opacity = 0.0
 border = "primary"
-border_width = 1.0
 concave_edge_corners = false
 end = [ "notifications", "spacer_4", "group:g2", "spacer_3", "group:g3", "spacer_2", "group:g1" ]
 margin_ends = 40
@@ -12,35 +11,38 @@ thickness = 35
     [[bar.main.capsule_group]]
     accordion = false
     accordion_direction = "end"
+    border = "primary"
     border_width = 1.0
     enabled = true
-    fill = "surface_container"
+    fill = "on_primary"
     id = "g1"
     members = [ "theme", "network", "session" ]
     opacity = 1.0
-    padding = 6.0
+    padding = 10.0
 
     [[bar.main.capsule_group]]
     accordion = false
     accordion_direction = "end"
+    border = "primary"
     border_width = 1.0
     enabled = true
-    fill = "surface_container"
+    fill = "on_secondary"
     id = "g2"
     members = [ "cpu", "memory", "temp", "battery" ]
-    opacity = 1.0
-    padding = 6.0
+    opacity = 0.75
+    padding = 10.0
 
     [[bar.main.capsule_group]]
     accordion = false
     accordion_direction = "end"
+    border = "primary"
     border_width = 1.0
     enabled = true
-    fill = "surface_container"
+    fill = "on_primary"
     id = "g3"
     members = [ "tray", "bluetooth", "volume" ]
     opacity = 1.0
-    padding = 6.0
+    padding = 10.0
 
 [battery]
 warning_threshold = 15
@@ -161,6 +163,13 @@ cpu_temp_critical_threshold = 90
 
 [theme]
 community_palette = "Paradise"
+
+[widget.clock]
+capsule = true
+capsule_border = "primary"
+capsule_fill = "on_primary"
+capsule_opacity = 0.48999999999999999
+capsule_padding = 10
 
 [widget.network]
 show_label = false
