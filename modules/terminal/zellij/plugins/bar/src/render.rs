@@ -20,25 +20,39 @@ pub enum Color {
     Magenta,
     White,
     BrightBlack,
-    BrightBlue,
+    /// The shared accent and its bright form: 256-colour slots 22 and 23,
+    /// which tinty-render fills in the kitty palette [ref:shared-accent].
+    Accent,
+    BrightAccent,
 }
 
 impl Color {
-    fn fg(self) -> u8 {
+    fn fg(self) -> &'static str {
         match self {
-            Color::Black => 30,
-            Color::Red => 31,
-            Color::Green => 32,
-            Color::Blue => 34,
-            Color::Magenta => 35,
-            Color::White => 37,
-            Color::BrightBlack => 90,
-            Color::BrightBlue => 94,
+            Color::Black => "30",
+            Color::Red => "31",
+            Color::Green => "32",
+            Color::Blue => "34",
+            Color::Magenta => "35",
+            Color::White => "37",
+            Color::BrightBlack => "90",
+            Color::Accent => "38;5;22",
+            Color::BrightAccent => "38;5;23",
         }
     }
 
-    fn bg(self) -> u8 {
-        self.fg() + 10
+    fn bg(self) -> &'static str {
+        match self {
+            Color::Black => "40",
+            Color::Red => "41",
+            Color::Green => "42",
+            Color::Blue => "44",
+            Color::Magenta => "45",
+            Color::White => "47",
+            Color::BrightBlack => "100",
+            Color::Accent => "48;5;22",
+            Color::BrightAccent => "48;5;23",
+        }
     }
 }
 
@@ -126,6 +140,8 @@ impl Cell {
 /// (background, foreground) of the mode block.
 fn mode_colors(mode: &str) -> (Color, Color) {
     match mode {
+        // The resting mode wears the accent, as the badge does
+        "Normal" => (Color::Accent, Color::Black),
         "Locked" => (Color::BrightBlack, Color::White),
         "Tmux" => (Color::Red, Color::Black),
         "Scroll" | "EnterSearch" | "Search" => (Color::Blue, Color::Black),
@@ -153,9 +169,9 @@ fn left(input: &Input) -> Vec<Cell> {
     };
     let hovered = |t| input.hover == Some(t);
     let badge_bg = if hovered(Target::Badge) {
-        Color::BrightBlue
+        Color::BrightAccent
     } else {
-        Color::Blue
+        Color::Accent
     };
     let mut cells = vec![
         cell(badge, Color::Black, badge_bg).bold().on(Target::Badge),
@@ -167,7 +183,7 @@ fn left(input: &Input) -> Vec<Cell> {
         let (bg, fg) = match (tab.active, renaming) {
             (true, true) => (Color::Magenta, Color::Black),
             (true, false) => (Color::White, Color::Black),
-            (false, _) if hovered(target) => (Color::Blue, Color::White),
+            (false, _) if hovered(target) => (Color::Accent, Color::White),
             (false, _) => (Color::BrightBlack, Color::White),
         };
         let label = cell(format!(" {} {} ", tab.position + 1, tab.name), fg, bg);
@@ -338,8 +354,8 @@ mod tests {
             hover: Some(Target::Tab(1)),
             ..input(&tabs, 80)
         });
-        assert!(badge.line.starts_with("\x1b[0;1;30;104m"));
-        assert!(tab.line.contains("37;44m 1 claude "));
+        assert!(badge.line.starts_with("\x1b[0;1;30;48;5;23m"));
+        assert!(tab.line.contains("37;48;5;22m 1 claude "));
         assert_eq!(active.line, plain_bar.line);
         assert_eq!(plain(&badge.line), plain(&plain_bar.line));
     }

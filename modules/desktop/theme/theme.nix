@@ -27,6 +27,10 @@ in
       # a scheme needs no rebuild.
       marks = dotfile-path ./scheme-marks;
 
+      # The palette slot of the shared accent, set with accent-menu and
+      # hot-reloaded like the marks [ref:shared-accent]
+      accent = dotfile-path ./accent;
+
       # "<id> <variant>" for every scheme tinty lists, so the picker and the
       # rotation can split schemes into light and dark without parsing YAML.
       variants = pkgs.runCommand "scheme-variants" { } ''
@@ -89,6 +93,7 @@ in
           export STYLE_ICONS=${lib.escapeShellArg style.icons.name}
           export STYLE_FONT=${lib.escapeShellArg style.font.mono}
           export STYLE_FONT_UI_SIZE=${toString style.font.uiSize}
+          export THEME_ACCENT=${lib.escapeShellArg accent}
           exec bash "${dotfile-path ./tinty-render.sh}" "$@"
         '';
       };
@@ -97,6 +102,26 @@ in
       # and mark schemes keep/skip. The fzf logic lives in the hot-reloaded
       # theme-menu.sh; this wrapper supplies its PATH, data paths and the fzf
       # colours (noctalia runs it with `kitty -e`, outside a login shell).
+      # Pick the shared accent's slot; the logic lives in the hot-reloaded
+      # accent-menu.sh, as with theme-menu below.
+      accent-menu = pkgs.writeShellApplication {
+        name = "accent-menu";
+        runtimeInputs = [
+          pkgs.tinty
+          pkgs.fzf
+          pkgs.gnused
+          pkgs.gnugrep
+          pkgs.coreutils
+        ];
+        text = ''
+          export FZF_DEFAULT_OPTS=${lib.escapeShellArg style.fzf.flag}" ''${FZF_DEFAULT_OPTS:-}"
+          export THEME_ACCENT=${lib.escapeShellArg accent}
+          export TINTY_CONFIG=${tintyConfig}
+          export TINTY_DATA=${tintyData}
+          exec bash "${dotfile-path ./accent-menu.sh}" "$@"
+        '';
+      };
+
       theme-menu = pkgs.writeShellApplication {
         name = "theme-menu";
         runtimeInputs = [
@@ -147,6 +172,7 @@ in
         pkgs.darkman
         pkgs.tinty
         theme-menu
+        accent-menu
       ];
 
       # Point tinty's schemes repo at the flake input (a read-only nix-store dir;

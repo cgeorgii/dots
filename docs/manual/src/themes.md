@@ -38,3 +38,25 @@ stay listed, showing their new mark, until a filter changes.
 
 Marks apply at once, without a rebuild. A scheme applied by hand lasts until
 darkman's next sun event. Commit `scheme-marks` to keep the marks.
+
+## The accent colour
+
+<!-- [ref:shared-accent] -->
+
+One palette slot colours the focused-window ring in niri, the bar's border,
+lazygit's active border, and in zellij the focused pane's frame and title,
+the session badge and the Normal mode pill, so they agree under every
+scheme. The rule: focus wears the accent, the unfocused counterparts are
+muted (base03), and red, yellow and green are kept for states such as errors
+and modes.
+
+`accent-menu` lists the candidate slots with a swatch of each in the active
+scheme; `enter` makes the highlighted slot the accent and re-themes
+everything live, with the list still open.
+
+The slot names follow base16's conventions (base0A is "yellow"), but schemes
+fill them as they like, so judge by the swatch. The base24 bright slots
+(base12 to base17) fall back to their normal slot under a base16 scheme.
+
+The choice is kept in `modules/desktop/theme/accent` and applies to every
+scheme. Commit it to keep it.

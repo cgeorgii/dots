@@ -3,7 +3,7 @@
 // Configuration Summary:
 // - Dual monitor: Dell S2722QC (4K@2.0x) left, ASUS VX279 (1080p) right
 // - Focus-follows-mouse enabled
-// - Gruvbox Dark color scheme
+// - Focus ring colours follow the tinty scheme: colors.kdl below
 // - Keyboard: US/US-intl, Caps->Escape, Ctrl+Space to switch layouts
 // - Natural scrolling on touchpad and mouse
 // - Bar, launcher and lock come from the shell: shell.kdl below
@@ -66,8 +66,6 @@ layout {
 
     focus-ring {
         width 2
-        active-color "#fabd2f"
-        inactive-color "#928374"
     }
 
     border {
@@ -226,6 +224,10 @@ window-rule {
 
 // Cursor, generated from the shared style [ref:shared-style]
 include "~/.config/niri/style.kdl"
+
+// Focus ring colours, written by tinty-render [ref:shared-accent].
+// Optional so niri still starts before the first theme is applied.
+include optional=true "~/.config/niri/colors.kdl"
 
 // Launcher and lock binds and window rules of noctalia, written by its feature
 include "~/.config/niri/shell.kdl"

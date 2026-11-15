@@ -3,8 +3,141 @@
 
 default_layout "compact-git"
 
-// Theme
-theme "gruvbox-dark"
+// Theme: colours are terminal palette indices, so zellij follows whatever
+// tinty-render writes into kitty's palette. 0-7 are base00, red, green,
+// yellow, blue, magenta, cyan, base05; 8 base03; 16-21 base09, base0F,
+// base01, base02, base04, base06; 22/23 the accent and its hover
+// [ref:shared-accent]. Focus wears the accent, the rest stays neutral.
+theme "tinty"
+
+themes {
+    tinty {
+        text_unselected {
+            base 7
+            background 0
+            emphasis_0 22
+            emphasis_1 6
+            emphasis_2 2
+            emphasis_3 5
+        }
+        text_selected {
+            base 7
+            background 19
+            emphasis_0 22
+            emphasis_1 6
+            emphasis_2 2
+            emphasis_3 5
+        }
+        ribbon_unselected {
+            base 7
+            background 19
+            emphasis_0 1
+            emphasis_1 7
+            emphasis_2 22
+            emphasis_3 5
+        }
+        ribbon_selected {
+            base 0
+            background 22
+            emphasis_0 1
+            emphasis_1 16
+            emphasis_2 5
+            emphasis_3 4
+        }
+        ribbon_hover {
+            base 0
+            background 23
+            emphasis_0 1
+            emphasis_1 16
+            emphasis_2 5
+            emphasis_3 4
+        }
+        table_title {
+            base 22
+            background 0
+            emphasis_0 6
+            emphasis_1 2
+            emphasis_2 5
+            emphasis_3 16
+        }
+        table_cell_unselected {
+            base 7
+            background 18
+            emphasis_0 22
+            emphasis_1 6
+            emphasis_2 2
+            emphasis_3 5
+        }
+        table_cell_selected {
+            base 7
+            background 19
+            emphasis_0 22
+            emphasis_1 6
+            emphasis_2 2
+            emphasis_3 5
+        }
+        list_unselected {
+            base 7
+            background 18
+            emphasis_0 22
+            emphasis_1 6
+            emphasis_2 2
+            emphasis_3 5
+        }
+        list_selected {
+            base 7
+            background 19
+            emphasis_0 22
+            emphasis_1 6
+            emphasis_2 2
+            emphasis_3 5
+        }
+        // Other panes: muted
+        frame_unselected {
+            base 8
+            background 0
+            emphasis_0 20
+            emphasis_1 6
+            emphasis_2 2
+            emphasis_3 5
+        }
+        // The focused pane's frame and title: the accent
+        frame_selected {
+            base 22
+            background 0
+            emphasis_0 23
+            emphasis_1 6
+            emphasis_2 2
+            emphasis_3 5
+        }
+        // A hovered pane, and the focused pane in a non-base mode (pane, tab,
+        // resize...): the accent's variant, as for hover in the bar
+        frame_highlight {
+            base 23
+            background 0
+            emphasis_0 23
+            emphasis_1 23
+            emphasis_2 23
+            emphasis_3 23
+        }
+        exit_code_success {
+            base 2
+            background 0
+            emphasis_0 2
+            emphasis_1 2
+            emphasis_2 2
+            emphasis_3 2
+        }
+        exit_code_error {
+            base 1
+            background 0
+            emphasis_0 1
+            emphasis_1 1
+            emphasis_2 1
+            emphasis_3 1
+        }
+    }
+}
 
 // Default mode
 default_mode "normal"
