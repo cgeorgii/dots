@@ -222,20 +222,6 @@ keybinds clear-defaults=true {
             SwitchToMode "normal"
         }
 
-        // Toggle the workmux agent sidebar in every tab, like tmux's C-s C-n
-        bind "Ctrl n" {
-            Run "workmux" "sidebar" {
-                floating true
-                close_on_exit true
-                name "workmux sidebar"
-                x "40%"
-                y "45%"
-                width "20%"
-                height "3"
-            }
-            SwitchToMode "normal"
-        }
-
         // Make the focused pane's directory the session root, where new panes
         // and tabs start (like tmux's attach -c)
         bind "Enter" {

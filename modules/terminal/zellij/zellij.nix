@@ -47,11 +47,58 @@ in
           exec bash "${dotfile-path ./zellij-tree.sh}" "$@"
         '';
       };
+
+      # Marks the tab holding the calling pane with an agent's status. The
+      # icon goes after a space between U+2063 and U+2064, where the bar
+      # colours it and autoname keeps it while renaming.
+      zellij-agent-status = pkgs.writeShellApplication {
+        name = "zellij-agent-status";
+        runtimeInputs = [
+          zellij
+          pkgs.jq
+        ];
+        text = ''
+          case "''${1:-}" in
+            working) icon=󰔟 ;;
+            waiting) icon=󰍡 ;;
+            done) icon=󰗠 ;;
+            clear) icon= ;;
+            *)
+              echo "usage: zellij-agent-status working|waiting|done|clear" >&2
+              exit 2
+              ;;
+          esac
+
+          # Outside zellij there is no tab to mark
+          [[ -n "''${ZELLIJ:-}" && -n "''${ZELLIJ_PANE_ID:-}" ]] || exit 0
+
+          open=$'⁣'
+          close=$'⁤'
+
+          read -r tab_id name < <(
+            zellij action list-panes --tab --json |
+              jq -r --argjson id "$ZELLIJ_PANE_ID" '
+                first(.[] | select((.is_plugin | not) and .id == $id))
+                | "\(.tab_id) \(.tab_name)"'
+          ) || exit 0
+
+          base=$name
+          if [[ $name == *"$open"*"$close" ]]; then
+            base=''${name%"$open"*}
+            base=''${base% }
+          fi
+
+          new=$base
+          [[ -z $icon ]] || new="$base $open$icon$close"
+          [[ $new == "$name" ]] || zellij action rename-tab-by-id "$tab_id" "$new"
+        '';
+      };
     in
     {
       home.packages = [
         zellij
         zellij-tree
+        zellij-agent-status
       ];
 
       xdg.configFile = {

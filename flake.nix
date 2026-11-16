@@ -10,7 +10,6 @@
     nixpkgs-for-keepassxc.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs-for-niri.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
-    workmux.url = "github:raine/workmux";
     pre-commit-hooks.url = "github:cachix/git-hooks.nix";
 
     home-manager = {

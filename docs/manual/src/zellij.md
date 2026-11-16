@@ -44,21 +44,10 @@ Neovim set their own.
 Renaming a tab with `C-s ,` fixes its name. To hand it back to automatic
 naming, rename it to nothing: `C-s ,` then `Enter` on the empty name.
 
-Tools that mark a tab with a status icon (workmux does, for its agents) keep
-their mark: the icon sits between the invisible characters U+2063 and U+2064,
-and the renaming leaves it in place.
-
-## workmux
-
-workmux finds zellij by itself through `$ZELLIJ`, so `workmux add` opens each
-agent in a new tab of the current session, appended at the end of the tab bar.
-Zellij only supports workmux's window mode, and its splits are always 50/50:
-the `percentage` values in the workmux config only apply under tmux.
-
-`C-s C-n` toggles the agent sidebar in every tab. Zellij 0.45.1 and earlier can
-fail a toggle partway, leaving panes out of order; toggling again usually puts
-it right. Status icons on agent tabs don't clear when the tab is focused, only
-when the next status update replaces them.
+Tools that mark a tab with a status icon keep their mark: the icon sits
+between the invisible characters U+2063 and U+2064, and the renaming leaves it
+in place. Claude Code's hooks mark the tab of each agent with
+`zellij-agent-status`: working, waiting for an answer, or done.
 
 ## The plugins
 

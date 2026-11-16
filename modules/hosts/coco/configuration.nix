@@ -45,7 +45,6 @@
       neovim
       git
       jujutsu
-      workmux
       claude
       niri
       noctalia

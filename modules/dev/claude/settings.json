@@ -20,7 +20,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "workmux register-agent"
+            "command": "zellij-agent-status clear"
           }
         ]
       }
@@ -30,7 +30,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "workmux set-window-status working"
+            "command": "zellij-agent-status working"
           }
         ]
       }
@@ -40,7 +40,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "workmux set-window-status working"
+            "command": "zellij-agent-status working"
           }
         ]
       }
@@ -51,7 +51,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "workmux set-window-status waiting"
+            "command": "zellij-agent-status waiting"
           }
         ]
       }
@@ -61,7 +61,17 @@
         "hooks": [
           {
             "type": "command",
-            "command": "workmux set-window-status done"
+            "command": "zellij-agent-status done"
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "zellij-agent-status clear"
           }
         ]
       }

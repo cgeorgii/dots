@@ -159,8 +159,8 @@ fn labelled(glyph: &str, text: &str) -> String {
     }
 }
 
-/// Splits a status icon off a tab name: workmux appends it, after a space,
-/// between U+2063 and U+2064.
+/// Splits a status icon off a tab name: `zellij-agent-status` appends it,
+/// after a space, between U+2063 and U+2064.
 fn status_icon(name: &str) -> Option<(&str, &str)> {
     let (base, rest) = name.rsplit_once('\u{2063}')?;
     let icon = rest.strip_suffix('\u{2064}')?;

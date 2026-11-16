@@ -111,8 +111,7 @@ The container setup is a reusable module, so the clean room
   joins its persistence set.
 - **Inside `dev`:** one non-root user with a locked password, no wheel, no
   sudo, no container runtime. Packages: claude-code, direnv with nix-direnv,
-  workmux (upstream, without the `gh` stub), tmux, git, gh, ripgrep, fd, jq,
-  curl and a plain editor.
+  tmux, git, gh, ripgrep, fd, jq, curl and a plain editor.
 - **Own nix-daemon on an overlay store:** the host's daemon is not shared,
   because fixed-output derivations would let a container reach any URL from
   the host's network, bypassing [ref:1.4-egress-prompt-proxy]. Each container
