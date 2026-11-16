@@ -218,12 +218,6 @@ window-rule {
 }
 
 window-rule {
-    // Make whispering float
-    match app-id="whispering"
-    open-floating true
-}
-
-window-rule {
     match app-id="dota-sage-overlay"
     open-floating true
 }

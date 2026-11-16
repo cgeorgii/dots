@@ -55,7 +55,6 @@
       chat
       spotify
       desktop-apps
-      whispering
     ];
 
     networking.hostName = "coco"; # The codependent computer

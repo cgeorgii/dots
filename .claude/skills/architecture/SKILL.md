@@ -43,7 +43,7 @@ no specialArgs.
 
 import-tree only loads `*.nix` files and skips any path containing `/_`, so
 plain NixOS modules or `callPackage` files that aren't flake-parts modules get
-a `_` prefix (`_hardware-configuration.nix`, `_xcompose.nix`, `whispering/_package.nix`).
+a `_` prefix (`_hardware-configuration.nix`, `_xcompose.nix`, `work/_vpn.nix`).
 
 ## Dotfile Management
 
