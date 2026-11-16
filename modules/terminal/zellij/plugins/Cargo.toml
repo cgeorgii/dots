@@ -5,7 +5,7 @@ members = ["meld", "autoname", "bar"]
 # One zellij-tile for every plugin; plugins.nix checks it against the zellij
 # in nixpkgs.
 [workspace.dependencies]
-zellij-tile = "=0.45.1"
+zellij-tile = "=0.46.0"
 
 [workspace.package]
 version = "0.1.0"
