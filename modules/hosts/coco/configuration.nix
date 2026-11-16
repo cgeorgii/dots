@@ -40,6 +40,7 @@
       zsh
       starship
       cli
+      btop
       kitty
       tmux
       zellij
