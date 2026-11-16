@@ -1,6 +1,13 @@
 agent: claude
 nerdfont: true
 
+# Material glyphs in the shared accent [ref:shared-accent]. zellij strips the
+# colour codes from tab names, so there the bar colours the icon itself.
+status_icons:
+  working: "#[fg=colour22]󰔟#[fg=default]"
+  waiting: "#[fg=colour22]󰍡#[fg=default]"
+  done: "#[fg=colour22]󰗠#[fg=default]"
+
 # No PR column or PR placeholders: they run `gh repo view`, which prompts for
 # the SSH key.
 dashboard:
