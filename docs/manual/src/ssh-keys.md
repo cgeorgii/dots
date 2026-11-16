@@ -77,3 +77,63 @@ run without a rebuild.
 
 Follow the same steps, skipping `ssh-keygen`: attach the existing private
 key, then delete it from `~/.ssh` once `ssh-add -l` lists it.
+
+## Fetching from GitHub without the key
+
+Each use of the key asks for confirmation. That only means something if the
+dialog is rare, but lazygit fetches in the background, and a fetch from a
+`git@github.com:` remote needs a signature. So git reads from GitHub over
+HTTPS and only pushes over SSH:
+
+- `url."https://github.com/".insteadOf` rewrites `git@github.com:` (and
+  `ssh://git@github.com/`) remotes for fetch, pull, clone, ls-remote and LFS
+  downloads. `pushInsteadOf` sends pushes back to `git@github.com:`, even for
+  remotes cloned over HTTPS. git applies `pushInsteadOf` to the configured
+  URL, not the rewritten one, which is why the SSH form also maps to itself.
+  `git remote -v` shows both URLs after rewriting.
+- HTTPS authenticates with a fine-grained personal access token whose only
+  permission is **Contents: Read-only**, on my own repositories. Leaked, it
+  exposes code but changes nothing. Private repositories of other owners
+  need a token of their own, and fail to fetch without one.
+- The token is the sops secret `modules/dev/git/github-ro-token.sops`,
+  decrypted to `/run/secrets/github-ro-token`, readable only by me. A helper,
+  `git-ro-credential`, is the only credential helper for
+  `https://github.com`. It hands the token to git and ignores git's requests
+  to store or erase credentials. No helper hands out a token that can write.
+- The helper also tells git not to ask for a password. Otherwise a fetch the
+  token can't authenticate (expired, missing, or a private repository of
+  another owner) would open a username dialog through `SSH_ASKPASS`, from
+  lazygit in the background.
+
+Nothing else in this chapter changes: pushes still ask, and so does
+everything else that uses the key.
+
+### Creating or renewing the token
+
+1. On GitHub: **Settings → Developer settings → Personal access tokens →
+   Fine-grained tokens → Generate new token**. Resource owner: me.
+   Repository access: **All repositories**. Permissions: **Contents:
+   Read-only** (Metadata: Read-only is added by itself), nothing else. Pick
+   an expiry and note it in the token's KeePassXC entry.
+
+2. Encrypt it from the terminal without it touching the disk or the shell
+   history. `read -s` doesn't echo the paste:
+
+   ```sh
+   read -rs 'tok?Token: '; printf %s "$tok" \
+     | sops encrypt --input-type binary --output-type binary \
+         --filename-override modules/dev/git/github-ro-token.sops /dev/stdin \
+     > modules/dev/git/github-ro-token.sops; unset tok
+   ```
+
+3. Rebuild, then check that git gets it (this prints only the first
+   characters):
+
+   ```sh
+   printf 'protocol=https\nhost=github.com\n\n' | git credential fill | sed -n 's/^password=\(.\{15\}\).*/\1…/p'
+   ```
+
+   A fine-grained token starts with `github_pat_`.
+
+When the token expires, fetches of private repositories fail with an
+authentication error, without a dialog. Public ones keep working.

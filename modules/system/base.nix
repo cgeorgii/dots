@@ -10,7 +10,6 @@
         git-lfs
         libsecret
         pass
-        git-credential-manager
         pinentry-gnome3
         readline
         wget

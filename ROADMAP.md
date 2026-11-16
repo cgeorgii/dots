@@ -41,6 +41,9 @@ Triaging gives a finding an ID and moves it under its area, or deletes it.
 
 - GTK 4 stays dark in light mode: Home Manager's `gtk4.theme` writes a static
   `~/.config/gtk-4.0/gtk.css` importing `Gruvbox-Dark`, which darkman never swaps.
+- No ssh-agent confirmation dialog for a `git push --dry-run` to GitHub
+  (2026-11-16): the "SSH key requested" notification showed and ssh blocked
+  waiting for the signature, but no Allow/Deny dialog was visible.
 
 ## Items
 

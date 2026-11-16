@@ -15,6 +15,7 @@
       network
       work
       security
+      git
       sops
       input
       peripherals
