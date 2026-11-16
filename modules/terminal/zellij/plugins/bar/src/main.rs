@@ -55,6 +55,8 @@ struct State {
     branches: HashMap<PathBuf, String>,
     /// The last render, for mapping clicks.
     bar: render::Bar,
+    /// Whether the bar has taken itself out of focus moves.
+    unselectable: bool,
     /// The target under the pointer.
     hover: Option<render::Target>,
 }
@@ -100,7 +102,7 @@ impl ZellijPlugin for State {
     fn update(&mut self, event: Event) -> bool {
         match event {
             Event::PermissionRequestResult(_) => {
-                set_selectable(false);
+                self.make_unselectable();
                 false
             }
             Event::ModeUpdate(mode) => {
@@ -108,6 +110,9 @@ impl ZellijPlugin for State {
                 true
             }
             Event::TabUpdate(tabs) => {
+                // When the permissions were granted before, no
+                // PermissionRequestResult comes; a tab update means they were
+                self.make_unselectable();
                 self.tabs = tabs;
                 self.follow_focus();
                 true
@@ -199,6 +204,15 @@ impl ZellijPlugin for State {
 
 #[cfg(target_family = "wasm")]
 impl State {
+    /// Takes the bar out of focus moves, once. It stays selectable until the
+    /// permissions are settled, as their prompt needs the keyboard.
+    fn make_unselectable(&mut self) {
+        if !self.unselectable {
+            set_selectable(false);
+            self.unselectable = true;
+        }
+    }
+
     /// The focused terminal pane of the active tab, preferring a floating one
     /// while floating panes are shown.
     fn focused_pane(&self) -> Option<PaneId> {
