@@ -86,9 +86,20 @@
 
     powerManagement = {
       enable = true;
-      cpuFreqGovernor = "performance";
-      cpufreq.max = 2800000;
+      cpuFreqGovernor = "powersave";
     };
+
+    services.tlp.settings = {
+      CPU_ENERGY_PERF_POLICY_ON_AC = "balance_performance";
+      CPU_ENERGY_PERF_POLICY_ON_BAT = "balance_power";
+      PLATFORM_PROFILE_ON_AC = "performance";
+      PLATFORM_PROFILE_ON_BAT = "low-power";
+    };
+
+    # The EC-backed acpitz zone sporadically reports 128 °C (0x80, a failed
+    # read) and the kernel powers off on it. The CPU still self-throttles via
+    # TCC and has its own hardware THERMTRIP.
+    boot.kernelParams = [ "thermal.crt=-1" ];
 
     # Don't suspend when lid is closed (using external monitors)
     services.logind.settings.Login = {
