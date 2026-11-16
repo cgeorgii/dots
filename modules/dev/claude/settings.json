@@ -98,5 +98,6 @@
   "verbose": false,
   "preferredNotifChannel": "notifications_disabled",
   "autoCompactEnabled": false,
-  "autoContinueAtUsageLimit": false
+  "autoContinueAtUsageLimit": false,
+  "agentPushNotifEnabled": true
 }
