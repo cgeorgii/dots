@@ -245,6 +245,9 @@ kill_session() {
   fi
   zellij kill-session "$1" || true
   rm -f "$roots/$1"
+  # Other sessions' pickers would open on a list still showing it: drop their
+  # cached lists (the caller refreshes its own)
+  find "${cache%/*}" -maxdepth 1 -name 'list.*' ! -path "$cache" -delete 2>/dev/null || true
 }
 
 # esc leaves search mode, or quits from navigation mode.
@@ -350,7 +353,7 @@ pick() {
       --bind="h:transform(bash '$self' collapse {1} {2})" \
       --bind="J:transform(bash '$self' move {1} {2} {4} down)" \
       --bind="K:transform(bash '$self' move {1} {2} {4} up)" \
-      --bind="x:execute-silent(bash '$self' kill {1})+reload(bash '$self' show)" \
+      --bind="x:execute-silent(bash '$self' kill {1})+reload(bash '$self' refresh)" \
       "${digits[@]}" \
       --bind="/:$search" \
       --bind="esc:transform:bash '$self' esc"
