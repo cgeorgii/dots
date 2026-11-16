@@ -5,3 +5,10 @@ Host gitlab.haskell.org
     User git
     IdentityFile ~/.ssh/id_ed25519_gitlab_haskell
     IdentitiesOnly yes
+
+# Some networks drop outbound port 22; GitHub serves SSH on 443 too. The
+# alias checks it against the existing github.com host keys.
+Host github.com
+    HostName ssh.github.com
+    Port 443
+    HostKeyAlias github.com
