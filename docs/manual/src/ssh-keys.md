@@ -116,10 +116,19 @@ everything else that uses the key.
   (Metadata: Read-only is added by itself), nothing else. It starts with
   `github_pat_`, and its username is `x-access-token`. Private repositories
   of other owners need a token of their own, and fail to fetch without one.
-- **GitLab:** **Preferences → Access tokens → Add new token**, with only the
-  **read_repository** scope. It starts with `glpat-`. GitLab ignores the
-  username next to a token, so `oauth2` will do. A group or project access
-  token works too, for a repository my own user can't read.
+- **GitLab** (19.2 or later): a fine-grained token, under **Preferences →
+  Personal access tokens → Generate token → Fine-grained token**.
+  1. Under **Group and project access**, choose **Only specific groups or
+     projects** and pick the repositories (or their group). This is easy to
+     miss, and the permission below depends on it.
+  2. Under **Code**, tick **Download**, which is what clone, fetch and LFS
+     downloads use, and nothing else. **Code: Read** covers API reads, not
+     git, and **Code: Push** would let the token write.
+
+  GitLab ignores the username next to a token, so `oauth2` will do. An
+  instance older than 19.2 has no fine-grained tokens: use a classic one
+  with only the **read_repository** scope, which reaches every project I
+  can read.
 
 Pick an expiry and note it in the token's KeePassXC entry.
 
@@ -137,7 +146,19 @@ Pick an expiry and note it in the token's KeePassXC entry.
    git add -N "modules/dev/git/ro-tokens/$host.sops"
    ```
 
-2. For a new host, add it to `readonly-hosts` in `modules/dev/git/git.nix`
+2. Check the token against a repository before rebuilding. It is handed to
+   git straight from the sops file, and `GIT_TERMINAL_PROMPT=0` makes a bad
+   token fail rather than ask for a password. Branches listed means it works:
+
+   ```sh
+   GIT_TERMINAL_PROMPT=0 git -c credential.helper= \
+     -c "credential.helper=!f() { echo username=oauth2; echo password=\$(sops decrypt --input-type binary --output-type binary modules/dev/git/ro-tokens/$host.sops); }; f" \
+     ls-remote "https://$host/GROUP/REPO.git"
+   ```
+
+   For GitHub, the username is `x-access-token` instead.
+
+3. For a new host, add it to `readonly-hosts` in `modules/dev/git/git.nix`
    with the username from the previous section:
 
    ```nix
@@ -147,7 +168,7 @@ Pick an expiry and note it in the token's KeePassXC entry.
    This only works if the host serves SSH as `git@HOST:` and HTTPS at
    `https://HOST/`, as GitHub and GitLab do.
 
-3. Rebuild, then check that git gets the token (this prints only the first
+4. Rebuild, then check that git gets the token (this prints only the first
    characters):
 
    ```sh
