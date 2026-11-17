@@ -318,9 +318,12 @@ pick() {
   trap 'rm -f "$state" "$state".*' EXIT
 
   # Building the list takes a round trip to every session, so the picker opens
-  # on the last run's list and swaps in a fresh one when it is ready
+  # on the last run's list and swaps in a fresh one when it is ready. Listing
+  # the sessions alone is cheap, so a cache whose sessions are no longer the
+  # live ones (made, killed or exited since) is rebuilt before opening, or the
+  # swap would add and drop sessions under the cursor.
   local refresh=""
-  if [[ -s $cache ]]; then
+  if [[ -s $cache && $(awk -F'\t' '$2 == "" { print $1 }' "$cache") == "$(sessions)" ]]; then
     cp "$cache" "$state.list"
     refresh="+reload-sync(bash '$self' refresh)"
   else
