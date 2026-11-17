@@ -1,15 +1,30 @@
-{
-  # Fetches from GitHub go over HTTPS with a read-only token; pushes stay on
-  # SSH and keep KeePassXC's confirmation. Why, in
+let
+  # Hosts whose fetches go over HTTPS with a read-only token, while pushes stay
+  # on SSH and keep KeePassXC's confirmation. Each token is the sops file
+  # ro-tokens/<host>.sops; `username` is what the host expects beside a
+  # token. Why, and how to add a host, in
   # [file:docs/manual/src/ssh-keys.md] [ref:1.6-github-readonly-fetch]
-  flake.modules.nixos.git = {
-    sops.secrets.github-ro-token = {
-      sopsFile = ./github-ro-token.sops;
-      format = "binary";
-      owner = "cgeorgii";
-      mode = "0400";
-    };
+  readonly-hosts = {
+    "github.com".username = "x-access-token";
+    "gitlab.helmsauer-it-solutions.org".username = "oauth2";
   };
+
+  secret = host: "git-ro-token/${host}";
+in
+{
+  flake.modules.nixos.git =
+    { lib, ... }:
+    {
+      sops.secrets = lib.mapAttrs' (
+        host: _:
+        lib.nameValuePair (secret host) {
+          sopsFile = ./ro-tokens + "/${host}.sops";
+          format = "binary";
+          owner = "cgeorgii";
+          mode = "0400";
+        }
+      ) readonly-hosts;
+    };
 
   flake.modules.homeManager.git =
     {
@@ -39,10 +54,22 @@
         '';
       };
 
-      github-ssh = [
-        "git@github.com:"
-        "ssh://git@github.com/"
+      ssh-forms = host: [
+        "git@${host}:"
+        "ssh://git@${host}/"
       ];
+
+      # git applies pushInsteadOf to the remote's configured URL, not the
+      # insteadOf result, so the SSH forms map to themselves for pushes. The
+      # empty helper drops helpers configured before this one.
+      readonly-fetch = lib.mapAttrsToList (host: cfg: {
+        url."https://${host}/".insteadOf = ssh-forms host;
+        url."git@${host}:".pushInsteadOf = ssh-forms host ++ [ "https://${host}/" ];
+        credential."https://${host}".helper = [
+          ""
+          "${lib.getExe git-ro-credential} ${osConfig.sops.secrets.${secret host}.path} ${cfg.username}"
+        ];
+      }) readonly-hosts;
     in
     {
       home.file.".gitignore".source = link-dotfile ./gitignore;
@@ -52,7 +79,7 @@
         enable = true;
         lfs.enable = true;
         includes = [
-          { path = "~/.gitconfig"; } # unmanaged; must not add a github.com credential helper
+          { path = "~/.gitconfig"; } # unmanaged; must not add credential helpers for readonly-hosts
           # delta light/dark theme, swapped by darkman. Included after [delta], so
           # it overrides. git re-reads config per invocation -> follows live.
           { path = "~/.config/delta/theme-active.gitconfig"; }
@@ -61,45 +88,41 @@
             condition = "gitdir:~/code/work/";
           }
         ];
-        settings = {
-          user.name = "Christian Georgii";
-          user.email = "cgeorgii@gmail.com";
-          github.user = "cgeorgii";
-          push.default = "simple";
-          rerere.enable = true;
-          branch.autosetuprebase = "always";
-          core.excludefile = "~/.gitignore";
-          core.excludesfile = "~/.gitignore";
-          hub.protocol = "ssh";
-          push.autoSetupRemote = true;
-          # git applies pushInsteadOf to the remote's configured URL, not the
-          # insteadOf result, so the SSH forms map to themselves for pushes.
-          url."https://github.com/".insteadOf = github-ssh;
-          url."git@github.com:".pushInsteadOf = github-ssh ++ [ "https://github.com/" ];
-          # The empty value drops helpers configured before this one.
-          credential."https://github.com".helper = [
-            ""
-            "${lib.getExe git-ro-credential} ${osConfig.sops.secrets.github-ro-token.path} x-access-token"
-          ];
-          alias = {
-            b = "branch";
-            cb = "checkout -b";
-            pp = "pull --prune";
-            co = "checkout";
-            cm = "commit";
-            cmm = "commit --allow-empty -m";
-            cma = "commit --amend --no-edit";
-            st = "status";
-            du = "diff @{upstream}";
-            di = "diff";
-            dc = "diff --cached";
-            dw = "diff --word-diff";
-            dwc = "diff --word-diff --cached";
-            lg = "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative";
-            review = "log master.. -p --reverse";
-            e = "!nvim .git/COMMIT_EDITMSG";
-          };
-        };
+        settings = lib.mkMerge (
+          readonly-fetch
+          ++ [
+            {
+              user.name = "Christian Georgii";
+              user.email = "cgeorgii@gmail.com";
+              github.user = "cgeorgii";
+              push.default = "simple";
+              rerere.enable = true;
+              branch.autosetuprebase = "always";
+              core.excludefile = "~/.gitignore";
+              core.excludesfile = "~/.gitignore";
+              hub.protocol = "ssh";
+              push.autoSetupRemote = true;
+              alias = {
+                b = "branch";
+                cb = "checkout -b";
+                pp = "pull --prune";
+                co = "checkout";
+                cm = "commit";
+                cmm = "commit --allow-empty -m";
+                cma = "commit --amend --no-edit";
+                st = "status";
+                du = "diff @{upstream}";
+                di = "diff";
+                dc = "diff --cached";
+                dw = "diff --word-diff";
+                dwc = "diff --word-diff --cached";
+                lg = "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative";
+                review = "log master.. -p --reverse";
+                e = "!nvim .git/COMMIT_EDITMSG";
+              };
+            }
+          ]
+        );
       };
 
       # lazygit's theme is rendered at runtime by tinty (see modules/desktop/theme.nix

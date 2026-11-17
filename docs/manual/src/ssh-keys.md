@@ -78,62 +78,81 @@ run without a rebuild.
 Follow the same steps, skipping `ssh-keygen`: attach the existing private
 key, then delete it from `~/.ssh` once `ssh-add -l` lists it.
 
-## Fetching from GitHub without the key
+## Fetching without the key
 
 Each use of the key asks for confirmation. That only means something if the
 dialog is rare, but lazygit fetches in the background, and a fetch from a
-`git@github.com:` remote needs a signature. So git reads from GitHub over
-HTTPS and only pushes over SSH:
+`git@github.com:` remote needs a signature. So for each host listed in
+`readonly-hosts` in `modules/dev/git/git.nix`, git reads over HTTPS and only
+pushes over SSH. Hosts not in the list are left alone and use SSH for
+everything.
 
-- `url."https://github.com/".insteadOf` rewrites `git@github.com:` (and
-  `ssh://git@github.com/`) remotes for fetch, pull, clone, ls-remote and LFS
-  downloads. `pushInsteadOf` sends pushes back to `git@github.com:`, even for
+- `url."https://HOST/".insteadOf` rewrites `git@HOST:` (and
+  `ssh://git@HOST/`) remotes for fetch, pull, clone, ls-remote and LFS
+  downloads. `pushInsteadOf` sends pushes back to `git@HOST:`, even for
   remotes cloned over HTTPS. git applies `pushInsteadOf` to the configured
   URL, not the rewritten one, which is why the SSH form also maps to itself.
   `git remote -v` shows both URLs after rewriting.
-- HTTPS authenticates with a fine-grained personal access token whose only
-  permission is **Contents: Read-only**, on my own repositories. Leaked, it
-  exposes code but changes nothing. Private repositories of other owners
-  need a token of their own, and fail to fetch without one.
-- The token is the sops secret `modules/dev/git/github-ro-token.sops`,
-  decrypted to `/run/secrets/github-ro-token`, readable only by me. A helper,
-  `git-ro-credential`, is the only credential helper for
-  `https://github.com`. It hands the token to git and ignores git's requests
-  to store or erase credentials. No helper hands out a token that can write.
+- HTTPS authenticates with a token that can only read repositories. Leaked, it
+  exposes code but changes nothing.
+- Each host's token is the sops secret `modules/dev/git/ro-tokens/HOST.sops`,
+  decrypted to `/run/secrets/git-ro-token/HOST`, readable only by me. A
+  helper, `git-ro-credential`, is the only credential helper for
+  `https://HOST`. It hands the token to git and ignores git's requests to
+  store or erase credentials. No helper hands out a token that can write.
 - The helper also tells git not to ask for a password. Otherwise a fetch the
-  token can't authenticate (expired, missing, or a private repository of
-  another owner) would open a username dialog through `SSH_ASKPASS`, from
-  lazygit in the background.
+  token can't authenticate (expired, or a repository it doesn't reach) would
+  open a username dialog through `SSH_ASKPASS`, from lazygit in the
+  background.
 
 Nothing else in this chapter changes: pushes still ask, and so does
 everything else that uses the key.
 
-### Creating or renewing the token
+### Creating a token
 
-1. On GitHub: **Settings → Developer settings → Personal access tokens →
-   Fine-grained tokens → Generate new token**. Resource owner: me.
-   Repository access: **All repositories**. Permissions: **Contents:
-   Read-only** (Metadata: Read-only is added by itself), nothing else. Pick
-   an expiry and note it in the token's KeePassXC entry.
+- **GitHub:** **Settings → Developer settings → Personal access tokens →
+  Fine-grained tokens → Generate new token**. Resource owner: me. Repository
+  access: **All repositories**. Permissions: **Contents: Read-only**
+  (Metadata: Read-only is added by itself), nothing else. It starts with
+  `github_pat_`, and its username is `x-access-token`. Private repositories
+  of other owners need a token of their own, and fail to fetch without one.
+- **GitLab:** **Preferences → Access tokens → Add new token**, with only the
+  **read_repository** scope. It starts with `glpat-`. GitLab ignores the
+  username next to a token, so `oauth2` will do. A group or project access
+  token works too, for a repository my own user can't read.
 
-2. Encrypt it from the terminal without it touching the disk or the shell
-   history. `read -s` doesn't echo the paste:
+Pick an expiry and note it in the token's KeePassXC entry.
+
+### Adding a host or renewing its token
+
+1. Encrypt the token from the terminal without it touching the disk or the
+   shell history. `read -s` doesn't echo the paste:
 
    ```sh
+   host=gitlab.example.com
    read -rs 'tok?Token: '; printf %s "$tok" \
      | sops encrypt --input-type binary --output-type binary \
-         --filename-override modules/dev/git/github-ro-token.sops /dev/stdin \
-     > modules/dev/git/github-ro-token.sops; unset tok
+         --filename-override "modules/dev/git/ro-tokens/$host.sops" /dev/stdin \
+     > "modules/dev/git/ro-tokens/$host.sops"; unset tok
+   git add -N "modules/dev/git/ro-tokens/$host.sops"
    ```
 
-3. Rebuild, then check that git gets it (this prints only the first
+2. For a new host, add it to `readonly-hosts` in `modules/dev/git/git.nix`
+   with the username from the previous section:
+
+   ```nix
+   "gitlab.example.com".username = "oauth2";
+   ```
+
+   This only works if the host serves SSH as `git@HOST:` and HTTPS at
+   `https://HOST/`, as GitHub and GitLab do.
+
+3. Rebuild, then check that git gets the token (this prints only the first
    characters):
 
    ```sh
-   printf 'protocol=https\nhost=github.com\n\n' | git credential fill | sed -n 's/^password=\(.\{15\}\).*/\1…/p'
+   printf 'protocol=https\nhost=%s\n\n' "$host" | git credential fill | sed -n 's/^password=\(.\{12\}\).*/\1…/p'
    ```
 
-   A fine-grained token starts with `github_pat_`.
-
-When the token expires, fetches of private repositories fail with an
-authentication error, without a dialog. Public ones keep working.
+When a token expires, fetches of private repositories on that host fail with
+an authentication error, without a dialog. Public ones keep working.
