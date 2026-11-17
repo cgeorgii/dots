@@ -90,10 +90,50 @@
     };
 
     services.tlp.settings = {
-      CPU_ENERGY_PERF_POLICY_ON_AC = "balance_performance";
+      # Turbo bursts at the firmware's 64 W PL2 drive the package into TCC
+      # throttling, stalling every core for up to ~130 ms at a time
+      CPU_BOOST_ON_AC = 0;
+      CPU_BOOST_ON_BAT = 0;
+      CPU_ENERGY_PERF_POLICY_ON_AC = "performance";
       CPU_ENERGY_PERF_POLICY_ON_BAT = "balance_power";
       PLATFORM_PROFILE_ON_AC = "performance";
       PLATFORM_PROFILE_ON_BAT = "low-power";
+    };
+
+    # Sustained package power above ~15 W heats the chassis until the firmware
+    # enters lap mode (dytc_lapmode), capping every core at 1.2 GHz and PL1 at
+    # 12-15 W for minutes after it cools. Holding PL1 at 15 W keeps bursts at
+    # full clock while sustained load settles below that point. The firmware
+    # rewrites PL1 on mode changes, so this reapplies it, and only ever lowers
+    # it, leaving the firmware's stricter limits alone.
+    systemd.services.cap-pl1 = {
+      description = "Hold the long-term CPU power limit (PL1) at 15 W";
+      wantedBy = [
+        "multi-user.target"
+        "post-resume.target"
+      ];
+      after = [ "post-resume.target" ];
+      serviceConfig = {
+        Type = "oneshot";
+        # Runs every 30 s; keep its start/stop lines out of the journal
+        LogLevelMax = "warning";
+      };
+      script = ''
+        pl1=/sys/class/powercap/intel-rapl-mmio:0/constraint_0_power_limit_uw
+        limit=15000000
+        [[ -w $pl1 ]] || exit 0
+        if (( $(<"$pl1") > limit )); then
+          echo "$limit" >"$pl1"
+        fi
+      '';
+    };
+    systemd.timers.cap-pl1 = {
+      wantedBy = [ "timers.target" ];
+      timerConfig = {
+        OnBootSec = "30s";
+        OnUnitActiveSec = "30s";
+        AccuracySec = "5s";
+      };
     };
 
     # The EC-backed acpitz zone sporadically reports 128 °C (0x80, a failed
