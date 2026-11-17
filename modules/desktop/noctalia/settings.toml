@@ -30,7 +30,7 @@ thickness = 35
     enabled = true
     fill = "surface_container_low"
     id = "g2"
-    members = [ "cpu", "memory", "temp", "battery" ]
+    members = [ "cpu", "memory", "temp", "board_temp", "battery" ]
     opacity = 1.0
     padding = 10.0
 
@@ -157,7 +157,7 @@ widget_order = [ "lockscreen-login-box@HDMI-A-1", "lockscreen-login-box@DP-3", "
         show_weather = true
 
 [plugins]
-enabled = []
+enabled = [ "cgeorgii/sensor" ]
 
 [shell]
 password_style = "random"

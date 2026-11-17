@@ -66,6 +66,15 @@ stat = "cpu_usage"
 type = "sysmon"
 stat = "ram_pct"
 
+# The SEN2 board sensor, from plugins/sensor: the firmware switches the CPU to
+# its 12 W mode once the chassis heats up around here, and the SEN zones'
+# kernel critical trip powers off at 80 °C
+[widget.board_temp]
+type = "cgeorgii/sensor:temp"
+zone = "SEN2"
+warn = 70
+critical = 75
+
 # Light/dark through darkman, which applies a tinty scheme; noctalia's own
 # theme-mode widget would pin `mode` in settings.toml instead.
 [widget.theme]

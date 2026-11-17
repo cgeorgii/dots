@@ -1,0 +1,40 @@
+id          = "cgeorgii/sensor"
+name        = "Sensor"
+version     = "1.0.0"
+plugin_api  = 23
+author      = "cgeorgii"
+icon        = "temperature"
+description = "Shows the temperature of one thermal zone, picked by its type."
+
+[[widget]]
+id    = "temp"
+entry = "widget.luau"
+
+  [[widget.setting]]
+  key             = "zone"
+  type            = "string"
+  label_key       = "settings.zone.label"
+  description_key = "settings.zone.description"
+  default         = "SEN2"
+
+  [[widget.setting]]
+  key       = "glyph"
+  type      = "glyph"
+  label_key = "settings.glyph.label"
+  default   = "device-laptop"
+
+  [[widget.setting]]
+  key       = "warn"
+  type      = "int"
+  label_key = "settings.warn.label"
+  default   = 70
+  min       = 0
+  max       = 120
+
+  [[widget.setting]]
+  key       = "critical"
+  type      = "int"
+  label_key = "settings.critical.label"
+  default   = 75
+  min       = 0
+  max       = 120

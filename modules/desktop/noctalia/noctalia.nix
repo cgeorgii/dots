@@ -29,6 +29,10 @@ in
         force = true;
       };
 
+      # Local plugins load from the data dir, which outranks every plugin
+      # source, and hot-reload their .luau files
+      xdg.dataFile."noctalia/plugins/sensor".source = link-dotfile ./plugins/sensor;
+
       xdg.configFile = {
         "noctalia/config.toml".source = link-dotfile ./config.toml;
         # The font follows the shared style [ref:shared-style]

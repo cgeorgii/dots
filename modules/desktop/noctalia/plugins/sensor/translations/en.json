@@ -1,0 +1,7 @@
+{
+  "settings.zone.label": "Thermal zone",
+  "settings.zone.description": "The zone's type, as in /sys/class/thermal/thermal_zone*/type",
+  "settings.glyph.label": "Glyph",
+  "settings.warn.label": "Warning temperature (°C)",
+  "settings.critical.label": "Critical temperature (°C)"
+}
