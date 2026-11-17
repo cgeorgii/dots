@@ -214,10 +214,10 @@ keybinds clear-defaults=true {
                 floating true
                 close_on_exit true
                 name "sessions"
-                x "5%"
-                y "5%"
-                width "90%"
-                height "90%"
+                x "30%"
+                y "15%"
+                width "80"
+                height "70%"
             }
             SwitchToMode "normal"
         }
@@ -399,7 +399,7 @@ plugins {
         branch_glyph   "\u{e725}"
         // Clicking the session block toggles the session picker, which
         // the bar finds by its pane name
-        badge_command  "zellij run --floating --close-on-exit --name sessions --x 5% --y 5% --width 90% --height 90% -- zellij-tree"
+        badge_command  "zellij run --floating --close-on-exit --name sessions --x 30% --y 15% --width 80 --height 70% -- zellij-tree"
         badge_pane     "sessions"
     }
 }

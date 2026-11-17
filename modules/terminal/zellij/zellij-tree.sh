@@ -7,7 +7,6 @@
 #   zellij-tree                  run the picker (usually inside a floating pane)
 #   zellij-tree list [--all]     print the tree, tab-separated: session, tab, label
 #   zellij-tree refresh          print the tree and keep it for the next pick
-#   zellij-tree preview S [T]    print the focused pane of session S, tab T
 #   zellij-tree expand|collapse  fzf actions for the line under the cursor
 #   zellij-tree move S T ID DIR  fzf actions moving that line down or up
 #   zellij-tree branch           print the git branch of $PWD for the status bar
@@ -34,7 +33,7 @@ set_root() {
   printf '%s\n' "$2" >"$roots/$1"
 }
 
-# Live sessions only, as exited ones can't be listed or previewed: in the order
+# Live sessions only, as exited ones can't be listed: in the order
 # set in the picker (see move_session), then the ones it hasn't placed, oldest
 # first.
 sessions() {
@@ -83,50 +82,6 @@ tree() {
     ' "$tmp/$i"
   done
   rm -rf "$tmp"
-}
-
-# The pane on screen for a line. fzf asks again when a reload changes the line
-# under the cursor, as moving a session does; the screen is the same, so the
-# last preview is kept and reused rather than asked of zellij again.
-preview() {
-  local key="$1/${2:-}" last="$state.preview"
-  if [[ -f $last && $(head -n1 "$last") == "$key" ]]; then
-    tail -n +2 "$last"
-    return
-  fi
-  { printf "%s\n" "$key"; capture "$@"; } >"$last.tmp"
-  mv "$last.tmp" "$last"
-  tail -n +2 "$last"
-}
-
-capture() {
-  local s=$1 tab=${2:-} panes pane tabs
-  # A session line previews its active tab: ask for the tabs alongside the
-  # panes, as each query is a round trip
-  if [[ -z $tab ]]; then
-    tabs=$(mktemp -t zellij-tree.XXXXXX)
-    zellij --session "$s" action list-tabs --json >"$tabs" 2>/dev/null &
-  fi
-  panes=$(zellij --session "$s" action list-panes --json --all 2>/dev/null) || {
-    echo "session $s is not reachable"
-    return
-  }
-  if [[ -z $tab ]]; then
-    wait
-    tab=$(jq -r 'map(select(.active)) | first | .position // 0' "$tabs" 2>/dev/null || echo 0)
-    rm -f "$tabs"
-  fi
-  # Prefer the focused terminal pane of the tab, falling back to any terminal pane.
-  pane=$(jq -r --argjson t "$tab" '
-    map(select(.tab_position == $t and (.is_plugin | not) and (.exited | not)))
-    | (map(select(.is_focused)) + .) | first | .id // empty
-  ' <<<"$panes")
-  if [[ -z $pane ]]; then
-    echo "no terminal pane in this tab"
-    return
-  fi
-  zellij --session "$s" action dump-screen --ansi --pane-id "terminal_$pane" 2>/dev/null |
-    sed -e :a -e '/^\n*$/{$d;N;ba' -e '}'
 }
 
 # The navigation-mode list fzf shows is kept in $state.list, so that moving a
@@ -348,8 +303,6 @@ pick() {
       --delimiter='\t' --with-nth=3 --id-nth=1,4 \
       --prompt='/' \
       --footer="$footer" --footer-border=none \
-      --preview="bash '$self' preview {1} {2}" \
-      --preview-window='right,60%,follow' \
       --bind="load:pos(${start:-1})+unbind(load)$refresh" \
       --bind='j:down,k:up,g:first,G:last,q:abort' \
       --bind="l:transform(bash '$self' expand {1} {2})" \
@@ -378,7 +331,6 @@ case "${1:-}" in
 list) list "${2:-}" ;;
 refresh) refresh ;;
 show) show ;;
-preview) preview "$2" "${3:-}" ;;
 expand) expand "$2" "${3:-}" ;;
 collapse) collapse "$2" "${3:-}" ;;
 esc) esc ;;
