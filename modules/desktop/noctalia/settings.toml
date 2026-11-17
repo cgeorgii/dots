@@ -3,9 +3,11 @@ config_version = 20
 [bar.main]
 background_opacity = 0.0
 border = "primary"
+capsule = true
 concave_edge_corners = false
 end = [ "notifications", "spacer_4", "group:g2", "spacer_3", "group:g3", "spacer_2", "group:g1" ]
 margin_ends = 40
+start = [ "taskbar" ]
 thickness = 35
 
     [[bar.main.capsule_group]]
@@ -14,7 +16,7 @@ thickness = 35
     border = "primary"
     border_width = 1.0
     enabled = true
-    fill = "on_primary"
+    fill = "surface_container_low"
     id = "g1"
     members = [ "theme", "network", "session" ]
     opacity = 1.0
@@ -26,10 +28,10 @@ thickness = 35
     border = "primary"
     border_width = 1.0
     enabled = true
-    fill = "on_secondary"
+    fill = "surface_container_low"
     id = "g2"
     members = [ "cpu", "memory", "temp", "battery" ]
-    opacity = 0.75
+    opacity = 1.0
     padding = 10.0
 
     [[bar.main.capsule_group]]
@@ -38,7 +40,7 @@ thickness = 35
     border = "primary"
     border_width = 1.0
     enabled = true
-    fill = "on_primary"
+    fill = "surface_container"
     id = "g3"
     members = [ "tray", "bluetooth", "volume" ]
     opacity = 1.0
@@ -168,10 +170,8 @@ cpu_temp_critical_threshold = 90
 community_palette = "Paradise"
 
 [widget.clock]
-capsule = true
 capsule_border = "primary"
-capsule_fill = "on_primary"
-capsule_opacity = 0.48999999999999999
+capsule_fill = "surface_container_low"
 capsule_padding = 10
 
 [widget.network]
@@ -187,7 +187,15 @@ type = "spacer"
 type = "spacer"
 
 [widget.taskbar]
+capsule = true
+capsule_border = "primary"
+capsule_padding = 7
+capsule_radius = "auto"
+empty_color = "on_surface_variant"
 group_by_workspace = true
 hide_empty_workspaces = true
-icon_scale = 1.2
-inactive_opacity = 0.5
+icon_scale = 1.5000000000000002
+inactive_opacity = 0.51000000000000001
+occupied_color = "on_surface_variant"
+show_glyph = false
+workspace_group_capsule = false
