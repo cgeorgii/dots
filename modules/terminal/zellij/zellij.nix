@@ -50,7 +50,7 @@ in
 
       # Marks the tab holding the calling pane with an agent's status. The
       # icon goes after a space between U+2063 and U+2064, where the bar
-      # colours it and autoname keeps it while renaming.
+      # finds it and autoname keeps it while renaming.
       zellij-agent-status = pkgs.writeShellApplication {
         name = "zellij-agent-status";
         runtimeInputs = [

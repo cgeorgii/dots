@@ -194,24 +194,15 @@ fn left(input: &Input) -> Vec<Cell> {
             (false, _) if hovered(target) => (Color::Accent, Color::White),
             (false, _) => (Color::BrightBlack, Color::White),
         };
-        let bolded = |c: Cell| if tab.active { c.bold() } else { c }.on(target);
-        cells.push(cell(RIGHT_ARROW, Color::Black, bg).on(target));
-        match status_icon(&tab.name) {
-            Some((name, icon)) => {
-                // On the hovered tab the accent is the background
-                let icon_fg = if bg == Color::Accent { fg } else { Color::Accent };
-                cells.extend([
-                    bolded(cell(format!(" {} {name} ", tab.position + 1), fg, bg)),
-                    bolded(cell(icon, icon_fg, bg)),
-                    bolded(cell(" ", fg, bg)),
-                ]);
-            }
-            None => cells.push(bolded(cell(
-                format!(" {} {} ", tab.position + 1, tab.name),
-                fg,
-                bg,
-            ))),
-        }
+        let name = match status_icon(&tab.name) {
+            Some((name, icon)) => format!("{name} {icon}"),
+            None => tab.name.clone(),
+        };
+        let label = cell(format!(" {} {name} ", tab.position + 1), fg, bg);
+        cells.extend([
+            cell(RIGHT_ARROW, Color::Black, bg).on(target),
+            if tab.active { label.bold() } else { label }.on(target),
+        ]);
         cells.push(cell(RIGHT_ARROW, bg, Color::Black).on(target));
     }
     cells
@@ -413,21 +404,15 @@ mod tests {
     }
 
     #[test]
-    fn status_icon_wears_the_accent() {
+    fn status_icon_wears_the_tab_colour() {
         let tabs = vec![Tab {
             position: 0,
             name: "claude \u{2063}X\u{2064}".into(),
             active: false,
         }];
         let bar = render(&input(&tabs, 40));
-        assert!(bar.line.contains("37;100m 1 claude \x1b[0;38;5;22;100mX\x1b[0;37;100m "));
-        let hovered = render(&Input {
-            hover: Some(Target::Tab(0)),
-            ..input(&tabs, 40)
-        });
-        assert!(hovered.line.contains("\x1b[0;37;48;5;22mX"));
-        // The icon, after "\u{e0b0} 1 claude ", still belongs to its tab
-        assert_eq!(bar.target_at(22), Some(Target::Tab(0)));
+        assert!(bar.line.contains("37;100m 1 claude X "));
+        assert!(!bar.line.contains('\u{2063}'));
     }
 
     #[test]
