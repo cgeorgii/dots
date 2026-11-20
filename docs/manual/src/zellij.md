@@ -30,13 +30,18 @@ melds cards: pressed on the bottom of two panes, `C-S-k` stacks it with the one
 above, and pressed again swaps the two. In general:
 
 - Up and down move the pane one place through its stack. At the edge of the
-  stack it joins the neighbour in that direction (a pane, or a stack it
-  becomes part of), entering on the side it came from: at the bottom when
-  moving up, at the top when moving down.
+  stack it breaks out on that side, taking its share of the stack's height.
+- A pane on its own joins the neighbour in that direction (a pane, or a stack
+  it becomes part of), entering on the side it came from: at the bottom when
+  moving up, at the top when moving down. So `C-S-j` into a stack and `C-S-k`
+  straight after put a pane back where it was.
 - Left and right always leave the column and join the neighbour at the bottom
   of its stack.
-- With no neighbour in that direction nothing happens: zellij can't break a
-  pane out of a stack on a chosen side.
+- With no neighbour in that direction nothing happens.
+
+Breaking out relies on `stacked_resize` (on by default): zellij's `Resize
+"Decrease"` is what pulls a pane out of a stack, and the plugin briefly
+focuses another pane of the stack so that it pulls out the right one.
 
 The pane stays focused and shown throughout. When several panes border it,
 the one focused most recently is joined, as with `C-h/j/k/l`. The keys work in

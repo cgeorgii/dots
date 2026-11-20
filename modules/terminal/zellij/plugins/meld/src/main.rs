@@ -3,8 +3,8 @@
 //!
 //! - `nav` moves focus and leaves a zoomed pane ([`nav`]);
 //! - `jump` moves focus out of the focused stack, to the pane beyond it;
-//! - `move` stacks the focused pane with its neighbour, or moves it through
-//!   its stack ([`moves`], [`layout`]).
+//! - `move` stacks the focused pane with its neighbour, moves it through its
+//!   stack, or breaks it out of it ([`moves`], [`layout`]).
 //!
 //! Moving focus also leaves locked mode at once, without waiting for
 //! zellij-autolock to notice the focus change: the keys that move on are then
@@ -58,7 +58,7 @@ impl ZellijPlugin for State {
             Event::TabUpdate(tabs) => self.tabs = tabs,
             Event::PaneUpdate(panes) => {
                 self.panes = panes;
-                if let Some(id) = self.focused_tiled_pane() {
+                if let Some(id) = Self::focused_tiled_pane(self.reported_panes()) {
                     self.clock += 1;
                     self.focused_at.insert(id, self.clock);
                 }
@@ -111,22 +111,51 @@ fn id_of(pane: &PaneInfo) -> moves::Id {
 }
 
 #[cfg(target_family = "wasm")]
+fn is_tiled(p: &PaneInfo) -> bool {
+    p.is_selectable && !p.is_floating && !p.is_suppressed
+}
+
+#[cfg(target_family = "wasm")]
 impl State {
     fn active_tab(&self) -> Option<&TabInfo> {
         self.tabs.iter().find(|t| t.active)
     }
 
-    /// The selectable tiled panes of the active tab
-    fn tiled_panes(&self) -> impl Iterator<Item = &PaneInfo> {
+    /// The active tab's panes, as last reported by `PaneUpdate`
+    fn reported_panes(&self) -> &[PaneInfo] {
         self.active_tab()
             .and_then(|t| self.panes.panes.get(&t.position))
-            .into_iter()
-            .flatten()
-            .filter(|p| p.is_selectable && !p.is_floating && !p.is_suppressed)
+            .map_or(&[], Vec::as_slice)
     }
 
-    fn focused_tiled_pane(&self) -> Option<moves::Id> {
-        self.tiled_panes().find(|p| p.is_focused).map(id_of)
+    /// The active tab's panes as they are now. zellij doesn't send a
+    /// `PaneUpdate` after stacking or moving panes, so what it last reported
+    /// can predate this plugin's own moves; each pane is asked for afresh,
+    /// the query queueing behind the commands already sent. Stacking adds
+    /// and removes no panes, so the reported ones are the ones to ask about.
+    /// Asked for one by one, panes never say they're focused: the focused
+    /// pane is asked for apart, as the focus of the client that pressed the
+    /// key.
+    fn current_panes(&self) -> Vec<PaneInfo> {
+        let focused = get_focused_pane_info().ok().map(|(_, id)| id);
+        self.reported_panes()
+            .iter()
+            .map(|p| {
+                let id = pane_id(id_of(p));
+                let mut info = get_pane_info(id).unwrap_or_else(|| p.clone());
+                if focused.is_some() {
+                    info.is_focused = focused == Some(id);
+                }
+                info
+            })
+            .collect()
+    }
+
+    fn focused_tiled_pane(panes: &[PaneInfo]) -> Option<moves::Id> {
+        panes
+            .iter()
+            .find(|p| is_tiled(p) && p.is_focused)
+            .map(id_of)
     }
 
     /// Called before focus moves. Only locked mode is left: the keys also
@@ -162,30 +191,29 @@ impl State {
         if tab.is_fullscreen_active || tab.are_floating_panes_visible {
             return self.navigate(dir);
         }
-        let Some(focused) = self.focused_tiled_pane() else {
+        let panes = self.current_panes();
+        let Some(focused) = Self::focused_tiled_pane(&panes) else {
             return;
         };
-        if let Some(target) = moves::neighbour(&self.layout_panes(tab), focused, dir) {
+        if let Some(target) = moves::neighbour(&self.layout_panes(&panes), focused, dir) {
             self.unlock();
             focus_pane_with_id(pane_id(target.id), false, false);
         }
     }
 
-    /// The visible tiled panes of `tab`, each standing for its stack.
-    fn layout_panes(&self, tab: &TabInfo) -> Vec<moves::Pane> {
+    /// The visible tiled panes among `panes`, each standing for its stack.
+    fn layout_panes(&self, panes: &[PaneInfo]) -> Vec<moves::Pane> {
         // A stack's hidden panes are suppressed, with its visible pane's
         // geometry
         let rect = |p: &PaneInfo| (p.pane_x, p.pane_y, p.pane_columns, p.pane_rows);
-        let hidden: Vec<_> = self
-            .panes
-            .panes
-            .get(&tab.position)
-            .into_iter()
-            .flatten()
+        let hidden: Vec<_> = panes
+            .iter()
             .filter(|p| p.is_suppressed && !p.is_floating)
             .map(rect)
             .collect();
-        self.tiled_panes()
+        panes
+            .iter()
+            .filter(|p| is_tiled(p))
             .map(|p| {
                 let id = id_of(p);
                 moves::Pane {
@@ -208,15 +236,15 @@ impl State {
         if tab.is_fullscreen_active || tab.are_floating_panes_visible {
             return;
         }
-        let Some(focused) = self.focused_tiled_pane() else {
+        let panes = self.current_panes();
+        let Some(focused) = Self::focused_tiled_pane(&panes) else {
             return;
         };
         let place = dump_session_layout_for_tab(tab.position)
             .ok()
             .and_then(|(dump, _)| layout::focused_place(&dump))
             .unwrap_or(0);
-        let panes = self.layout_panes(tab);
-        for step in moves::plan(&panes, focused, place, dir) {
+        for step in moves::plan(&self.layout_panes(&panes), focused, place, dir) {
             match step {
                 moves::Step::Stack { target, pane } => {
                     stack_panes(vec![pane_id(target), pane_id(pane)])
@@ -224,6 +252,9 @@ impl State {
                 moves::Step::Shift { pane, dir } => {
                     move_pane_with_pane_id_in_direction(pane_id(pane), direction(dir))
                 }
+                moves::Step::FocusStep(dir) => move_focus(direction(dir)),
+                moves::Step::Unstack => resize_focused_pane(Resize::Decrease),
+                moves::Step::Focus(pane) => focus_pane_with_id(pane_id(pane), false, false),
             }
         }
     }

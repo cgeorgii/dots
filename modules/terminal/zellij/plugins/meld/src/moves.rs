@@ -1,11 +1,17 @@
 //! Moving the focused pane into the pane or stack beside it, like laying off a
 //! card onto a meld.
 //!
-//! Up and down move the pane one place through its stack, and at the stack's
-//! edge stack it with the neighbour in that direction, entering on the side it
-//! came from. Left and right always leave the column and join the neighbour at
-//! the bottom of its stack. With no neighbour nothing happens: zellij has no
-//! way to break a pane out of a stack on a chosen side.
+//! Up and down move the pane one place through its stack. At the stack's edge
+//! the pane breaks out of it on that side, and a pane on its own joins the
+//! neighbour in that direction, entering on the side it came from. Left and
+//! right always leave the column and join the neighbour at the bottom of its
+//! stack.
+//!
+//! zellij has no command to break a given pane out of a stack, but shrinking
+//! a stacked pane with a non-directional `Resize Decrease` breaks one out: the
+//! top pane, upwards, when the expanded pane is at the bottom of the stack,
+//! and the bottom pane, downwards, otherwise. Focusing another pane of the
+//! stack first, which expands it, picks the side.
 //!
 //! This assumes zellij's default `stacked_pane_list`, where a stack is one
 //! visible pane with the others hidden behind it: every stack is then a single
@@ -65,6 +71,13 @@ pub enum Step {
     Stack { target: Id, pane: Id },
     /// Swap `pane` with its neighbour in its stack, `Up` or `Down`.
     Shift { pane: Id, dir: Dir },
+    /// Move focus one pane in `dir`, through the stack.
+    FocusStep(Dir),
+    /// Shrink the focused pane with a non-directional `Resize Decrease`,
+    /// breaking a pane out of its stack.
+    Unstack,
+    /// Focus `pane`.
+    Focus(Id),
 }
 
 /// The pane or stack beside `of` in `dir`: of several, the one focused most
@@ -92,6 +105,9 @@ pub fn plan(panes: &[Pane], focused: Id, place: usize, dir: Dir) -> Vec<Step> {
     if within {
         return vec![Step::Shift { pane: pane.id, dir }];
     }
+    if pane.stacked > 1 && matches!(dir, Dir::Up | Dir::Down) {
+        return break_out(pane, dir);
+    }
 
     let Some(target) = neighbour(panes, pane.id, dir) else {
         return vec![];
@@ -107,6 +123,21 @@ pub fn plan(panes: &[Pane], focused: Id, place: usize, dir: Dir) -> Vec<Step> {
         dir: Dir::Up,
     }));
     steps
+}
+
+/// Breaks `pane`, at the `dir` edge of its stack, out of it on that side. To
+/// break out upwards, from the top, the bottom pane is expanded: focus walks
+/// down the stack to it. Downwards, from the bottom, any other pane will do:
+/// the one above.
+fn break_out(pane: &Pane, dir: Dir) -> Vec<Step> {
+    let (walk, steps) = match dir {
+        Dir::Up => (Dir::Down, pane.stacked - 1),
+        _ => (Dir::Up, 1),
+    };
+    let mut plan: Vec<Step> = (0..steps).map(|_| Step::FocusStep(walk)).collect();
+    plan.push(Step::Unstack);
+    plan.push(Step::Focus(pane.id));
+    plan
 }
 
 #[cfg(test)]
@@ -186,17 +217,47 @@ mod tests {
     }
 
     #[test]
-    fn the_edge_of_a_stack_joins_the_neighbour() {
-        let panes = vec![t(0, 0, 0, 120, 20, 1), t(1, 0, 20, 120, 20, 2)];
-        assert_eq!(plan(&panes, focus(1), 0, Dir::Up), vec![stack(0, 1)]);
+    fn nothing_beyond_the_edge_does_nothing() {
+        assert_eq!(plan(&split(), focus(0), 0, Dir::Up), vec![]);
+        assert_eq!(plan(&split(), focus(1), 0, Dir::Down), vec![]);
+        let panes = vec![t(0, 0, 0, 120, 40, 2)];
+        assert_eq!(plan(&panes, focus(0), 0, Dir::Left), vec![]);
     }
 
     #[test]
-    fn nothing_beyond_the_edge_does_nothing() {
-        let panes = vec![t(0, 0, 0, 120, 40, 2)];
-        assert_eq!(plan(&panes, focus(0), 0, Dir::Up), vec![]);
-        assert_eq!(plan(&panes, focus(0), 1, Dir::Down), vec![]);
-        assert_eq!(plan(&panes, focus(0), 0, Dir::Left), vec![]);
+    fn up_from_the_top_of_a_stack_breaks_out_above() {
+        let panes = vec![t(0, 0, 0, 120, 40, 3)];
+        assert_eq!(
+            plan(&panes, focus(0), 0, Dir::Up),
+            vec![
+                Step::FocusStep(Dir::Down),
+                Step::FocusStep(Dir::Down),
+                Step::Unstack,
+                Step::Focus(focus(0)),
+            ]
+        );
+    }
+
+    #[test]
+    fn down_from_the_bottom_of_a_stack_breaks_out_below() {
+        let panes = vec![t(0, 0, 0, 120, 40, 3)];
+        assert_eq!(
+            plan(&panes, focus(0), 2, Dir::Down),
+            vec![
+                Step::FocusStep(Dir::Up),
+                Step::Unstack,
+                Step::Focus(focus(0))
+            ]
+        );
+    }
+
+    #[test]
+    fn breaking_out_comes_before_joining_the_neighbour() {
+        let panes = vec![t(0, 0, 0, 120, 20, 1), t(1, 0, 20, 120, 20, 2)];
+        assert_eq!(
+            plan(&panes, focus(1), 0, Dir::Up),
+            break_out(&panes[1], Dir::Up)
+        );
     }
 
     #[test]
