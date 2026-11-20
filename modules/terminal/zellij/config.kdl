@@ -315,6 +315,11 @@ keybinds clear-defaults=true {
         bind "Ctrl Shift k" { MessagePlugin "meld" { name "move"; payload "up"; }; }
         bind "Ctrl Shift l" { MessagePlugin "meld" { name "move"; payload "right"; }; }
 
+        // Alt-jk: focus the pane below or above the focused stack, skipping
+        // the rest of it
+        bind "Alt j" { MessagePlugin "meld" { name "jump"; payload "down"; }; }
+        bind "Alt k" { MessagePlugin "meld" { name "jump"; payload "up"; }; }
+
         // Tab reordering: Alt-Shift-hl, alongside Alt-hl tab navigation
         bind "Alt Shift h" { MoveTab "Left"; }
         bind "Alt Shift l" { MoveTab "Right"; }
@@ -385,7 +390,7 @@ plugins {
         watch_interval "1.0"
     }
     // Built from plugins/ and documented in [file:docs/manual/src/zellij.md]
-    // Pane navigation that leaves a zoomed pane
+    // Pane navigation that leaves a zoomed pane, and moving panes into stacks
     meld location="file:~/.config/zellij/plugins/meld.wasm"
     // Tabs named after their focused pane
     autoname location="file:~/.config/zellij/plugins/autoname.wasm" {

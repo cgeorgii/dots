@@ -13,6 +13,16 @@ focuses the neighbour, as in tmux; zellij on its own would zoom the
 neighbour instead. With floating panes showing, the keys move between them and
 the zoom stays.
 
+## Leaving a stack
+
+`C-h/j/k/l` step through a stack one pane at a time. `M-j` and `M-k` skip the
+rest of it, focusing the pane (or stack) below or above the focused stack;
+outside a stack they move like `C-j` and `C-k`. They work in Neovim too.
+
+Moving focus out of Neovim leaves locked mode at once, so `C-j` pressed again
+straight away moves on rather than reaching the shell. When the new pane runs
+Neovim, autolock locks it again a moment later.
+
 ## Moving panes into stacks
 
 `C-S-h/j/k/l` moves the focused pane, building stacks the way a Rommé player

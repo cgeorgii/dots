@@ -2,8 +2,14 @@
 //! messages take a payload of `left`, `down`, `up` or `right`:
 //!
 //! - `nav` moves focus and leaves a zoomed pane ([`nav`]);
+//! - `jump` moves focus out of the focused stack, to the pane beyond it;
 //! - `move` stacks the focused pane with its neighbour, or moves it through
 //!   its stack ([`moves`], [`layout`]).
+//!
+//! Moving focus also leaves locked mode at once, without waiting for
+//! zellij-autolock to notice the focus change: the keys that move on are then
+//! live in the new pane straight away. Autolock locks again if that pane runs
+//! Neovim.
 
 mod layout;
 mod moves;
@@ -28,6 +34,7 @@ struct State {
     /// When each pane last had focus, counted in pane updates
     focused_at: HashMap<moves::Id, u64>,
     clock: u64,
+    mode: InputMode,
 }
 
 #[cfg(target_family = "wasm")]
@@ -38,11 +45,16 @@ impl ZellijPlugin for State {
             PermissionType::ChangeApplicationState,
             PermissionType::ReadCliPipes,
         ]);
-        subscribe(&[EventType::TabUpdate, EventType::PaneUpdate]);
+        subscribe(&[
+            EventType::TabUpdate,
+            EventType::PaneUpdate,
+            EventType::ModeUpdate,
+        ]);
     }
 
     fn update(&mut self, event: Event) -> bool {
         match event {
+            Event::ModeUpdate(info) => self.mode = info.mode,
             Event::TabUpdate(tabs) => self.tabs = tabs,
             Event::PaneUpdate(panes) => {
                 self.panes = panes;
@@ -63,6 +75,7 @@ impl ZellijPlugin for State {
         let dir = message.payload.as_deref().and_then(nav::Dir::parse);
         match (message.name.as_str(), dir) {
             ("nav", Some(dir)) => self.navigate(dir),
+            ("jump", Some(dir)) => self.jump(dir),
             ("move", Some(dir)) => self.move_pane(dir),
             _ => {}
         }
@@ -116,7 +129,16 @@ impl State {
         self.tiled_panes().find(|p| p.is_focused).map(id_of)
     }
 
+    /// Called before focus moves. Only locked mode is left: the keys also
+    /// navigate from scroll and search modes, which they keep.
+    fn unlock(&self) {
+        if self.mode == InputMode::Locked {
+            switch_to_input_mode(&InputMode::Normal);
+        }
+    }
+
     fn navigate(&self, dir: nav::Dir) {
+        self.unlock();
         let tab = self
             .active_tab()
             .map(|t| nav::TabState {
@@ -130,6 +152,53 @@ impl State {
                 nav::Step::Move(d) => move_focus(direction(d)),
             }
         }
+    }
+
+    /// Focuses the pane or stack beyond the focused pane's stack. Zoomed, or
+    /// among floating panes, the geometry isn't the layout's, so this falls
+    /// back to `navigate`.
+    fn jump(&self, dir: nav::Dir) {
+        let Some(tab) = self.active_tab() else { return };
+        if tab.is_fullscreen_active || tab.are_floating_panes_visible {
+            return self.navigate(dir);
+        }
+        let Some(focused) = self.focused_tiled_pane() else {
+            return;
+        };
+        if let Some(target) = moves::neighbour(&self.layout_panes(tab), focused, dir) {
+            self.unlock();
+            focus_pane_with_id(pane_id(target.id), false, false);
+        }
+    }
+
+    /// The visible tiled panes of `tab`, each standing for its stack.
+    fn layout_panes(&self, tab: &TabInfo) -> Vec<moves::Pane> {
+        // A stack's hidden panes are suppressed, with its visible pane's
+        // geometry
+        let rect = |p: &PaneInfo| (p.pane_x, p.pane_y, p.pane_columns, p.pane_rows);
+        let hidden: Vec<_> = self
+            .panes
+            .panes
+            .get(&tab.position)
+            .into_iter()
+            .flatten()
+            .filter(|p| p.is_suppressed && !p.is_floating)
+            .map(rect)
+            .collect();
+        self.tiled_panes()
+            .map(|p| {
+                let id = id_of(p);
+                moves::Pane {
+                    id,
+                    x: p.pane_x,
+                    y: p.pane_y,
+                    cols: p.pane_columns,
+                    rows: p.pane_rows,
+                    stacked: 1 + hidden.iter().filter(|h| **h == rect(p)).count(),
+                    focused_at: self.focused_at.get(&id).copied().unwrap_or(0),
+                }
+            })
+            .collect()
     }
 
     /// Only tiled panes move, and not while one is zoomed: the geometry is
@@ -146,33 +215,7 @@ impl State {
             .ok()
             .and_then(|(dump, _)| layout::focused_place(&dump))
             .unwrap_or(0);
-        // A stack's hidden panes are suppressed, with its visible pane's
-        // geometry
-        let rect = |p: &PaneInfo| (p.pane_x, p.pane_y, p.pane_columns, p.pane_rows);
-        let hidden: Vec<_> = self
-            .panes
-            .panes
-            .get(&tab.position)
-            .into_iter()
-            .flatten()
-            .filter(|p| p.is_suppressed && !p.is_floating)
-            .map(rect)
-            .collect();
-        let panes: Vec<moves::Pane> = self
-            .tiled_panes()
-            .map(|p| {
-                let id = id_of(p);
-                moves::Pane {
-                    id,
-                    x: p.pane_x,
-                    y: p.pane_y,
-                    cols: p.pane_columns,
-                    rows: p.pane_rows,
-                    stacked: 1 + hidden.iter().filter(|h| **h == rect(p)).count(),
-                    focused_at: self.focused_at.get(&id).copied().unwrap_or(0),
-                }
-            })
-            .collect();
+        let panes = self.layout_panes(tab);
         for step in moves::plan(&panes, focused, place, dir) {
             match step {
                 moves::Step::Stack { target, pane } => {

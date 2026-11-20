@@ -67,6 +67,17 @@ pub enum Step {
     Shift { pane: Id, dir: Dir },
 }
 
+/// The pane or stack beside `of` in `dir`: of several, the one focused most
+/// recently, as zellij's own focus moves choose. A stack being one rectangle,
+/// this steps over the rest of the stack `of` is in.
+pub fn neighbour(panes: &[Pane], of: Id, dir: Dir) -> Option<&Pane> {
+    let pane = panes.iter().find(|p| p.id == of)?;
+    panes
+        .iter()
+        .filter(|p| p.id != pane.id && p.is_beside(pane, dir))
+        .max_by_key(|p| p.focused_at)
+}
+
 /// The commands that move the focused pane in `dir`, given its place in its
 /// stack (0 at the top).
 pub fn plan(panes: &[Pane], focused: Id, place: usize, dir: Dir) -> Vec<Step> {
@@ -82,11 +93,7 @@ pub fn plan(panes: &[Pane], focused: Id, place: usize, dir: Dir) -> Vec<Step> {
         return vec![Step::Shift { pane: pane.id, dir }];
     }
 
-    let Some(target) = panes
-        .iter()
-        .filter(|p| p.id != pane.id && p.is_beside(pane, dir))
-        .max_by_key(|p| p.focused_at)
-    else {
+    let Some(target) = neighbour(panes, pane.id, dir) else {
         return vec![];
     };
     // Coming from above, the pane climbs from the bottom to the top
@@ -209,6 +216,20 @@ mod tests {
         ];
         assert_eq!(plan(&panes, focus(2), 0, Dir::Up), vec![stack(1, 2)]);
         assert_eq!(plan(&panes, focus(1), 0, Dir::Right), vec![]);
+    }
+
+    #[test]
+    fn the_neighbour_of_a_stack_is_past_its_edge() {
+        // A stack of three between 0 and 2
+        let panes = vec![
+            t(0, 0, 0, 120, 10, 1),
+            t(1, 0, 10, 120, 20, 3),
+            t(2, 0, 30, 120, 10, 1),
+        ];
+        let id = |p: Option<&Pane>| p.map(|p| p.id);
+        assert_eq!(id(neighbour(&panes, focus(1), Dir::Down)), Some(focus(2)));
+        assert_eq!(id(neighbour(&panes, focus(1), Dir::Up)), Some(focus(0)));
+        assert_eq!(id(neighbour(&panes, focus(0), Dir::Up)), None);
     }
 
     #[test]
